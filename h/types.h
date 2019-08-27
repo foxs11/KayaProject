@@ -86,5 +86,22 @@ typedef struct state_t {
 #define s_HI	s_reg[29]
 #define s_LO	s_reg[30]
 
+typedef struct pcb_t {
+	struct pcb_t	*p_next,
+								*p_prev,
+								*p_prnt,
+								*p_child,
+								*p_sib,
+								*p_prevsib;
+	state_t				p_s;
+	int						*p_semAdd;
+} pcb_t, pcb_PTR;
+
+typedef struct semd_t {
+	struct semd_t	*s_next;
+	int 					*s_semAdd;
+	pcb_t 				*s_procQ;
+} semd_t, semd_PTR;
+
 
 #endif

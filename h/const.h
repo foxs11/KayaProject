@@ -33,6 +33,9 @@
 
 #define NULL ((void *)0xFFFFFFFF)
 
+/* process queue constants */
+#define MAXPROC 20
+
 
 /* vectors number and type */
 #define VECTSNUM	4
