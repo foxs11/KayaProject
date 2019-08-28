@@ -15,16 +15,17 @@ static pcb_PTR pcbFree_h;
 
 void freePcb (pcb_PTR p){
   cleanPcb(p);
-  if(emptyProcQ(pcbFree_h)){
-    pcbFree_h = p;
-  }
-  else{
-    pcbFree_h->p_next->p_prev = p;
-    p->p_next = pcbFree_h->p_next;
-    p->p_prev = pcbFree_h;
-    pcbFree_h->p_next = p;
-    pcbFree_h = p;
-  }
+  // if(emptyProcQ(pcbFree_h)){
+  //   pcbFree_h = p;
+  // }
+  // else{
+  //   pcbFree_h->p_next->p_prev = p;
+  //   p->p_next = pcbFree_h->p_next;
+  //   p->p_prev = pcbFree_h;
+  //   pcbFree_h->p_next = p;
+  //   pcbFree_h = p;
+  // }
+  insertProcQ(&pcbFree_h, p);
 }
 
 pcb_PTR allocPcb (){
@@ -39,14 +40,17 @@ pcb_PTR allocPcb (){
 
 HIDDEN cleanPcb(pcb_PTR x){
   x->p_next = NULL;
-
-chris
-
+  x->p_prev = NULL;
+  x->p_child = NULL;
+  x->p_sib = NULL;
+  x->p_prevsib = NULL;
+  x->p_prnt = NULL;
 }
+
 void initPcbs (){
   static pcb_t procTable[MAXPROC];
   for(i=0; i<MAXPROC; i++){
-    freePCB(&procTable[1]);
+    freePcb(&procTable[1]);
   }
 }
 
@@ -74,12 +78,7 @@ void insertProcQ (pcb_PTR *tp, pcb_PTR p){
 }
 
 pcb_PTR removeProcQ (pcb_PTR *tp){
-  if(emptyProcQ(*tp)){
-    return NULL;
-  }
-  else{
-    return outProcQ(tp, *tp->p_next);
-  }
+  return outProcQ(tp, *tp->p_next);
 }
 
 pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
@@ -119,7 +118,7 @@ pcb_PTR headProcQ (pcb_PTR tp){
 }
 
 int emptyChild (pcb_PTR p){
-chris
+	return (p->p_child == NULL);
 }
 
 void insertChild (pcb_PTR prnt, pcb_PTR p){
@@ -135,11 +134,32 @@ void insertChild (pcb_PTR prnt, pcb_PTR p){
 }
 
 pcb_PTR removeChild (pcb_PTR p){
-chris
+  return outChild()
 }
 
-pcb_PTR outChild (pcb_PTR p){
-chris
+pcb_PTR outChild (pcb_PTR p){ // wait wtf shouldn't there be 2 parameters?
+  if (p->p_prnt == NULL) {
+		return NULL;
+  }
+  else {
+		if (p->p_sib == NULL && p->p_prevsib == NULL) { // is p an only child?
+			p->p_prnt->p_child = NULL;
+		}
+		else { // not only child
+			if (p->p_sib == NULL) { // is p the last child?
+				p->p_prevsib->p_sib = NULL;
+			}
+			else if (p->p_prevsib == NULL) { //is p the first child?
+				p->p_prnt->p_child = p->p_sib;
+				p->p_sib->p_prevsib = NULL;
+			}
+			else { // middle child
+				p->p_sib->p_prevsib = p->p_prevsib;
+				p->p_prevsib->p_sib = p->p_sib;
+			}
+		}
+		return p;
+	}
 }
 
 /***************************************************************/
