@@ -10,6 +10,7 @@
 */
 
 #include "../h/types.h"
+#include "../h/const.h"
 
 static pcb_PTR pcbFree_h;
 
@@ -49,7 +50,7 @@ HIDDEN cleanPcb(pcb_PTR x){
 
 void initPcbs (){
   static pcb_t procTable[MAXPROC];
-  for(i=0; i<MAXPROC; i++){
+  for(int i=0; i<MAXPROC; i++){
     freePcb(&procTable[i]);
   }
 }
