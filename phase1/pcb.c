@@ -11,28 +11,28 @@
 
 #include "../h/types.h"
 
-static pcb_PTR freeList;
+static pcb_PTR pcbFree_h;
 
 void freePcb (pcb_PTR p){
   cleanPcb(p);
-  if(emptyProcQ(freeList)){
-    freeList = p;
+  if(emptyProcQ(pcbFree_h)){
+    pcbFree_h = p;
   }
   else{
-    freeList->p_next->p_prev = p;
-    p->p_next = freeList->p_next;
-    p->p_prev = freeList;
-    freeList->p_next = p;
-    freeList = p;
+    pcbFree_h->p_next->p_prev = p;
+    p->p_next = pcbFree_h->p_next;
+    p->p_prev = pcbFree_h;
+    pcbFree_h->p_next = p;
+    pcbFree_h = p;
   }
 }
 
 pcb_PTR allocPcb (){
-  if(emptyProcQ(freeList)){
+  if(emptyProcQ(pcbFree_h)){
     return NULL;
   }
   else{
-    pcb_PTR allocatedPcb = removeProcQ(&freeList);
+    pcb_PTR allocatedPcb = removeProcQ(&pcbFree_h);
     return cleanPcb(allocatedPcb);
   }
 }
