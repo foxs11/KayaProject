@@ -50,7 +50,7 @@ HIDDEN cleanPcb(pcb_PTR x){
 void initPcbs (){
   static pcb_t procTable[MAXPROC];
   for(i=0; i<MAXPROC; i++){
-    freePcb(&procTable[1]);
+    freePcb(&procTable[i]);
   }
 }
 
