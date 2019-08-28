@@ -123,7 +123,15 @@ chris
 }
 
 void insertChild (pcb_PTR prnt, pcb_PTR p){
-sammy
+  if(emptyChild(prnt)){
+    prnt->p_child = p;
+  }
+  else{
+    prnt->p_child->p_prevsib = p;
+    p->p_sib = prnt->p_child;
+    p->p_prnt = prnt;
+    prnt->p_child = p;
+  }
 }
 
 pcb_PTR removeChild (pcb_PTR p){
