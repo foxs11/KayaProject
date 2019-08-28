@@ -14,7 +14,17 @@
 static pcb_PTR freeList;
 
 void freePcb (pcb_PTR p){
-sammy
+  cleanPcb(p);
+  if(emptyProcQ(freeList)){
+    freeList = p;
+  }
+  else{
+    freeList->p_next->p_prev = p;
+    p->p_next = freeList->p_next;
+    p->p_prev = freeList;
+    freeList->p_next = p;
+    freeList = p;
+  }
 }
 
 pcb_PTR allocPcb (){
@@ -34,20 +44,18 @@ chris
 
 }
 void initPcbs (){
-
+  static pcb_t procTable[MAXPROC];
+  for(i=0; i<MAXPROC; i++){
+    freePCB(&procTable[1]);
+  }
 }
 
 pcb_PTR mkEmptyProcQ (){
-  return NULL;
+  return (NULL);
 }
 
 int emptyProcQ (pcb_PTR tp){
-  if(*tp == NULL) {
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
+  return(tp==NULL);
 }
 
 void insertProcQ (pcb_PTR *tp, pcb_PTR p){
@@ -75,7 +83,30 @@ pcb_PTR removeProcQ (pcb_PTR *tp){
 }
 
 pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
-sammy
+  pcb_PTR tailPointer = *tp;
+  if(emptyProcQ(*tp)){
+    return NULL;
+  }
+  else if(p==*tp){
+    *tp->p_next->p_prev = *tp->p_prev;
+    *tp->p_prev->p_next = *tp->p_next;
+    **tp = *tp->p_prev;
+    return *tailPointer;
+  }
+  else{
+    current_PTR = *tp->p_next;
+    while(current_PTR != *tailPointer){
+      if(current_PTR != p){
+        current_PTR = current_PTR->p_next;
+      }
+      else{
+        *current_PTR->p_next->p_prev = *current_PTR->p_prev;
+        *current_PTR->p_prev->p_next = *current_PTR->p_next;
+        return current_PTR;
+      }
+    }
+    return NULL;
+  }
 }
 
 pcb_PTR headProcQ (pcb_PTR tp){
