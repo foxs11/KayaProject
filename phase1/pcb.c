@@ -48,7 +48,7 @@ void freePcb (pcb_PTR p){
 }
 
 pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
-  pcb_PTR tailPointer = tp;
+  pcb_PTR tailPointer = *tp;
   if(emptyProcQ(*tp)){
     return NULL;
   }
