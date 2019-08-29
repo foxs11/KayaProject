@@ -14,21 +14,6 @@
 
 static pcb_PTR pcbFree_h;
 
-void freePcb (pcb_PTR p){
-  cleanPcb(p);
-  insertProcQ(&pcbFree_h, p);
-}
-
-pcb_PTR allocPcb (){
-  if(emptyProcQ(pcbFree_h)){
-    return NULL;
-  }
-  else{
-    pcb_PTR allocatedPcb = removeProcQ(&pcbFree_h);
-    return cleanPcb(allocatedPcb);
-  }
-}
-
 HIDDEN cleanPcb(pcb_PTR x){
   x->p_next = NULL;
   x->p_prev = NULL;
@@ -36,17 +21,6 @@ HIDDEN cleanPcb(pcb_PTR x){
   x->p_sib = NULL;
   x->p_prevsib = NULL;
   x->p_prnt = NULL;
-}
-
-void initPcbs (){
-  static pcb_t procTable[MAXPROC];
-  for(int i=0; i<MAXPROC; i++){
-    freePcb(&procTable[i]);
-  }
-}
-
-pcb_PTR mkEmptyProcQ (){
-  return (NULL);
 }
 
 int emptyProcQ (pcb_PTR tp){
@@ -68,8 +42,9 @@ void insertProcQ (pcb_PTR *tp, pcb_PTR p){
   }
 }
 
-pcb_PTR removeProcQ (pcb_PTR *tp){
-  return outProcQ(tp, (*tp)->p_next);
+void freePcb (pcb_PTR p){
+  cleanPcb(p);
+  insertProcQ(&pcbFree_h, p);
 }
 
 pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
@@ -99,6 +74,32 @@ pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
   }
 }
 
+pcb_PTR removeProcQ (pcb_PTR *tp){
+  return outProcQ(tp, (*tp)->p_next);
+}
+
+pcb_PTR allocPcb (){
+  if(emptyProcQ(pcbFree_h)){
+    return NULL;
+  }
+  else{
+    pcb_PTR allocatedPcb = removeProcQ(&pcbFree_h);
+    return cleanPcb(allocatedPcb);
+  }
+}
+
+
+void initPcbs (){
+  static pcb_t procTable[MAXPROC];
+  for(int i=0; i<MAXPROC; i++){
+    freePcb(&procTable[i]);
+  }
+}
+
+pcb_PTR mkEmptyProcQ (){
+  return (NULL);
+}
+
 pcb_PTR headProcQ (pcb_PTR tp){
   if(emptyProcQ(tp)){
     return NULL;
@@ -123,10 +124,6 @@ void insertChild (pcb_PTR prnt, pcb_PTR p){
     p->p_prnt = prnt;
     prnt->p_child = p;
   }
-}
-
-pcb_PTR removeChild (pcb_PTR p){
-  return outChild(p);
 }
 
 pcb_PTR outChild (pcb_PTR p){ // wait wtf shouldn't there be 2 parameters?
@@ -154,6 +151,9 @@ pcb_PTR outChild (pcb_PTR p){ // wait wtf shouldn't there be 2 parameters?
 	}
 }
 
+pcb_PTR removeChild (pcb_PTR p){
+  return outChild(p);
+}
 /***************************************************************/
 
 #endif
