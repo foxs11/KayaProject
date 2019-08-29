@@ -25,18 +25,18 @@ extern int insertBlocked (int *semAdd, pcb_PTR p){
     allocateSemd(semAdd);
     insertProcQ(semAdd->s_procQ, p);
   }
-} /*search active semdList if found: insertProcQ(p and tp found in semd) if not found: allocate new semd, put new node into active list, perform found */
+} search active semdList if found: insertProcQ(p and tp found in semd) if not found: allocate new semd, put new node into active list, perform found */
 
 /* extern pcb_PTR removeBlocked (int *semAdd){}
 
 extern pcb_PTR outBlocked (pcb_PTR p){
-} /*search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
+} search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
 
 /* extern pcb_PTR headBlocked (int *semAdd){chris}
 
 extern void initASL (){chris}
 
-/* these where suggested to be made in the videos */
+these where suggested to be made in the videos */
 /* HIDDEN allocateSemd(){}
 
 HIDDEN freeSemd(){}
