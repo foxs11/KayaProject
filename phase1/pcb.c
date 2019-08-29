@@ -34,11 +34,11 @@ void insertProcQ (pcb_PTR *tp, pcb_PTR p){
     p->p_next = p;
   }
   else{
-    (*tp)->p_next->p_prev = p; //head prev
-    p->p_next = (*tp)->p_next; // new node next
-    (*tp)->p_next = p; // old tail next
-    p->p_prev = *tp; // new node prev
-    *tp = p; // new tail pointer
+    (*tp)->p_next->p_prev = p; /* head prev */
+    p->p_next = (*tp)->p_next;  /* new node next */
+    (*tp)->p_next = p; /* old tail next*/
+    p->p_prev = *tp; /* new node prev*/
+    *tp = p; /* new tail pointer*/
   }
 }
 
@@ -126,23 +126,23 @@ void insertChild (pcb_PTR prnt, pcb_PTR p){
   }
 }
 
-pcb_PTR outChild (pcb_PTR p){ // wait wtf shouldn't there be 2 parameters?
+pcb_PTR outChild (pcb_PTR p){
   if (p->p_prnt == NULL) {
 		return NULL;
   }
   else {
-		if (p->p_sib == NULL && p->p_prevsib == NULL) { // is p an only child?
+		if (p->p_sib == NULL && p->p_prevsib == NULL) { /* is p an only child? */
 			p->p_prnt->p_child = NULL;
 		}
-		else { // not only child
-			if (p->p_sib == NULL) { // is p the last child?
+		else { /* not only child */
+			if (p->p_sib == NULL) { /* is p the last child? */
 				p->p_prevsib->p_sib = NULL;
 			}
-			else if (p->p_prevsib == NULL) { //is p the first child?
+			else if (p->p_prevsib == NULL) { /*is p the first child? */
 				p->p_prnt->p_child = p->p_sib;
 				p->p_sib->p_prevsib = NULL;
 			}
-			else { // middle child
+			else { /* middle child */
 				p->p_sib->p_prevsib = p->p_prevsib;
 				p->p_prevsib->p_sib = p->p_sib;
 			}
