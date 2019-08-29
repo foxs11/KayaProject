@@ -16,16 +16,6 @@ static pcb_PTR pcbFree_h;
 
 void freePcb (pcb_PTR p){
   cleanPcb(p);
-  // if(emptyProcQ(pcbFree_h)){
-  //   pcbFree_h = p;
-  // }
-  // else{
-  //   pcbFree_h->p_next->p_prev = p;
-  //   p->p_next = pcbFree_h->p_next;
-  //   p->p_prev = pcbFree_h;
-  //   pcbFree_h->p_next = p;
-  //   pcbFree_h = p;
-  // }
   insertProcQ(&pcbFree_h, p);
 }
 
@@ -70,32 +60,32 @@ void insertProcQ (pcb_PTR *tp, pcb_PTR p){
     p->p_next = p;
   }
   else{
-    *tp->p_next->p_prev = p; //head prev
-    p->p_next = *tp->p_next; // new node next
-    *tp->p_next = p; // old tail next
+    (*tp)->p_next->p_prev = p; //head prev
+    p->p_next = (*tp)->p_next; // new node next
+    (*tp)->p_next = p; // old tail next
     p->p_prev = *tp; // new node prev
     *tp = p; // new tail pointer
   }
 }
 
 pcb_PTR removeProcQ (pcb_PTR *tp){
-  return outProcQ(tp, *tp->p_next);
+  return outProcQ(tp, (*tp)->p_next);
 }
 
 pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
-  pcb_PTR tailPointer = *tp;
+  pcb_PTR tailPointer = tp;
   if(emptyProcQ(*tp)){
     return NULL;
   }
   else if(p==*tp){
-    *tp->p_next->p_prev = *tp->p_prev;
-    *tp->p_prev->p_next = *tp->p_next;
-    **tp = *tp->p_prev;
-    return *tailPointer;
+    (*tp)->p_next->p_prev = (*tp)->p_prev;
+    (*tp)->p_prev->p_next = (*tp)->p_next;
+    *tp = (*tp)->p_prev;
+    return (tailPointer);
   }
   else{
-    current_PTR = *tp->p_next;
-    while(current_PTR != *tailPointer){
+    pcb_PTR current_PTR = (*tp)->p_next;
+    while(current_PTR != tailPointer){
       if(current_PTR != p){
         current_PTR = current_PTR->p_next;
       }
@@ -125,6 +115,7 @@ int emptyChild (pcb_PTR p){
 void insertChild (pcb_PTR prnt, pcb_PTR p){
   if(emptyChild(prnt)){
     prnt->p_child = p;
+    p->p_prnt = prnt;
   }
   else{
     prnt->p_child->p_prevsib = p;
@@ -135,7 +126,7 @@ void insertChild (pcb_PTR prnt, pcb_PTR p){
 }
 
 pcb_PTR removeChild (pcb_PTR p){
-  return outChild()
+  return outChild(p);
 }
 
 pcb_PTR outChild (pcb_PTR p){ // wait wtf shouldn't there be 2 parameters?
