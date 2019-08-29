@@ -14,7 +14,7 @@
 
 static pcb_PTR pcbFree_h;
 
-HIDDEN cleanPcb(pcb_PTR x){
+HIDDEN void cleanPcb(pcb_PTR x){
   x->p_next = NULL;
   x->p_prev = NULL;
   x->p_child = NULL;
@@ -72,6 +72,8 @@ pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
     }
     return NULL;
   }
+  /* shouldn't get here but was put here to deal with some edge case */
+  return NULL;
 }
 
 pcb_PTR removeProcQ (pcb_PTR *tp){
@@ -84,7 +86,8 @@ pcb_PTR allocPcb (){
   }
   else{
     pcb_PTR allocatedPcb = removeProcQ(&pcbFree_h);
-    return cleanPcb(allocatedPcb);
+    cleanPcb(allocatedPcb);
+    return allocatedPcb;
   }
 }
 
