@@ -5,7 +5,7 @@ INCDIR = /usr/local/include/umps2/umps
 SUPDIR = /usr/local/share/umps2
 LIBDIR = /usr/local/lib/umps2
 
-DEFS = ../h/const.h ../h/types.h ../e/asl.e ../e/pcb.e $(INCDIR)/libumps.e Makefile
+DEFS = ../h/const.h ../h/types.h ../e/pcb.e $(INCDIR)/libumps.e Makefile
 
 CFLAGS = -ansi -pedantic -Wall -c
 LDAOUTFLAGS = -T $(SUPDIR)/elf32ltsmip.h.umpsaout.x
@@ -24,17 +24,14 @@ kernel.core.umps: kernel
 	umps2-elf2umps -k kernel
 
 kernel: p1test.o asl.o pcb.o
-	$(LD) $(LDCOREFLAGS) $(LIBDIR)/crtso.o p1test.o asl.o pcb.o $(LIBDIR)/libumps.o -o kernel
+	$(LD) $(LDCOREFLAGS) $(LIBDIR)/crtso.o p1test.o pcb.o $(LIBDIR)/libumps.o -o kernel
 
 p1test.o: p1test.c $(DEFS)
 	$(CC) $(CFLAGS) p1test.c
- 
-asl.o: asl.c $(DEFS)
-	$(CC) $(CFLAGS) asl.c
 
 pcb.o: pcb.c $(DEFS)
 	$(CC) $(CFLAGS) pcb.c
- 
+	
 # crti.o: crti.s
 # 	$(AS) crti.s -o crti.o
 
