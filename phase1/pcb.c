@@ -65,8 +65,8 @@ pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
         current_PTR = current_PTR->p_next;
       }
       else{
-        *current_PTR->p_next->p_prev = *current_PTR->p_prev;
-        *current_PTR->p_prev->p_next = *current_PTR->p_next;
+        current_PTR->p_next->p_prev = current_PTR->p_prev;
+        current_PTR->p_prev->p_next = current_PTR->p_next;
         return current_PTR;
       }
     }
@@ -151,6 +151,7 @@ pcb_PTR outChild (pcb_PTR p){
 				p->p_prevsib->p_sib = p->p_sib;
 			}
 		}
+    p->p_prnt = NULL;
 		return p;
 	}
 }
