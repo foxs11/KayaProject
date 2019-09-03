@@ -36,7 +36,19 @@ extern pcb_PTR removeBlocked (int *semAdd){
 extern pcb_PTR outBlocked (pcb_PTR p){
 } /* search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
 
-extern pcb_PTR headBlocked (int *semAdd){chris}
+extern pcb_PTR headBlocked (int *semAdd){
+  if(!searchSemd(semAdd)){
+    return NULL;
+  }
+  else{
+    if(*semAdd->s_procQ == NULL){
+      return NULL;
+    }
+    else{
+      return *semAdd->s_procQ->s_next;
+    }
+  }
+}
 
 extern void initASL (){
   static semd_t semdTable[MAXPROC];
@@ -51,11 +63,15 @@ HIDDEN allocateSemd(int *semAdd){
   
 }
 
-HIDDEN freeSemd(){}
+HIDDEN freeSemd(semd_PTR p){
+  cleanSemd(p);
+  p->s_next = semdFree_h;
+  semdFree_h = p;
+}
 
 HIDDEN int searchSemd(int *semd){
   semd_PTR semdListPTR = semd_h;
-  while(semd != NULL){
+  while(semdListPTR != NULL){
     if(semd == semdListPTR){
       return TRUE;
     }
