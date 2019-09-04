@@ -58,7 +58,7 @@ pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
     return NULL;
   }
   else if(p==*tp){
-    if((*tp->p_next == *tp)){
+    if((*tp)->p_next == *tp){
       *tp = NULL;
     }
     else{
