@@ -49,9 +49,7 @@ void insertProcQ (pcb_PTR *tp, pcb_PTR p){
 
 void freePcb (pcb_PTR p){
   cleanPcb(p);
-  addokbuf("freePcb1\n");
   insertProcQ(&pcbFree_h, p);
-  addokbuf("freePbc2\n");
 }
 
 pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
