@@ -57,7 +57,7 @@ HIDDEN void freeSemd(semd_PTR p){
 
 HIDDEN void allocateSemd(int semAdd){
   if(semdFree_h != NULL){
-    semd_PTR newSemd = *semdFree_h;
+    semd_PTR newSemd = semdFree_h;
     if(semd_h == NULL){
       semdFree_h = newSemd->s_next;
       cleanSemd(newSemd);
@@ -67,13 +67,13 @@ HIDDEN void allocateSemd(int semAdd){
     else{
       semd_PTR currentInSemd = semd_h;
       semd_PTR nextInSemd = semd_h->s_next;
-      while(*semAdd > nextInSemd->s_semAdd){
+      while(semAdd > nextInSemd->s_semAdd){
         currentInSemd = currentInSemd->s_next;
         nextInSemd = nextInSemd->s_next;
       }
       semdFree_h = newSemd->s_next;
       cleanSemd(newSemd);
-      newSemd->s_semAdd = *semAdd;
+      newSemd->s_semAdd = semAdd;
       currentInSemd->s_next = newSemd;
       newSemd->s_next = nextInSemd;
     }
