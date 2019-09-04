@@ -151,23 +151,23 @@ pcb_PTR outChild (pcb_PTR p){
 		return NULL;
   }
   else {
-    addokbuf("in out child1\n");
 		if (p->p_sib == NULL && p->p_prevsib == NULL) { /* is p an only child? */
+      addokbuf("in out child1\n");
 			p->p_prnt->p_child = NULL;
 		}
-    addokbuf("in out child2n");
 		else { /* not only child */
       addokbuf("in out child3\n");
 			if (p->p_sib == NULL) { /* is p the last child? */
+        addokbuf("in out child4\n");
 				p->p_prevsib->p_sib = NULL;
 			}
-      addokbuf("in out child4\n");
 			else if (p->p_prevsib == NULL) { /*is p the first child? */
+        addokbuf("in out child5\n");
 				p->p_prnt->p_child = p->p_sib;
 				p->p_sib->p_prevsib = NULL;
 			}
-      addokbuf("in out child5\n");
 			else { /* middle child */
+        addokbuf("in out child6\n");
 				p->p_sib->p_prevsib = p->p_prevsib;
 				p->p_prevsib->p_sib = p->p_sib;
 			}
