@@ -188,8 +188,10 @@ void main() {
 	/* Check if removeProc and insertProc remove in the correct order */
 	addokbuf("Removing...   \n");
 	for (i = 0; i < 8; i++) {
+		addokbuf("Removing1\n");
 		if ((q = removeProcQ(&qa)) == NULL)
 			adderrbuf("removeProcQ: unexpected NULL   ");
+		addokbuf("Removing2\n");
 		freePcb(q);
 	}
 	if (q != lastproc)
