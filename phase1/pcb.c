@@ -93,7 +93,6 @@ pcb_PTR allocPcb (){
 
 
 void initPcbs (){
-  addokbuf("start of initPcbs");
   static pcb_t procTable[MAXPROC];
   addokbuf("start of initPcbs2");
   int i;
