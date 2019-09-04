@@ -173,7 +173,6 @@ pcb_PTR outChild (pcb_PTR p){
 				p->p_prevsib->p_sib = p->p_sib;
 			}
 		}
-    p->p_prnt = NULL;
 		return p;
 	}
 }
