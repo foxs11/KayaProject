@@ -86,12 +86,17 @@ pcb_PTR removeProcQ (pcb_PTR *tp){
 }
 
 pcb_PTR allocPcb (){
+  addokbuf("in allocPcb\n");
   if(emptyProcQ(pcbFree_h)){
+    addokbuf("in allocPcb1\n");
     return NULL;
   }
   else{
+    addokbuf("in allocPcb2\n");
     pcb_PTR allocatedPcb = removeProcQ(&pcbFree_h);
+    addokbuf("in allocPcb3\n");
     cleanPcb(allocatedPcb);
+    addokbuf("in allocPcb4\n");
     return allocatedPcb;
   }
 }
