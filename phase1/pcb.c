@@ -12,10 +12,9 @@
 #include "../h/types.h"
 #include "../h/const.h"
 
-static pcb_PTR pcbFree_h = NULL;
+static pcb_PTR pcbFree_h;
 
 HIDDEN void cleanPcb(pcb_PTR x){
-  addokbuf("CleanPcb\n");
   x->p_next = NULL;
   x->p_prev = NULL;
   x->p_child = NULL;
@@ -34,33 +33,21 @@ int emptyProcQ (pcb_PTR tp){
 }
 
 void insertProcQ (pcb_PTR *tp, pcb_PTR p){
-  addokbuf("insertProcq\n");
   if(emptyProcQ(*tp)){
-    addokbuf("insertProcq1\n");
     *tp = p;
-    addokbuf("insertProcq2\n");
     p->p_prev = p;
-    addokbuf("insertProcq3\n");
     p->p_next = p;
-    addokbuf("insertProcq4\n");
   }
   else{
-    addokbuf("insertProcq5\n");
     (*tp)->p_next->p_prev = p; /* head prev */
-    addokbuf("insertProcq6\n");
     p->p_next = (*tp)->p_next;  /* new node next */
-    addokbuf("insertProcq7\n");
     (*tp)->p_next = p; /* old tail next*/
-    addokbuf("insertProcq8\n");
     p->p_prev = *tp; /* new node prev*/
-    addokbuf("insertProcq9\n");
     *tp = p; /* new tail pointer*/
-    addokbuf("insertProcq0\n");
   }
 }
 
 void freePcb (pcb_PTR p){
-  addokbuf("FreePbc\n");
   cleanPcb(p);
   insertProcQ(&pcbFree_h, p);
 }
@@ -111,11 +98,9 @@ pcb_PTR allocPcb (){
 
 
 void initPcbs (){
-  addokbuf("InitPcbs start\n");
+  pcbFree_h = NULL;
   static pcb_t procTable[MAXPROC];
-  addokbuf("InitPcbs start1\n");
   int i;
-  addokbuf("InitPcbs start2\n");
   for(i=0; i<MAXPROC; i++){
     freePcb(&procTable[i]);
   }
