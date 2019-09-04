@@ -12,7 +12,7 @@
 #include "../h/types.h"
 #include "../h/const.h"
 
-static pcb_PTR pcbFree_h;
+static pcb_PTR pcbFree_h = NULL;
 
 HIDDEN void cleanPcb(pcb_PTR x){
   addokbuf("CleanPcb\n");
@@ -25,7 +25,7 @@ HIDDEN void cleanPcb(pcb_PTR x){
 }
 
 int emptyProcQ (pcb_PTR tp){
-  if(*tp==NULL){
+  if(tp==NULL){
     return TRUE;
   }
   else{
