@@ -103,6 +103,7 @@ pcb_PTR allocPcb (){
 
 
 void initPcbs (){
+  pcbFree_h = NULL;
   static pcb_t procTable[MAXPROC];
   int i;
   for(i=0; i<MAXPROC; i++){
