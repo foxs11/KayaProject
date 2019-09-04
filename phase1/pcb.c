@@ -24,12 +24,7 @@ HIDDEN void cleanPcb(pcb_PTR x){
 }
 
 int emptyProcQ (pcb_PTR tp){
-  if(tp==NULL){
-    return TRUE;
-  }
-  else{
-    return FALSE;
-  }
+  return(tp == NULL);
 }
 
 void insertProcQ (pcb_PTR *tp, pcb_PTR p){
