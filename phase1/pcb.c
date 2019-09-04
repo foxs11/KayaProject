@@ -146,29 +146,22 @@ void insertChild (pcb_PTR prnt, pcb_PTR p){
 }
 
 pcb_PTR outChild (pcb_PTR p){
-  addokbuf("in out child\n");
   if (p->p_prnt == NULL) {
-    addokbuf("in out child0\n");
 		return NULL;
   }
   else {
 		if (p->p_sib == NULL && p->p_prevsib == NULL) { /* is p an only child? */
-      addokbuf("in out child1\n");
 			p->p_prnt->p_child = NULL;
 		}
 		else { /* not only child */
-      addokbuf("in out child3\n");
 			if (p->p_sib == NULL) { /* is p the last child? */
-        addokbuf("in out child4\n");
 				p->p_prevsib->p_sib = NULL;
 			}
 			else if (p->p_prevsib == NULL) { /*is p the first child? */
-        addokbuf("in out child5\n");
 				p->p_prnt->p_child = p->p_sib;
 				p->p_sib->p_prevsib = NULL;
 			}
 			else { /* middle child */
-        addokbuf("in out child6\n");
 				p->p_sib->p_prevsib = p->p_prevsib;
 				p->p_prevsib->p_sib = p->p_sib;
 			}
@@ -179,7 +172,6 @@ pcb_PTR outChild (pcb_PTR p){
 }
 
 pcb_PTR removeChild (pcb_PTR p){
-  addokbuf("in remove child\n");
   if(emptyChild(p)){
     return NULL;
   }
