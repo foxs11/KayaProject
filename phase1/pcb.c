@@ -103,7 +103,7 @@ pcb_PTR allocPcb (){
 
 
 void initPcbs (){
-  pcbFree_h = NULL;
+  pcbFree_h = NULL; /*I think I had to do this because c auto initializes to something random*/
   static pcb_t procTable[MAXPROC];
   int i;
   for(i=0; i<MAXPROC; i++){
