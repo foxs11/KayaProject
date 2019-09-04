@@ -12,7 +12,7 @@
 #include "../h/types.h"
 #include "../h/const.h"
 
-static pcb_PTR pcbFree_h = NULL;
+static pcb_PTR pcbFree_h;
 
 HIDDEN void cleanPcb(pcb_PTR x){
   x->p_next = NULL;
