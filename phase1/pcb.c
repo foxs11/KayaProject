@@ -25,7 +25,7 @@ HIDDEN void cleanPcb(pcb_PTR x){
 }
 
 int emptyProcQ (pcb_PTR tp){
-  if(tp==NULL){
+  if(*tp==NULL){
     return TRUE;
   }
   else{
