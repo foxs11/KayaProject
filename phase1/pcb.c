@@ -91,7 +91,7 @@ pcb_PTR removeProcQ (pcb_PTR *tp){
 }
 
 pcb_PTR allocPcb (){
-  if(emptyProcQ(pcbFree_h) == TRUE){
+  if(emptyProcQ(pcbFree_h)){
     return NULL;
   }
   else{
