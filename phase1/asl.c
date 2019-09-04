@@ -97,7 +97,7 @@ HIDDEN semd_PTR getsemdPTR(int *semd){
       semdListPTR = semdListPTR->s_next; 
     }
   }
-  return FALSE;
+  return NULL;
 }
 
 /***************************************************************/
