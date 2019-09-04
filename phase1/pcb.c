@@ -87,7 +87,12 @@ pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
 }
 
 pcb_PTR removeProcQ (pcb_PTR *tp){
-  return outProcQ(tp, (*tp)->p_next);
+  if(tp == NULL){
+    return NULL;
+  }
+  else{
+    return outProcQ(tp, (*tp)->p_next);
+  }
 }
 
 pcb_PTR allocPcb (){

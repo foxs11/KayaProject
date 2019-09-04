@@ -192,10 +192,8 @@ void main() {
 			adderrbuf("removeProcQ: unexpected NULL   ");
 		freePcb(q);
 	}
-	addokbuf("Removing1\n");
 	if (q != lastproc)
 		adderrbuf("removeProcQ: failed on last entry   ");
-	addokbuf("Removing2\n");
 	if (removeProcQ(&qa) != NULL)
 		adderrbuf("removeProcQ: removes too many entries   ");
 
