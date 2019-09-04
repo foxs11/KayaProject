@@ -180,6 +180,9 @@ pcb_PTR outChild (pcb_PTR p){
 
 pcb_PTR removeChild (pcb_PTR p){
   addokbuf("in remove child\n");
+  if(emptyChild(p)){
+    return NULL;
+  }
   return outChild(p->p_child);
 }
 /***************************************************************/
