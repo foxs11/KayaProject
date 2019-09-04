@@ -31,16 +31,26 @@ int emptyProcQ (pcb_PTR tp){
 void insertProcQ (pcb_PTR *tp, pcb_PTR p){
   addokbuf("insertProcq\n");
   if(emptyProcQ(*tp)){
+    addokbuf("insertProcq1\n");
     *tp = p;
+    addokbuf("insertProcq2\n");
     p->p_prev = p;
+    addokbuf("insertProcq3\n");
     p->p_next = p;
+    addokbuf("insertProcq4\n");
   }
   else{
+    addokbuf("insertProcq5\n");
     (*tp)->p_next->p_prev = p; /* head prev */
+    addokbuf("insertProcq6\n");
     p->p_next = (*tp)->p_next;  /* new node next */
+    addokbuf("insertProcq7\n");
     (*tp)->p_next = p; /* old tail next*/
+    addokbuf("insertProcq8\n");
     p->p_prev = *tp; /* new node prev*/
+    addokbuf("insertProcq9\n");
     *tp = p; /* new tail pointer*/
+    addokbuf("insertProcq0\n");
   }
 }
 
