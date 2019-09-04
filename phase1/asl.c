@@ -81,7 +81,7 @@ HIDDEN void allocateSemd(int semAdd){
 }
 
 extern int insertBlocked (int *semAdd, pcb_PTR p){
-  if(seachSemd(semAdd)){
+  if(searchSemd(semAdd)){
     insertProcQ(getsemdPTR(semAdd)->s_procQ, p);
     p->p_semAdd = *semAdd;
   }
