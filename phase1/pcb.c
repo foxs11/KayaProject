@@ -87,7 +87,7 @@ pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
 }
 
 pcb_PTR removeProcQ (pcb_PTR *tp){
-  if(tp == NULL){
+  if(*tp == NULL){
     return NULL;
   }
   else{
