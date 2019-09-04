@@ -25,7 +25,12 @@ HIDDEN void cleanPcb(pcb_PTR x){
 }
 
 int emptyProcQ (pcb_PTR tp){
-  return(tp==NULL);
+  if(tp==NULL){
+    return TRUE;
+  }
+  else{
+    return FALSE;
+  }
 }
 
 void insertProcQ (pcb_PTR *tp, pcb_PTR p){
@@ -57,7 +62,7 @@ void insertProcQ (pcb_PTR *tp, pcb_PTR p){
 void freePcb (pcb_PTR p){
   addokbuf("FreePbc\n");
   cleanPcb(p);
-  insertProcQ(pcbFree_h, p);
+  insertProcQ(&pcbFree_h, p);
 }
 
 pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
