@@ -12,7 +12,7 @@
 #include "../h/types.h"
 #include "../h/const.h"
 
-static pcb_PTR pcbFree_h;
+static pcb_PTR pcbFree_h = NULL;;
 
 HIDDEN void cleanPcb(pcb_PTR x){
   x->p_next = NULL;
@@ -98,7 +98,6 @@ pcb_PTR allocPcb (){
 
 
 void initPcbs (){
-  pcbFree_h = NULL;
   static pcb_t procTable[MAXPROC];
   int i;
   for(i=0; i<MAXPROC; i++){
