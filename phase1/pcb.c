@@ -54,7 +54,7 @@ void freePcb (pcb_PTR p){
 
 pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
   pcb_PTR tailPointer = *tp;
-  if(emptyProcQ(*tp) == TRUE){
+  if(emptyProcQ(*tp)){
     return NULL;
   }
   else if(p==*tp){
@@ -87,7 +87,7 @@ pcb_PTR removeProcQ (pcb_PTR *tp){
 
 pcb_PTR allocPcb (){
   addokbuf("in allocPcb\n");
-  if(emptyProcQ(pcbFree_h)){
+  if(emptyProcQ(pcbFree_h) == TRUE){
     addokbuf("in allocPcb1\n");
     return NULL;
   }
