@@ -39,6 +39,14 @@ extern pcb_PTR removeBlocked (int *semAdd){
 }
 
 extern pcb_PTR outBlocked (pcb_PTR p){
+  pcb_PTR toReturn = outProcQ(&getsemdPTR(p->p_semAdd)->s_procQ, p);
+  if(getsemdPTR(p->p_semAdd)->s_procQ == NULL){
+    freeSemd(getsemdPTR(p->p_semAdd));
+    return toReturn;
+  }
+  else{
+    return toReturn;
+  }
 } /* search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
 
 extern pcb_PTR headBlocked (int *semAdd){
@@ -64,11 +72,32 @@ extern void initASL (){
 }
 
 /* these where suggested to be made in the videos */
-HIDDEN allocateSemd(int *semAdd){
-  
+HIDDEN void allocateSemd(int semAdd){
+  if(semdFree_h != NULL){
+    semd_PTR newSemd = semdFree_h;
+    if(semd_h == NULL){
+      semdFree_h = newSemd->s_next;
+      cleanSemd(newSemd);
+      semd_h = newSemd;
+      newSemd->s_semAdd = semAdd;
+    }
+    else{
+      semd_PTR currentInSemd = semd_h;
+      semd_PTR nextInSemd = semd_h->s_next;
+      while(semAdd > nextInSemd->s_semAdd){
+        currentInSemd = currentInSemd->s_next;
+        nextInSemd = nextInSemd->s_next;
+      }
+      semdFree_h = newSemd->s_next;
+      cleanSemd(newSemd);
+      newSemd->s_semAdd = semAdd;
+      currentInSemd->s_next = newSemd;
+      newSemd->s_next = nextInSemd;
+    }
+  }
 }
 
-HIDDEN freeSemd(semd_PTR p){
+HIDDEN void freeSemd(semd_PTR p){
   cleanSemd(p);
   p->s_next = semdFree_h;
   semdFree_h = p;
@@ -98,6 +127,12 @@ HIDDEN semd_PTR getsemdPTR(int *semd){
     }
   }
   return NULL;
+}
+
+HIDDEN void cleanSemd(semd_PTR p){
+  p->s_next = NULL;
+	p->s_semAdd = NULL;
+  p->s_procQ = NULL;
 }
 
 /***************************************************************/
