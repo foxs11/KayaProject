@@ -148,6 +148,7 @@ void insertChild (pcb_PTR prnt, pcb_PTR p){
 pcb_PTR outChild (pcb_PTR p){
   addokbuf("in out child\n");
   if (p->p_prnt == NULL) {
+    addokbuf("in out child0\n");
 		return NULL;
   }
   else {
