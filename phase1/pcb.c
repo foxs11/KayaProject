@@ -173,13 +173,14 @@ pcb_PTR outChild (pcb_PTR p){
 				p->p_prevsib->p_sib = p->p_sib;
 			}
 		}
+    p->p_prnt = NULL;
 		return p;
 	}
 }
 
 pcb_PTR removeChild (pcb_PTR p){
   addokbuf("in remove child\n");
-  return outChild(p);
+  return outChild(p->p_child);
 }
 /***************************************************************/
 
