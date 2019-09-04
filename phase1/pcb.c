@@ -15,6 +15,7 @@
 static pcb_PTR pcbFree_h;
 
 HIDDEN void cleanPcb(pcb_PTR x){
+  addokbuf("CleanPcb\n");
   x->p_next = NULL;
   x->p_prev = NULL;
   x->p_child = NULL;
@@ -28,6 +29,7 @@ int emptyProcQ (pcb_PTR tp){
 }
 
 void insertProcQ (pcb_PTR *tp, pcb_PTR p){
+  addokbuf("insertProcq\n");
   if(emptyProcQ(*tp)){
     *tp = p;
     p->p_prev = p;
@@ -43,6 +45,7 @@ void insertProcQ (pcb_PTR *tp, pcb_PTR p){
 }
 
 void freePcb (pcb_PTR p){
+  addokbuf("FreePbc\n");
   cleanPcb(p);
   insertProcQ(&pcbFree_h, p);
 }
