@@ -40,48 +40,35 @@ HIDDEN void freeSemd(semd_PTR p){
 HIDDEN semd_PTR allocateSemd(int *semAdd){
   semd_PTR allocatedSemd; 
   if (semdFree_h == NULL) {
-    addokbuf("in allocate\n");
     return NULL;
   }
   /* one on free list */
   else if (semdFree_h->s_next == NULL) {
-    addokbuf("in allocate1\n");
     allocatedSemd = semdFree_h;
-    addokbuf("in allocate2\n");
     semdFree_h = NULL;
-    addokbuf("in allocate3\n");
     allocatedSemd->s_semAdd = semAdd;
-    addokbuf("in allocate4\n");
     return allocatedSemd;
   }
   else { /* more than one on free list */
-    addokbuf("in allocate5\n");
     allocatedSemd = semdFree_h;
-    addokbuf("in allocate6\n");
     semdFree_h = semdFree_h->s_next;
-    addokbuf("in allocate7\n");
     allocatedSemd->s_semAdd = semAdd;
-    addokbuf("in allocate8\n");
     return allocatedSemd;
   }
 }
 
 int insertBlocked (int *semAdd, pcb_PTR p){
   semd_PTR parent = searchSemd(semAdd);
-  addokbuf("in insertBlocked\n");
   if(parent->s_next->s_semAdd == semAdd){
-    addokbuf("in insertBlocked1\n");
     insertProcQ(&(parent->s_next->s_procQ), p);
     p->p_semAdd = semAdd;
     return FALSE;
   }
   else{ /* semd not found and needs to be allocated */
-    addokbuf("in insertBlocked2\n");
     semd_PTR newSemd = allocateSemd(semAdd);
     if (newSemd == NULL) {
       return TRUE; /* no more free semd's and insert is blocked */
     }
-    addokbuf("in insertBlocked3\n");
     newSemd->s_next = parent->s_next;
     parent->s_next = newSemd;
     insertProcQ(&(newSemd->s_procQ), p);
@@ -111,11 +98,9 @@ pcb_PTR outBlocked (pcb_PTR p){
 pcb_PTR removeBlocked (int *semAdd){
   semd_PTR parent = searchSemd(semAdd);
   if (parent->s_next->s_semAdd != semAdd) {
-    addokbuf("in removeBlocked null return\n");
     return NULL;
   }
   else {
-    addokbuf("in removeBlocked2\n");
     return outBlocked(headProcQ(parent->s_next->s_procQ));
   }
 }
