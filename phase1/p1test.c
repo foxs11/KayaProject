@@ -278,6 +278,11 @@ void main() {
 
 	/* check if semaphore descriptors are returned to free list */
 	p = removeBlocked(&sem[11]);
+	int *searched = NULL;
+	semd_PTR search = NULL;
+	search = searchSemd(&sem[11]);
+	searched = search->s_next->s_semAdd;
+	adebug(searched, 0);
 	if (insertBlocked(&sem[11],p))
 		adderrbuf("removeBlocked: fails to return to free list   ");
 	int *searched3 = NULL;
