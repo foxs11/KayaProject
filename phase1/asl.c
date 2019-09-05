@@ -85,13 +85,13 @@ pcb_PTR outBlocked (pcb_PTR p){
   }
   else { /* p should be on the right process queue */
     if (headProcQ(parent->s_next->s_procQ) == p) { /* are we removing the last pcb? */
-      pcb_PTR outedPcb = outProcQ(parent->s_next->s_procQ, p);
+      pcb_PTR outedPcb = outProcQ(&(parent->s_next->s_procQ), p);
       parent->s_next = parent->s_next->s_next;
       freeSemd(parent->s_next);
       return outedPcb;
     }
     else{
-      return outProcQ(parent->s_next->s_procQ, p);
+      return outProcQ(&(parent->s_next->s_procQ), p);
     }
   }
 } /* search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
