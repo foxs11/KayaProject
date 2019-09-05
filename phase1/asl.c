@@ -123,7 +123,7 @@ pcb_PTR removeBlocked (int *semAdd){
 
 pcb_PTR headBlocked (int *semAdd){
   semd_PTR parent = searchSemd(semAdd);
-  if (*(parent->s_next->s_semAdd) != *semAdd) {
+  if (parent->s_next->s_semAdd != semAdd) {
     return NULL;
   }
   else {
