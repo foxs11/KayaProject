@@ -61,7 +61,7 @@ HIDDEN semd_PTR allocateSemd(int semAdd){
 int insertBlocked (int *semAdd, pcb_PTR p){
   semd_PTR parent = searchSemd(semAdd);
   if(parent->s_next->s_semAdd == semAdd){
-    insertProcQ(parent->s_next->s_procQ, p);
+    insertProcQ(&(parent->s_next->s_procQ), p);
     p->p_semAdd = semAdd;
     return FALSE;
   }
@@ -72,7 +72,7 @@ int insertBlocked (int *semAdd, pcb_PTR p){
     }
     newSemd->s_next = parent->s_next;
     parent->s_next = newSemd;
-    insertProcQ(newSemd->s_procQ, p);
+    insertProcQ(&(newSemd->s_procQ), p);
     p->p_semAdd = semAdd;
     return FALSE;
   }
