@@ -17,7 +17,7 @@
 
 #include "/usr/local/include/umps2/umps/libumps.e"
 #include "../e/pcb.e"
-/* #include "../e/asl.e" */
+#include "../e/asl.e"
 
 
 #define MAXPROC	20
