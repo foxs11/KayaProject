@@ -76,9 +76,9 @@ int insertBlocked (int *semAdd, pcb_PTR p){
     return FALSE;
   }
   else{ /* semd not found and needs to be allocated */
+    addokbuf("in insertBlocked2\n");
     semd_PTR newSemd = allocateSemd(semAdd);
     if (newSemd == NULL) {
-      addokbuf("in insertBlocked2\n");
       return TRUE; /* no more free semd's and insert is blocked */
     }
     addokbuf("in insertBlocked3\n");
