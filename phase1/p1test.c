@@ -308,6 +308,11 @@ void main() {
 	search9 = searchSemd(&sem[12]);
 	searched9 = search9->s_next->s_semAdd;
 	adebug(searched9, 0);
+	int *searched11 = NULL;
+	semd_PTR search11 = NULL;
+	search11 = searchSemd(&sem[10]);
+	searched11 = search11->s_next->s_semAdd;
+	adebug(searched11, 0);
 	if (insertBlocked(&sem[11],p))
 		adderrbuf("removeBlocked: fails to return to free list   ");
 	int *searched7 = NULL;
