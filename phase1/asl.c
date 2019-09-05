@@ -58,7 +58,7 @@ HIDDEN semd_PTR allocateSemd(int semAdd){
   }
 }
 
-extern int insertBlocked (int *semAdd, pcb_PTR p){
+int insertBlocked (int *semAdd, pcb_PTR p){
   semd_PTR parent = searchSemd(semAdd);
   if(parent->s_next->s_semAdd == semAdd){
     insertProcQ(parent->s_next->s_procQ, p);
@@ -78,7 +78,7 @@ extern int insertBlocked (int *semAdd, pcb_PTR p){
   }
 } /* search active semdList if found: insertProcQ(p and tp found in semd) if not found: allocate new semd, put new node into active list, perform found */
 
-extern pcb_PTR outBlocked (pcb_PTR p){
+pcb_PTR outBlocked (pcb_PTR p){
   semd_PTR parent = searchSemd(p->p_semAdd);
   if (parent->s_next->s_semAdd != p->p_semAdd) {
     return NULL;
@@ -94,7 +94,7 @@ extern pcb_PTR outBlocked (pcb_PTR p){
   }
 } /* search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
 
-extern pcb_PTR removeBlocked (int *semAdd){
+pcb_PTR removeBlocked (int *semAdd){
   semd_PTR parent = searchSemd(p->p_semAdd);
   if (parent->s_next->s_semAdd != p->p_semAdd) {
     return NULL;
@@ -111,7 +111,7 @@ extern pcb_PTR removeBlocked (int *semAdd){
 }
 
 
-extern pcb_PTR headBlocked (int *semAdd){
+pcb_PTR headBlocked (int *semAdd){
   semd_PTR parent = searchSemd(p->p_semAdd);
   if (parent->s_next->s_semAdd != p->p_semAdd) {
     return NULL;
@@ -121,7 +121,7 @@ extern pcb_PTR headBlocked (int *semAdd){
   }
 }
 
-extern void initASL (){
+void initASL (){
   static semd_t semdTable[MAXPROC+2];
   int i;
   for(i=0; i<MAXPROC+2; i++){
