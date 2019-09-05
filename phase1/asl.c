@@ -73,6 +73,7 @@ int insertBlocked (int *semAdd, pcb_PTR p){
     parent->s_next = newSemd;
     insertProcQ(&(newSemd->s_procQ), p);
     p->p_semAdd = semAdd;
+    addokbuf("in insertBlocked asdfsadfsfasdfasfasfdd\n");
     return FALSE;
   }
 } /* search active semdList if found: insertProcQ(p and tp found in semd) if not found: allocate new semd, put new node into active list, perform found */
