@@ -98,7 +98,7 @@ pcb_PTR outBlocked (pcb_PTR p){
 
 pcb_PTR removeBlocked (int *semAdd){
   semd_PTR parent = searchSemd(semAdd);
-  if (*(parent->s_next->s_semAdd) != *semAdd) {
+  if (parent->s_next->s_semAdd != semAdd) {
     addokbuf("in removeBlocked null return\n");
     return NULL;
   }
