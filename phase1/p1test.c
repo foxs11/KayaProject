@@ -270,9 +270,11 @@ void main() {
 	p = removeBlocked(&sem[11]);
 	addokbuf("MADE IT THROUGH1\n");
 	if (insertBlocked(&sem[11],p))
+		addokbuf("MADE IT THROUGH2\n");
 		adderrbuf("removeBlocked: fails to return to free list   ");
 
 	if (insertBlocked(&onesem, procp[9]) == FALSE)
+		addokbuf("MADE IT THROUGH3\n");
 		adderrbuf("insertBlocked: inserted more than MAXPROC   ");
 	
 	addokbuf("removeBlocked test started   \n");
