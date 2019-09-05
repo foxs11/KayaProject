@@ -292,7 +292,7 @@ void main() {
 		addokbuf("in removeBlocked test\n");
 		int *searched4 = NULL;
 		semd_PTR search4 = NULL;
-		search4 = searchSemd(&sem[i]);
+		search4 = searchSemd(&sem[11]);
 		searched4 = search4->s_next->s_semAdd;
 		adebug(searched4, 0);
 		q = removeBlocked(&sem[i]);
