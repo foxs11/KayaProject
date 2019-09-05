@@ -276,7 +276,7 @@ void main() {
 	for (i = 10; i< MAXPROC; i++) {
 		q = removeBlocked(&sem[i]);
 		if (q == NULL)
-			adderrbuf("removeBlocked: wouldn't remove   ");
+			adderrbuf("removeBlocked: wouldn't remove   " + i);
 		if (q != procp[i])
 			adderrbuf("removeBlocked: removed wrong element   ");
 		if (insertBlocked(&sem[i-10], q))
