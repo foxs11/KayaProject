@@ -274,9 +274,10 @@ void main() {
 		adderrbuf("insertBlocked: inserted more than MAXPROC   ");
 	addokbuf("removeBlocked test started   \n");
 	for (i = 10; i< MAXPROC; i++) {
+		addokbuf("in removeBlocked test\n");
 		q = removeBlocked(&sem[i]);
 		if (q == NULL)
-			adderrbuf("removeBlocked: wouldn't remove   " + i);
+			adderrbuf("removeBlocked: wouldn't remove   ");
 		if (q != procp[i])
 			adderrbuf("removeBlocked: removed wrong element   ");
 		if (insertBlocked(&sem[i-10], q))
