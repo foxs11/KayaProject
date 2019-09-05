@@ -42,6 +42,7 @@ HIDDEN semd_PTR allocateSemd(int semAdd){
     return NULL;
   }
   else {
+    addokbuf("in allocate\n");
     /* one on free list */
     if (semdFree_h->s_next == NULL) {
       semd_PTR allocatedSemd = semdFree_h;
