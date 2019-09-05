@@ -278,8 +278,10 @@ void main() {
 	p = removeBlocked(&sem[11]);
 	if (insertBlocked(&sem[11],p))
 		adderrbuf("removeBlocked: fails to return to free list   ");
-	int *searched3;
-	searched3 = searchSemd(&sem[11])->s_next->s_semAdd;
+	int *searched3 = NULL;
+	semd_PTR search3 = NULL;
+	search3 = searchSemd(&sem[11]);
+	searched3 = search3->s_next->s_semAdd;
 	adebug(searched3, 0);
 	if (insertBlocked(&onesem, procp[9]) == FALSE)
 		adderrbuf("insertBlocked: inserted more than MAXPROC   ");
