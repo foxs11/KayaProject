@@ -270,8 +270,10 @@ void main() {
 		if (insertBlocked(&sem[i], procp[i]))
 			adderrbuf("insertBlocked(2): unexpected TRUE   ");
 	}
-	int *searched2;
-	searched2 = searchSemd(&sem[11])->s_next->s_semAdd;
+	int *searched2 = NULL;
+	semd_PTR search2 = NULL;
+	search2 = searchSemd(&sem[11]);
+	searched2 = search2->s_next->s_semAdd;
 	adebug(searched2, 0);
 
 	/* check if semaphore descriptors are returned to free list */
