@@ -90,34 +90,30 @@ pcb_PTR outBlocked (pcb_PTR p){
       freeSemd(parent->s_next);
       return outedPcb;
     }
-    return outProcQ(parent->s_next->s_procQ, p);
+    else{
+      return outProcQ(parent->s_next->s_procQ, p);
+    }
   }
 } /* search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
 
 pcb_PTR removeBlocked (int *semAdd){
-  semd_PTR parent = searchSemd(p->p_semAdd);
-  if (parent->s_next->s_semAdd != p->p_semAdd) {
+  semd_PTR parent = searchSemd(semAdd);
+  if (parent->s_next->s_semAdd != *semAdd) {
     return NULL;
   }
-  else { /* p should be on the right process queue */
-    if (headProcQ(parent->s_next->s_procQ) == p) { /* are we removing the last pcb? */
-      pcb_PTR outedPcb = removeProcQ(parent->s_next->s_procQ, p);
-      parent->s_next = parent->s_next->s_next;
-      freeSemd(parent->s_next);
-      return outedPcb;
-    }
-    return removeProcQ(parent->s_next->s_procQ, p);
+  else {
+    return outBlocked(headProcQ(parent->s_next->s_procQ));
   }
 }
 
 
 pcb_PTR headBlocked (int *semAdd){
-  semd_PTR parent = searchSemd(p->p_semAdd);
-  if (parent->s_next->s_semAdd != p->p_semAdd) {
+  semd_PTR parent = searchSemd(semAdd);
+  if (parent->s_next->s_semAdd != *semAdd) {
     return NULL;
   }
-  else { /* p should be on the right process queue */
-    return headProcQ(parent->s_next->s_procQ, p);
+  else {
+    return headProcQ(parent->s_next->s_procQ);
   }
 }
 
