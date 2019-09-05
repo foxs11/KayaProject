@@ -41,6 +41,11 @@ char *mp = okbuf;
 
 typedef unsigned int devreg;
 
+HIDDEN void adebug(int a, int b){
+	int i = 0;
+}
+
+
 /* This function returns the terminal transmitter status value given its address */ 
 devreg termstat(memaddr * stataddr) {
 	return((*stataddr) & STATUSMASK);
@@ -265,11 +270,17 @@ void main() {
 		if (insertBlocked(&sem[i], procp[i]))
 			adderrbuf("insertBlocked(2): unexpected TRUE   ");
 	}
+	int *searched2;
+	searched2 = searchSemd(&sem[11])->s_next->s_semAdd;
+	adebug(searched2, 0);
 
 	/* check if semaphore descriptors are returned to free list */
 	p = removeBlocked(&sem[11]);
 	if (insertBlocked(&sem[11],p))
 		adderrbuf("removeBlocked: fails to return to free list   ");
+	int *searched3;
+	searched3 = searchSemd(&sem[11])->s_next->s_semAdd;
+	adebug(searched3, 0);
 	if (insertBlocked(&onesem, procp[9]) == FALSE)
 		adderrbuf("insertBlocked: inserted more than MAXPROC   ");
 	addokbuf("removeBlocked test started   \n");
