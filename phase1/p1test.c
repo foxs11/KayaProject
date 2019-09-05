@@ -275,7 +275,7 @@ void main() {
 	search2 = searchSemd(&sem[11]);
 	searched2 = search2->s_next->s_semAdd;
 	adebug(searched2, 0);
-	
+
 	int *searched10 = NULL;
 	semd_PTR search10 = NULL;
 	search10 = searchSemd(&sem[12]);
@@ -303,7 +303,6 @@ void main() {
 	search6 = searchSemd(&sem[11]);
 	searched6 = search6->s_next->s_semAdd;
 	adebug(searched6, 0);
-	p = removeBlocked(&sem[12]);
 	int *searched9 = NULL;
 	semd_PTR search9 = NULL;
 	search9 = searchSemd(&sem[12]);
