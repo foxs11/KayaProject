@@ -71,15 +71,20 @@ int insertBlocked (int *semAdd, pcb_PTR p){
   else{ /* semd not found and needs to be allocated */
     addokbuf("in insertBlocked3\n");
     semd_PTR newSemd = allocateSemd(*semAdd);
+    addokbuf("in insertBlocked4\n");
     if (newSemd == NULL) {
-      addokbuf("in insertBlocked4\n");
+      addokbuf("in insertBlocked5\n");
       return TRUE; /* no more free semd's and insert is blocked */
     }
-    addokbuf("in insertBlocked5\n");
+    addokbuf("in insertBlocked6\n");
     newSemd->s_next = parent->s_next;
+    addokbuf("in insertBlocked7\n");
     parent->s_next = newSemd;
+    addokbuf("in insertBlocked8\n");
     insertProcQ(&(newSemd->s_procQ), p);
+    addokbuf("in insertBlocked9\n");
     p->p_semAdd = semAdd;
+    addokbuf("in insertBlocked0\n");
     return FALSE;
   }
 } /* search active semdList if found: insertProcQ(p and tp found in semd) if not found: allocate new semd, put new node into active list, perform found */
