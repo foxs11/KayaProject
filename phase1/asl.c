@@ -38,16 +38,12 @@ HIDDEN void freeSemd(semd_PTR p){
 }
 
 HIDDEN semd_PTR allocateSemd(int semAdd){
-  addokbuf("in allocateSemd\n");
   if (semdFree_h == NULL) {
-    addokbuf("in allocateSemd1\n");
     return NULL;
   }
   else {
-    addokbuf("in allocateSemd2\n");
     /* one on free list */
     if (semdFree_h->s_next == NULL) {
-      addokbuf("in allocateSemd3\n");
       semd_PTR allocatedSemd = semdFree_h;
       semdFree_h = NULL;
       allocatedSemd->s_semAdd = &semAdd;
@@ -56,8 +52,11 @@ HIDDEN semd_PTR allocateSemd(int semAdd){
     else { /* more than one on free list */
       addokbuf("in allocateSemd4\n");
       semd_PTR allocatedSemd = semdFree_h;
+      addokbuf("in allocateSemd5\n");
       semdFree_h = semdFree_h->s_next;
+      addokbuf("in allocateSemd6\n");
       allocatedSemd->s_semAdd = &semAdd;
+      addokbuf("in allocateSemd7\n");
       return allocatedSemd;
     }
   }
