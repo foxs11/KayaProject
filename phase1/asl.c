@@ -23,7 +23,7 @@ HIDDEN void cleanSemd(semd_PTR p){
   p->s_procQ = NULL;
 }
 
-HIDDEN int searchSemd(int *semd){
+HIDDEN semd_PTR searchSemd(int *semd){
   semd_PTR semdListPTR = semd_h;
   while (semdListPTR->s_next->s_semAdd < semd) {
     semdListPTR = semdListPTR->s_next;
@@ -46,13 +46,13 @@ HIDDEN semd_PTR allocateSemd(int semAdd){
     if (semdFree_h->s_next == NULL) {
       semd_PTR allocatedSemd = semdFree_h;
       semdFree_h = NULL;
-      allocatedSemd->s_semAdd = semAdd;
+      allocatedSemd->s_semAdd = &semAdd;
       return allocatedSemd;
     }
     else { /* more than one on free list */
       semd_PTR allocatedSemd = semdFree_h;
       semdFree_h = semdFree_h->s_next;
-      allocatedSemd->s_semAdd = semAdd;
+      allocatedSemd->s_semAdd = &semAdd;
       return allocatedSemd;
     }
   }
@@ -66,7 +66,7 @@ int insertBlocked (int *semAdd, pcb_PTR p){
     return FALSE;
   }
   else{ /* semd not found and needs to be allocated */
-    semd_PTR newSemd = allocateSemd(semAdd);
+    semd_PTR newSemd = allocateSemd(*semAdd);
     if (newSemd == NULL) {
       return TRUE; /* no more free semd's and insert is blocked */
     }
@@ -79,7 +79,7 @@ int insertBlocked (int *semAdd, pcb_PTR p){
 } /* search active semdList if found: insertProcQ(p and tp found in semd) if not found: allocate new semd, put new node into active list, perform found */
 
 pcb_PTR outBlocked (pcb_PTR p){
-  semd_PTR parent = searchSemd(p->p_semAdd);
+  semd_PTR parent = searchSemd(&p->p_semAdd);
   if (parent->s_next->s_semAdd != p->p_semAdd) {
     return NULL;
   }
