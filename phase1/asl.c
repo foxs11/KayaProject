@@ -50,20 +50,15 @@ HIDDEN semd_PTR allocateSemd(int semAdd){
       return allocatedSemd;
     }
     else { /* more than one on free list */
-      addokbuf("in allocateSemd4\n");
       semd_PTR allocatedSemd = semdFree_h;
-      addokbuf("in allocateSemd5\n");
       semdFree_h = semdFree_h->s_next;
-      addokbuf("in allocateSemd6\n");
       allocatedSemd->s_semAdd = &semAdd;
-      addokbuf("in allocateSemd7\n");
       return allocatedSemd;
     }
   }
 }
 
 int insertBlocked (int *semAdd, pcb_PTR p){
-  addokbuf("in insertBlocked\n");
   semd_PTR parent = searchSemd(semAdd);
   if(parent->s_next->s_semAdd == semAdd){
     insertProcQ(&(parent->s_next->s_procQ), p);
