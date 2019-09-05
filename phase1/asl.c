@@ -115,6 +115,7 @@ pcb_PTR removeBlocked (int *semAdd){
     return NULL;
   }
   else {
+    addokbuf("in removeBlocked2\n");
     return outBlocked(headProcQ(parent->s_next->s_procQ));
   }
 }
