@@ -23,7 +23,8 @@ HIDDEN void cleanSemd(semd_PTR p){
   p->s_procQ = NULL;
 }
 
-HIDDEN semd_PTR searchSemd(int *semd){
+/* TODO: make this hidden!!!!!!*/
+semd_PTR searchSemd(int *semd){
   semd_PTR semdListPTR = semd_h;
   while (semdListPTR->s_next->s_semAdd < semd) {
     semdListPTR = semdListPTR->s_next;
