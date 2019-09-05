@@ -265,16 +265,15 @@ void main() {
 		if (insertBlocked(&sem[i], procp[i]))
 			adderrbuf("insertBlocked(2): unexpected TRUE   ");
 	}
-	addokbuf("MADE IT THROUGH\n");
+
 	/* check if semaphore descriptors are returned to free list */
 	p = removeBlocked(&sem[11]);
-	addokbuf("MADE IT THROUGH1\n");
 	if (insertBlocked(&sem[11],p))
 		adderrbuf("removeBlocked: fails to return to free list   ");
-	addokbuf("MADE IT THROUGH2\n");
+
 	if (insertBlocked(&onesem, procp[9]) == FALSE)
 		adderrbuf("insertBlocked: inserted more than MAXPROC   ");
-	addokbuf("MADE IT THROUGH3\n");
+	
 	addokbuf("removeBlocked test started   \n");
 	for (i = 10; i< MAXPROC; i++) {
 		q = removeBlocked(&sem[i]);
