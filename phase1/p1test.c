@@ -275,6 +275,12 @@ void main() {
 	search2 = searchSemd(&sem[11]);
 	searched2 = search2->s_next->s_semAdd;
 	adebug(searched2, 0);
+	p = removeBlocked(&sem[12]);
+	int *searched10 = NULL;
+	semd_PTR search10 = NULL;
+	search10 = searchSemd(&sem[12]);
+	searched10 = search10->s_next->s_semAdd;
+	adebug(searched10, 0);
 
 	/* check if semaphore descriptors are returned to free list */
 	p = removeBlocked(&sem[11]);
