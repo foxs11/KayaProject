@@ -79,7 +79,7 @@ int insertBlocked (int *semAdd, pcb_PTR p){
 } /* search active semdList if found: insertProcQ(p and tp found in semd) if not found: allocate new semd, put new node into active list, perform found */
 
 pcb_PTR outBlocked (pcb_PTR p){
-  semd_PTR parent = searchSemd(*(p->p_semAdd));
+  semd_PTR parent = searchSemd(&(*(p->p_semAdd)));
   if (parent->s_next->s_semAdd != p->p_semAdd) {
     return NULL;
   }
