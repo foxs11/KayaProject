@@ -61,15 +61,18 @@ HIDDEN semd_PTR allocateSemd(int semAdd){
 int insertBlocked (int *semAdd, pcb_PTR p){
   semd_PTR parent = searchSemd(semAdd);
   if(parent->s_next->s_semAdd == semAdd){
+    addokbuf("bad insert\n");
     insertProcQ(&(parent->s_next->s_procQ), p);
     p->p_semAdd = semAdd;
     return FALSE;
   }
   else{ /* semd not found and needs to be allocated */
+    addokbuf("good insert\n");
     semd_PTR newSemd = allocateSemd(*semAdd);
     if (newSemd == NULL) {
       return TRUE; /* no more free semd's and insert is blocked */
     }
+    addokbuf("good insert2\n");
     newSemd->s_next = parent->s_next;
     parent->s_next = newSemd;
     insertProcQ(&(newSemd->s_procQ), p);
