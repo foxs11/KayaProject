@@ -265,9 +265,10 @@ void main() {
 		if (insertBlocked(&sem[i], procp[i]))
 			adderrbuf("insertBlocked(2): unexpected TRUE   ");
 	}
-
+	addokbuf("MADE IT THROUGH\n");
 	/* check if semaphore descriptors are returned to free list */
 	p = removeBlocked(&sem[11]);
+	addokbuf("MADE IT THROUGH1\n");
 	if (insertBlocked(&sem[11],p))
 		adderrbuf("removeBlocked: fails to return to free list   ");
 
