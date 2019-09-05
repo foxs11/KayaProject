@@ -127,6 +127,8 @@ void initASL (){
   for(i=0; i<MAXPROC+2; i++){
     freeSemd(&semdTable[i]);
   }
+  semd_h = allocateSemd(0);
+  semd_h->s_next = allocateSemd(MAXINT);
 }
 
 /***************************************************************/

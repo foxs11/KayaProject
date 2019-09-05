@@ -35,6 +35,7 @@
 
 /* process queue constants */
 #define MAXPROC 20
+#define MAXINT 0xFFFFFFFF
 
 
 /* vectors number and type */
