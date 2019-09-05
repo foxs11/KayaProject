@@ -16,7 +16,30 @@ insertChild, removeChild and emptyChild ok
 process tree module ok      
 Initialized active semaphore list   
 insertBlocked test #1 started  
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
 insertBlocked test #2 started  
-MADE IT THROUGH
-in removeBlocked null return
-MADE IT THROUGH1
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+in insertBlocked asdfsadfsfasdfasfasfdd
+removeBlocked good
+in insertBlocked asdfsadfsfasdfasfasfdd
+removeBlocked test started   
+removeBlocked good
+removeBlocked bad
+removeBlocked: wouldn't remove   

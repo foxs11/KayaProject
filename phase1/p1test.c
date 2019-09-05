@@ -41,11 +41,6 @@ char *mp = okbuf;
 
 typedef unsigned int devreg;
 
-HIDDEN void adebug(int a, int b){
-	int i = 0;
-}
-
-
 /* This function returns the terminal transmitter status value given its address */ 
 devreg termstat(memaddr * stataddr) {
 	return((*stataddr) & STATUSMASK);
@@ -270,73 +265,17 @@ void main() {
 		if (insertBlocked(&sem[i], procp[i]))
 			adderrbuf("insertBlocked(2): unexpected TRUE   ");
 	}
-	int *searched2 = NULL;
-	semd_PTR search2 = NULL;
-	search2 = searchSemd(&sem[11]);
-	searched2 = search2->s_next->s_semAdd;
-	adebug(searched2, 0);
-
-	int *searched10 = NULL;
-	semd_PTR search10 = NULL;
-	search10 = searchSemd(&sem[12]);
-	searched10 = search10->s_next->s_semAdd;
-	adebug(searched10, 0);
 
 	/* check if semaphore descriptors are returned to free list */
 	p = removeBlocked(&sem[11]);
-	int *searched = NULL;
-	semd_PTR search = NULL;
-	search = searchSemd(&sem[11]);
-	searched = search->s_next->s_semAdd;
-	adebug(searched, 0);
 	if (insertBlocked(&sem[11],p))
 		adderrbuf("removeBlocked: fails to return to free list   ");
-	int *searched3 = NULL;
-	semd_PTR search3 = NULL;
-	search3 = searchSemd(&sem[11]);
-	searched3 = search3->s_next->s_semAdd;
-	adebug(searched3, 0);
-	
-	int *searched15 = NULL;
-	semd_PTR search15 = NULL;
-	search15 = searchSemd(&sem[12]);
-	searched15 = search15->s_next->s_semAdd;
-	adebug(searched15, 0);
-
-	p = removeBlocked(&sem[11]);
-	int *searched6 = NULL;
-	semd_PTR search6 = NULL;
-	search6 = searchSemd(&sem[11]);
-	searched6 = search6->s_next->s_semAdd;
-	adebug(searched6, 0);
-	int *searched9 = NULL;
-	semd_PTR search9 = NULL;
-	search9 = searchSemd(&sem[12]);
-	searched9 = search9->s_next->s_semAdd;
-	adebug(searched9, 0);
-	int *searched11 = NULL;
-	semd_PTR search11 = NULL;
-	search11 = searchSemd(&sem[10]);
-	searched11 = search11->s_next->s_semAdd;
-	adebug(searched11, 0);
-	if (insertBlocked(&sem[11],p))
-		adderrbuf("removeBlocked: fails to return to free list   ");
-	int *searched7 = NULL;
-	semd_PTR search7 = NULL;
-	search7 = searchSemd(&sem[11]);
-	searched7 = search7->s_next->s_semAdd;
-	adebug(searched7, 0);
 
 	if (insertBlocked(&onesem, procp[9]) == FALSE)
 		adderrbuf("insertBlocked: inserted more than MAXPROC   ");
+	
 	addokbuf("removeBlocked test started   \n");
 	for (i = 10; i< MAXPROC; i++) {
-		addokbuf("in removeBlocked test\n");
-		int *searched4 = NULL;
-		semd_PTR search4 = NULL;
-		search4 = searchSemd(&sem[11]);
-		searched4 = search4->s_next->s_semAdd;
-		adebug(searched4, 0);
 		q = removeBlocked(&sem[i]);
 		if (q == NULL)
 			adderrbuf("removeBlocked: wouldn't remove   ");
