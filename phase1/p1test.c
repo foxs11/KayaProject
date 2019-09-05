@@ -290,6 +290,21 @@ void main() {
 	search3 = searchSemd(&sem[11]);
 	searched3 = search3->s_next->s_semAdd;
 	adebug(searched3, 0);
+
+	p = removeBlocked(&sem[11]);
+	int *searched6 = NULL;
+	semd_PTR search6 = NULL;
+	search6 = searchSemd(&sem[11]);
+	searched6 = search6->s_next->s_semAdd;
+	adebug(searched6, 0);
+	if (insertBlocked(&sem[11],p))
+		adderrbuf("removeBlocked: fails to return to free list   ");
+	int *searched7 = NULL;
+	semd_PTR search7 = NULL;
+	search7 = searchSemd(&sem[11]);
+	searched7 = search7->s_next->s_semAdd;
+	adebug(searched7, 0);
+
 	if (insertBlocked(&onesem, procp[9]) == FALSE)
 		adderrbuf("insertBlocked: inserted more than MAXPROC   ");
 	addokbuf("removeBlocked test started   \n");
