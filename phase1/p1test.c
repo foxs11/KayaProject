@@ -290,6 +290,11 @@ void main() {
 	addokbuf("removeBlocked test started   \n");
 	for (i = 10; i< MAXPROC; i++) {
 		addokbuf("in removeBlocked test\n");
+		int *searched4 = NULL;
+		semd_PTR search4 = NULL;
+		search4 = searchSemd(&sem[11]);
+		searched4 = search4->s_next->s_semAdd;
+		adebug(searched2, 0);
 		q = removeBlocked(&sem[i]);
 		if (q == NULL)
 			adderrbuf("removeBlocked: wouldn't remove   ");
