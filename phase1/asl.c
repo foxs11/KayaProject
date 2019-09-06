@@ -1,12 +1,15 @@
 #ifndef ASL
 #define ASL
 
-/************************** ASL.E ******************************
+/************************** ASL.C ******************************
 *
-*  The externals declaration file for the Active Semaphore List
-*    Module.
+*  Provides methods for maintaining the Active Semaphore List.
+*  This is maintained as a linear, singly linked list of semd_t nodes in ascending order by semAdd.
+*  There are two dummy nodes to guard against edge cases in removal and insertion.
+*  Maintains a semaphore descriptor node free list as a singly linked, linear stack.
+*  Supports removal and insertion of process blocks onto the procQs of corresponding semd_ts.
+*  Semd_ts whose procQs become empty are removed and added back to the free list.
 *
-*  Written by Mikeyg
 */
 
 #include "../h/types.h"
