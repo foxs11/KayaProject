@@ -87,7 +87,7 @@ pcb_PTR outBlocked (pcb_PTR p){
     return NULL;
   }
   /* p should be on the right process queue */
-  else if (headProcQ(parent->s_next->s_procQ) == p) { /* are we removing the last pcb? */
+  else if (headProcQ(parent->s_next->s_procQ->p_next) == p) { /* are we removing the last pcb? */
     addokbuf("outBlocked last pcb \n");
     pcb_PTR outedPcb = outProcQ(&(parent->s_next->s_procQ), p);
     semd_PTR tempToBeRemoved = parent->s_next;
