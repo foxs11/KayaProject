@@ -111,12 +111,16 @@ pcb_PTR removeBlocked (int *semAdd){
 
 pcb_PTR headBlocked (int *semAdd){
   semd_PTR parent = searchSemd(semAdd);
-  if (parent->s_next->s_semAdd != semAdd || emptyProcQ(parent->s_next->s_procQ)) {
+  if (parent->s_next->s_semAdd != semAdd) {
     addokbuf("line 115");
     return NULL;
   }
-  else {
+  else if (emptyProcQ(parent->s_next->s_procQ)){
     addokbuf("line 119");
+    return NULL;
+  }
+  else {
+    addokbuf("line 122");
     return headProcQ(parent->s_next->s_procQ);
   }
 }
