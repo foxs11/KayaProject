@@ -47,12 +47,14 @@ HIDDEN semd_PTR allocateSemd(int *semAdd){
   else if (semdFree_h->s_next == NULL) {
     allocatedSemd = semdFree_h;
     semdFree_h = NULL;
+    cleanSemd(allocatedSemd);
     allocatedSemd->s_semAdd = semAdd;
     return allocatedSemd;
   }
   else { /* more than one on free list */
     allocatedSemd = semdFree_h;
     semdFree_h = semdFree_h->s_next;
+    cleanSemd(allocatedSemd);
     allocatedSemd->s_semAdd = semAdd;
     return allocatedSemd;
   }
@@ -74,7 +76,6 @@ int insertBlocked (int *semAdd, pcb_PTR p){
     parent->s_next = newSemd;
     insertProcQ(&(newSemd->s_procQ), p);
     p->p_semAdd = semAdd;
-    addokbuf("in insertBlocked asdfsadfsfasdfasfasfdd\n");
     return FALSE;
   }
 } /* search active semdList if found: insertProcQ(p and tp found in semd) if not found: allocate new semd, put new node into active list, perform found */
@@ -99,11 +100,9 @@ pcb_PTR outBlocked (pcb_PTR p){
 pcb_PTR removeBlocked (int *semAdd){
   semd_PTR parent = searchSemd(semAdd);
   if (parent->s_next->s_semAdd != semAdd) {
-    addokbuf("removeBlocked bad\n");
     return NULL;
   }
   else {
-    addokbuf("removeBlocked good\n");
     return outBlocked(headProcQ(parent->s_next->s_procQ));
   }
 }
@@ -129,6 +128,7 @@ void initASL (){
   }
   semd_h = allocateSemd(0);
   semd_h->s_next = allocateSemd(MAXINT);
+  semd_h->s_next->s_next = NULL;
 }
 
 /***************************************************************/
