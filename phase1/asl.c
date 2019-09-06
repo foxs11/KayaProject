@@ -87,7 +87,6 @@ pcb_PTR outBlocked (pcb_PTR p){
   }
   /* p should be on the right process queue */
   else if (headProcQ(parent->s_next->s_procQ) == p) { /* are we removing the last pcb? */
-    addokbuf("is the last procQ \n");
     pcb_PTR outedPcb = outProcQ(&(parent->s_next->s_procQ), p);
     semd_PTR tempToBeRemoved = parent->s_next;
     parent->s_next = parent->s_next->s_next;
@@ -95,7 +94,6 @@ pcb_PTR outBlocked (pcb_PTR p){
     return outedPcb;
   }
   else{
-    addokbuf("is NOT the last procQ \n");
     return outProcQ(&(parent->s_next->s_procQ), p);
   }
 } /* search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
