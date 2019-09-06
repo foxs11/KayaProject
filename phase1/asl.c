@@ -93,7 +93,7 @@ pcb_PTR outBlocked (pcb_PTR p){
     freeSemd(tempToBeRemoved);
     return outedPcb;
   }
-  else{
+  else{ /* more than one pcb in procQ */
     return outProcQ(&(parent->s_next->s_procQ), p);
   }
 } /* search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
@@ -115,6 +115,7 @@ pcb_PTR headBlocked (int *semAdd){
     return NULL;
   }
   else {
+    addokbuf("line 118");
     return headProcQ(parent->s_next->s_procQ);
   }
 }
