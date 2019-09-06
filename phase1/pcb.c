@@ -56,21 +56,21 @@ void freePcb (pcb_PTR p){
 /* Remove the ProcBlk pointed to bypfrom the process queue whosetail-pointer is pointed to by tp.  Update the process queue’s tailpointer if necessary. If the desired entry is not in the indicated queue(an error condition), return NULL; otherwise, return p. Note that p can point to any element of the process queue. */
 pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
   pcb_PTR tailPointer = *tp;
-  if(emptyProcQ(*tp)){
+  if(emptyProcQ(*tp)){ /* is the queue empty? if so return null */
     return NULL;
   }
-  else if(p==*tp){
-    if((*tp)->p_next == *tp){
-      *tp = NULL;
+  else if(p==*tp){ /* is p the tp? */
+    if(headProcQ(*tp) == *tp){ /* is p the only procBlk on the queue? ********change to headprocQ */
+      *(tp) = NULL;
     }
-    else{
+    else{ /* p is not only node in the queue but it is the tp */
       (*tp)->p_next->p_prev = (*tp)->p_prev;
       (*tp)->p_prev->p_next = (*tp)->p_next;
       *tp = (*tp)->p_prev;
     }
     return (tailPointer);
   }
-  else{
+  else{ /* p is not the tp */
     pcb_PTR current_PTR = (*tp)->p_next;
     while(current_PTR != tailPointer){
       if(current_PTR != p){
