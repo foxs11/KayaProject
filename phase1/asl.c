@@ -4,7 +4,7 @@
 /************************** ASL.C ******************************
 *
 *  Provides methods for maintaining the Active Semaphore List.
-*  This is maintained as a linear, singly linked list of semd_t nodes in ascending order by semAdd.
+*  This is maintained as a linear, singly linked list of semd_t nodes in ascending order by semAdd with a head pointer.
 *  There are two dummy nodes to guard against edge cases in removal and insertion.
 *  Maintains a semaphore descriptor node free list as a singly linked, linear stack.
 *  Supports removal and insertion of process blocks onto the procQs of corresponding semd_ts.
@@ -17,15 +17,20 @@
 #include "../e/pcb.e"
 #include "pcb.c"
 
-static semd_PTR semd_h;
-static semd_PTR semdFree_h;
+static semd_PTR semd_h; /* pointer to the head of the ASL */
+static semd_PTR semdFree_h; /* pointer to the head of the semd free list */
 
+/* null out the fields of a semd node that is either about to be allocated
+*  or about to be returned to the free list */
 HIDDEN void cleanSemd(semd_PTR p){
   p->s_next = NULL;
 	p->s_semAdd = NULL;
   p->s_procQ = NULL;
 }
 
+/* This function takes a semd as a parameter and searches the ASL for that node.
+*  Whether the node in question is on the ASL or not, the function returns
+*  the previous node to where the node would be or is. */
 HIDDEN semd_PTR searchSemd(int *semd){
   semd_PTR semdListPTR = semd_h;
   while (semdListPTR->s_next->s_semAdd < semd) {
@@ -34,12 +39,18 @@ HIDDEN semd_PTR searchSemd(int *semd){
   return semdListPTR;
 }
 
+/* This function, given a semd, cleans it and returns it to the free list */
 HIDDEN void freeSemd(semd_PTR p){
   cleanSemd(p);
   p->s_next = semdFree_h;
   semdFree_h = p;
 }
 
+/* This function allocates a new semd from the free list to be later inserted
+*  into the ASL. It sets the allocated semd's s_semAdd to the parameter semAdd.
+*  Returns null if the free list is empty, and handles the cases of just one
+*  on the free list and more than one differently in order to maintain the integrity
+*  of the free list. */
 HIDDEN semd_PTR allocateSemd(int *semAdd){
   semd_PTR allocatedSemd; 
   if (semdFree_h == NULL) {
@@ -62,10 +73,19 @@ HIDDEN semd_PTR allocateSemd(int *semAdd){
   }
 }
 
+/* Insert the ProcBlk pointed to bypat the tail of the process queue
+*  associated with the semaphore whose physical address issemAdd
+*  and set the semaphore address ofpto semAdd. If the semaphore is
+*  currently not active (i.e. there is no descriptor for it in the ASL),
+*  allocate a new descriptor from the semdFree list, insert it in the ASL
+*  (at the appropriate position), initialize all of thefields (i.e. set
+*  s_semAdd to semAdd, and s_procq to mkEmptyProcQ()), and proceed as
+*  above. If a new semaphore descriptor needs to be allocated and the
+*  semdFree list is empty, return TRUE. In all other cases return FALSE.*/
 int insertBlocked (int *semAdd, pcb_PTR p){
   semd_PTR parent = searchSemd(semAdd);
-  if(parent->s_next->s_semAdd == semAdd){
-    insertProcQ(&(parent->s_next->s_procQ), p);
+  if (parent->s_next->s_semAdd == semAdd){ /* is there a semd with semAdd on the ASL? */
+    insertProcQ(&(parent->s_next->s_procQ), p); /* yes */
     p->p_semAdd = semAdd;
     return FALSE;
   }
@@ -74,18 +94,22 @@ int insertBlocked (int *semAdd, pcb_PTR p){
     if (newSemd == NULL) {
       return TRUE; /* no more free semd's and insert is blocked */
     }
-    newSemd->s_next = parent->s_next;
+    newSemd->s_next = parent->s_next; /* there are available semds */
     parent->s_next = newSemd;
     insertProcQ(&(newSemd->s_procQ), p);
     p->p_semAdd = semAdd;
     return FALSE;
   }
-} /* search active semdList if found: insertProcQ(p and tp found in semd) if not found: allocate new semd, put new node into active list, perform found */
+}
 
+/* Remove the ProcBlk pointed to bypfrom the process queue associated
+*  with p’s semaphore (p→psemAdd) on the ASL. If ProcBlkpointed
+*  to by p does not appear in the process queue associated with p’s
+*  semaphore, which is an error condition, return NULL; otherwise, return p. */
 pcb_PTR outBlocked (pcb_PTR p){
   semd_PTR parent = searchSemd(&(*(p->p_semAdd)));
-  if (parent->s_next->s_semAdd != p->p_semAdd) {
-    return NULL;
+  if (parent->s_next->s_semAdd != p->p_semAdd) { /* did we find the procBlk on the ASL? */
+    return NULL; /* no */
   }
   /* p should be on the right process queue */
   else if (headProcQ(parent->s_next->s_procQ->p_next) == p) { /* are we removing the last pcb? */
@@ -98,32 +122,43 @@ pcb_PTR outBlocked (pcb_PTR p){
   else{ /* more than one pcb in procQ */
     return outProcQ(&(parent->s_next->s_procQ), p);
   }
-} /* search active semdList if not found: error case, if found: outProcQ on the process queue, value is returned. If processqueue not empty: your done, if it is empty: deallocate this semd node */
+}
 
+/* Search the ASL for a descriptor of this semaphore.  If none is
+*  found, return NULL; otherwise, remove the first (i.e. head)
+*  ProcBlk from the process queue of the found semaphore descriptor
+*  and re-turn a pointer to it. If the process queue for this
+*  semaphore becomes empty (emptyProcQ(sprocq)is TRUE), remove the
+*  semaphore descriptor from the ASL and return it to the semdFree list. */
 pcb_PTR removeBlocked (int *semAdd){
   semd_PTR parent = searchSemd(semAdd);
-  if (parent->s_next->s_semAdd != semAdd) {
-    return NULL;
+  if (parent->s_next->s_semAdd != semAdd) { /* is the next node the one we are looking for? */
+    return NULL; /* no */
   }
-  else {
+  else { /* yes */
     return outBlocked(headProcQ(parent->s_next->s_procQ));
   }
 }
 
-
+/* Return a pointer to the ProcBlk that is at the head of the process
+*  queue associated with the semaphore semAdd. Return NULL if semAdd
+*  is not found on the ASL or if the process queue associated with semAdd is empty. */
 pcb_PTR headBlocked (int *semAdd){
   semd_PTR parent = searchSemd(semAdd);
-  if (parent->s_next->s_semAdd != semAdd) {
-    return NULL;
+  if (parent->s_next->s_semAdd != semAdd) { /* is the next node the one we are looking for? */
+    return NULL; /* no */
   }
-  else if (emptyProcQ(parent->s_next->s_procQ)){
-    return NULL;
+  else if (emptyProcQ(parent->s_next->s_procQ)){ /* yes, but is the procQ empty? */
+    return NULL; /* yes */
   }
-  else {
+  else { /* no */
     return headProcQ(parent->s_next->s_procQ);
   }
 }
 
+/* Initialize the semdFree list to contain all the elements of the array
+*  staticsemdt semdTable[MAXPROC]. This method will be only called once
+*  during data structure initializa-tion. */
 void initASL (){
   static semd_t semdTable[MAXPROC+2];
   semd_h = NULL;
@@ -132,7 +167,7 @@ void initASL (){
   for(i=0; i<MAXPROC+2; i++){
     freeSemd(&semdTable[i]);
   }
-  semd_h = allocateSemd(0);
+  semd_h = allocateSemd(0); /* set up sentinel nodes */
   semd_h->s_next = allocateSemd(MAXINT);
   semd_h->s_next->s_next = NULL;
 }
