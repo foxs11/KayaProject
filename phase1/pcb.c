@@ -17,6 +17,7 @@
 
 static pcb_PTR pcbFree_h; /* the tail pointer into the pcb free list */
 
+/* GLOBAL FUNCTIONS */
 
 /* Return TRUE if the queue whose tail is pointed to bytpis empty.
 *  Return FALSE otherwise. */
@@ -204,6 +205,8 @@ pcb_PTR removeChild (pcb_PTR p){
   }
   return outChild(p->p_child);
 }
+
+/* LOCAL FUNCTIONS */
 
 /* Null out the fields of ProcBlk pointed to by p so as to avoid having
 * newly allocated or newly deallocated ProcBlks not evidence of their old relationships */

@@ -20,58 +20,7 @@
 static semd_PTR semd_h; /* pointer to the head of the ASL */
 static semd_PTR semdFree_h; /* pointer to the head of the semd free list */
 
-/* null out the fields of a semd node that is either about to be allocated
-*  or about to be returned to the free list */
-HIDDEN void cleanSemd(semd_PTR p){
-  p->s_next = NULL;
-	p->s_semAdd = NULL;
-  p->s_procQ = NULL;
-}
-
-/* This function takes a semd as a parameter and searches the ASL for that node.
-*  Whether the node in question is on the ASL or not, the function returns
-*  the previous node to where the node would be or is. */
-HIDDEN semd_PTR searchSemd(int *semd){
-  semd_PTR semdListPTR = semd_h;
-  while (semdListPTR->s_next->s_semAdd < semd) {
-    semdListPTR = semdListPTR->s_next;
-  }
-  return semdListPTR;
-}
-
-/* This function, given a semd, cleans it and returns it to the free list */
-HIDDEN void freeSemd(semd_PTR p){
-  cleanSemd(p);
-  p->s_next = semdFree_h;
-  semdFree_h = p;
-}
-
-/* This function allocates a new semd from the free list to be later inserted
-*  into the ASL. It sets the allocated semd's s_semAdd to the parameter semAdd.
-*  Returns null if the free list is empty, and handles the cases of just one
-*  on the free list and more than one differently in order to maintain the integrity
-*  of the free list. */
-HIDDEN semd_PTR allocateSemd(int *semAdd){
-  semd_PTR allocatedSemd; 
-  if (semdFree_h == NULL) {
-    return NULL;
-  }
-  /* one on free list */
-  else if (semdFree_h->s_next == NULL) {
-    allocatedSemd = semdFree_h;
-    semdFree_h = NULL;
-    cleanSemd(allocatedSemd);
-    allocatedSemd->s_semAdd = semAdd;
-    return allocatedSemd;
-  }
-  else { /* more than one on free list */
-    allocatedSemd = semdFree_h;
-    semdFree_h = semdFree_h->s_next;
-    cleanSemd(allocatedSemd);
-    allocatedSemd->s_semAdd = semAdd;
-    return allocatedSemd;
-  }
-}
+/* GLOBAL FUNCTIONS */
 
 /* Insert the ProcBlk pointed to bypat the tail of the process queue
 *  associated with the semaphore whose physical address issemAdd
@@ -170,6 +119,61 @@ void initASL (){
   semd_h = allocateSemd(0); /* set up sentinel nodes */
   semd_h->s_next = allocateSemd(MAXINT);
   semd_h->s_next->s_next = NULL;
+}
+
+/* LOCAL FUNCTIONS */
+
+/* null out the fields of a semd node that is either about to be allocated
+*  or about to be returned to the free list */
+HIDDEN void cleanSemd(semd_PTR p){
+  p->s_next = NULL;
+  p->s_semAdd = NULL;
+  p->s_procQ = NULL;
+}
+
+/* This function takes a semd as a parameter and searches the ASL for that node.
+*  Whether the node in question is on the ASL or not, the function returns
+*  the previous node to where the node would be or is. */
+HIDDEN semd_PTR searchSemd(int *semd){
+  semd_PTR semdListPTR = semd_h;
+  while (semdListPTR->s_next->s_semAdd < semd) {
+    semdListPTR = semdListPTR->s_next;
+  }
+  return semdListPTR;
+}
+
+/* This function, given a semd, cleans it and returns it to the free list */
+HIDDEN void freeSemd(semd_PTR p){
+  cleanSemd(p);
+  p->s_next = semdFree_h;
+  semdFree_h = p;
+}
+
+/* This function allocates a new semd from the free list to be later inserted
+*  into the ASL. It sets the allocated semd's s_semAdd to the parameter semAdd.
+*  Returns null if the free list is empty, and handles the cases of just one
+*  on the free list and more than one differently in order to maintain the integrity
+*  of the free list. */
+HIDDEN semd_PTR allocateSemd(int *semAdd){
+  semd_PTR allocatedSemd; 
+  if (semdFree_h == NULL) {
+    return NULL;
+  }
+  /* one on free list */
+  else if (semdFree_h->s_next == NULL) {
+    allocatedSemd = semdFree_h;
+    semdFree_h = NULL;
+    cleanSemd(allocatedSemd);
+    allocatedSemd->s_semAdd = semAdd;
+    return allocatedSemd;
+  }
+  else { /* more than one on free list */
+    allocatedSemd = semdFree_h;
+    semdFree_h = semdFree_h->s_next;
+    cleanSemd(allocatedSemd);
+    allocatedSemd->s_semAdd = semAdd;
+    return allocatedSemd;
+  }
 }
 
 /***************************************************************/
