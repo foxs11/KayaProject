@@ -17,16 +17,6 @@
 
 static pcb_PTR pcbFree_h; /* the tail pointer into the pcb free list */
 
-/* Null out the fields of ProcBlk pointed to by p so as to avoid having
-* newly allocated or newly deallocated ProcBlks not evidence of their old relationships */
-HIDDEN void cleanPcb(pcb_PTR x){
-  x->p_next = NULL;
-  x->p_prev = NULL;
-  x->p_child = NULL;
-  x->p_sib = NULL;
-  x->p_prevsib = NULL;
-  x->p_prnt = NULL;
-}
 
 /* Return TRUE if the queue whose tail is pointed to bytpis empty.
 *  Return FALSE otherwise. */
@@ -213,6 +203,17 @@ pcb_PTR removeChild (pcb_PTR p){
     return NULL;
   }
   return outChild(p->p_child);
+}
+
+/* Null out the fields of ProcBlk pointed to by p so as to avoid having
+* newly allocated or newly deallocated ProcBlks not evidence of their old relationships */
+HIDDEN void cleanPcb(pcb_PTR x){
+  x->p_next = NULL;
+  x->p_prev = NULL;
+  x->p_child = NULL;
+  x->p_sib = NULL;
+  x->p_prevsib = NULL;
+  x->p_prnt = NULL;
 }
 /***************************************************************/
 
