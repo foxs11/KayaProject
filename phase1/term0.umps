@@ -16,30 +16,9 @@ insertChild, removeChild and emptyChild ok
 process tree module ok      
 Initialized active semaphore list   
 insertBlocked test #1 started  
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
 insertBlocked test #2 started  
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-in insertBlocked asdfsadfsfasdfasfasfdd
-removeBlocked good
-in insertBlocked asdfsadfsfasdfasfasfdd
 removeBlocked test started   
-removeBlocked good
-removeBlocked bad
-removeBlocked: wouldn't remove   
+insertBlocked and removeBlocked ok   
+headBlocked and outBlocked ok   
+ASL module ok   
+So Long and Thanks for All the Fish
