@@ -3,6 +3,7 @@
 #include "../phase1/asl.c"
 #include "../h/types.h"
 #include "../h/const.h"
+#include "/usr/local/include/umps2/umps/libumps.e"
 
 void scheduler(){
   pcb_PTR process = removeProcQ(&readyQue);
@@ -15,7 +16,10 @@ void scheduler(){
         PANIC();
       }
       else{
-        /* setStatus here to enable interrupts */
+        
+        unsigned int cp0status = getSTATUS();
+        cp0status = cp0status | SCHEDULERINTSUNMASKED;
+        setSTATUS(cp0status); /* has a return value...? */
         WAIT();
       }
     }
@@ -26,4 +30,8 @@ void scheduler(){
     STCK(time);
     LDST(&(process->p_s));
   }
+}
+
+void setStatus(unsigned int * status){
+
 }

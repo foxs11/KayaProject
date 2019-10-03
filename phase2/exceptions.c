@@ -49,3 +49,54 @@ void syscallDispatch(int syscallNum){
     passUpOrDie();
   }
 }
+
+void createProcess(){
+  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  state_PTR newProcState = syscallOld->s_a1;
+  syscallOld->s_v0 = -1;
+  pcb_PTR p = allocPcb();
+  if (p==NULL) {
+    syscallOld->s_v0 = -1;
+    return;
+  }
+  else { /* pcb allocated */
+    stateCopy(p, newProcState);
+    processCount++;
+    insertChild(currentProc, p);
+    insertProcQ(&readyQue, p);
+    syscallOld->s_v0 = 1;
+    LDST(&syscallOld);
+  }
+}
+
+void terminateProcess(){
+  terminateRecursively(currentProcess);
+  scheduler();
+}
+
+void terminateRecursively(pcb_PTR processToKill) {
+  if (!emptyChild(processToKill)) {
+    terminateRecursively(processToKill->p_child);
+  }
+  if (processToKill->p_semAdd != NULL) { /* on ASL */
+    freePcb(outBlocked(processToKill));
+    processCount--;
+    softBlockedCount--;
+  }
+  else if (processToKill == currentProcess) { /* current proc */
+    freePcb(processToKill);
+    processCount--;
+  }
+  else { /* pcb is on readyQue */
+    freePcb(outProcQ(&readyQue, processToKill));
+    processCount--;
+  }
+}
+
+void stateCopy(pcb_PTR p, state_PTR s){
+  p->p_s.s_asid = s->s_asid;
+  p->p_s.s_cause = s->s_cause;
+  p->p_s.s_status = s->s_status;
+  p->p_s.s_pc = s->s_pc;
+  p->p_s.s_reg = s->s_reg;
+}
