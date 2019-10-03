@@ -15,13 +15,14 @@ void scheduler(){
         PANIC();
       }
       else{
+        /* setStatus here to enable interrupts */
         WAIT();
       }
     }
   }
   else{
     currentProcess = process;
-    LDIT(5000);
+    setTimer(5000);
     STCK(time);
     LDST(&(process->p_s));
   }
