@@ -74,9 +74,9 @@ void terminateProcess(){
   scheduler();
 }
 
-void terminateRecursively(pcb_PTR processToKill) {
-  if (!emptyChild(processToKill)) {
-    terminateRecursively(processToKill->p_child);
+void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
+  while (!emptyChild(processToKill)) {
+    terminateRecursively(removeChild(processToKill));
   }
   if (processToKill->p_semAdd != NULL) { /* on ASL */
     freePcb(outBlocked(processToKill));
@@ -84,7 +84,7 @@ void terminateRecursively(pcb_PTR processToKill) {
     softBlockedCount--;
   }
   else if (processToKill == currentProcess) { /* current proc */
-    freePcb(processToKill);
+    freePcb(outChild(processToKill));
     processCount--;
   }
   else { /* pcb is on readyQue */
@@ -99,4 +99,72 @@ void stateCopy(pcb_PTR p, state_PTR s){
   p->p_s.s_status = s->s_status;
   p->p_s.s_pc = s->s_pc;
   p->p_s.s_reg = s->s_reg;
+}
+
+void specifyExceptionStateVector(){
+  
+
+  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  int exceptionType = syscallOld->s_a1;
+  state_PTR oldState = syscallOld->s_a2;
+  state_PTR newState = syscallOld->s_a3;
+
+  if (exceptionType == 0){
+    if (currentProcess->p_oldTLB != NULL){
+      terminateProcess();
+    }
+    else {
+      currentProcess->p_oldTBL = oldState;
+      currentProcess->p_newTBL = newState;
+    }
+  }
+  else if (exceptionType == 1){
+    if (currentProcess->p_oldPgm != NULL){
+      terminateProcess();
+    }
+    else {
+      currentProcess->p_oldPgm = oldState;
+      currentProcess->p_newPgm = newState;
+    }
+  }
+  else if (exceptionType == 2){
+    if (currentProcess->p_oldSys != NULL){
+      terminateProcess();
+    }
+    else {
+      currentProcess->p_oldSys = oldState;
+      currentProcess->p_newSys = newState;
+    }
+  }
+
+  LDST(&syscallOld);
+}
+
+void passUpOrDie(int exceptionType){
+  state_PTR oldState = NULL;
+  if (exceptionType == 0) {
+    if (currentProcess->oldTLB != NULL) {
+      oldState = (state_t *) TLBMANAGEMENTOLDAREA;
+      currentProcess->oldTLB = oldState;
+      LDST(currentProcess->newTLB);
+    }
+  }
+  else if (exceptionType == 1) {
+    if (currentProcess->oldPgm != NULL) {
+      oldState = (state_t *) PROGRAMTRAPOLDAREA;
+      currentProcess->oldPgm = oldState;
+      LDST(currentProcess->newPgm);
+    }
+  }
+  else if (exceptionType == 2) {
+    if (currentProcess->oldSys != NULL) {
+      oldState = (state_t *) SYSCALLOLDAREA;
+      currentProcess->oldSys = oldState;
+      LDST(currentProcess->newSys);
+    }
+  }
+  /* sys 5 hasnt been called before, kill it */
+  terminateProcess();
+
+  
 }

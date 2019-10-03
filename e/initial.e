@@ -6,11 +6,8 @@
 #include "scheduler.c"
 
 /* global variables */
-int processCount;
-int softBlockCount;
-pcb_PTR currentProcess;
-pcb_PTR readyQue;
-cpu_t *time;
-
-void main(){
-}
+extern int processCount;
+extern int softBlockCount;
+extern pcb_PTR currentProcess;
+extern pcb_PTR readyQue;
+extern cpu_t *time;

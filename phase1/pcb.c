@@ -218,6 +218,12 @@ HIDDEN void cleanPcb(pcb_PTR x){
   x->p_prevsib = NULL;
   x->p_prnt = NULL;
   x->p_semAdd = NULL;
+  x->p_oldSys = NULL;
+  x->p_newSys = NULL;
+  x->p_oldPgm = NULL;
+  x->p_newPgm = NULL;
+  x->p_oldTLB = NULL;
+  x->p_newTLB = NULL;
 }
 /***************************************************************/
 

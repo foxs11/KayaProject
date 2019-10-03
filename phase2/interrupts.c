@@ -3,6 +3,27 @@
 #include "../h/types.h"
 #include "../h/const.h"
 
+
+unsigned int ackTerminal(int *devSemNum){
+	volatile devregarea_t *deviceRegs;
+	unsigned int intStatus;
+
+	deviceRegs = (devregarea_t *) RAMBASEADDR;
+
+	intStatus = deviceRegs->devreg[(*devSemNum)].t_transm_status;
+	if ((intStatus & 0x0F) != READY) {
+		deviceRegs->devreg[(*devSemNum)].t_transm_command = ACK;
+	}
+
+	else {
+		intStatus = deviceRegs->devreg[(*devSemNum)].t_recv_command = ACK;
+
+		*devSemNum = *devSemNum + DEVPERINT;
+	}
+
+	return intStatus;
+}
+
 void interruptHandler(){
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
   unsigned int cause = interruptOld->s_cause;
@@ -19,7 +40,31 @@ void interruptHandler(){
 
   	/* int handler video 2 */
   	/*get semAdd*/
-  	
+  	pcb_PTR p = NULL;
+  	if (semAdd <= 0) {
+  		p = removeBlocked(semAdd);
+  		p->p_s.s_v0 = device->d_status;
+  		insertProcQ(&readyQue, p);
+  		softBlockedCount--;
+  		/*ack the interrupt */
+  		if (lineNumber == 7) {
+  			ackTerminal();
+  		}
+  		else{
+  			device->d_command = 1;
+  		}
+  		if (waitFlag == 1) {
+  			scheduler();
+  		}
+  		else{
+  			LDST(interruptOld);
+  		}
+  		
+  	}
+  	else {
+  		ERROR
+  	}
+
   }
   else { /* line number not between 3 and 7 */
 
