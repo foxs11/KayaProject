@@ -20,6 +20,7 @@ void scheduler(){
         unsigned int cp0status = getSTATUS();
         cp0status = cp0status | SCHEDULERINTSUNMASKED;
         setSTATUS(cp0status); /* has a return value...? */
+        waitFlag = 1;
         WAIT();
       }
     }

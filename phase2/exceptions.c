@@ -28,21 +28,21 @@ void syscallDispatch(int syscallNum){
   if(1<= syscallNum <= 8){
     switch(syscallNum){
       case 1:
-        createProcess();
+        createProcess(); /* done */
       case 2:
-        terminateProcess();
+        terminateProcess(); /* done */
       case 3:
-        verhogen();
+        verhogen(); /* done */
       case 4:
-        passeren();
+        passeren(); /* done */
       case 5:
-        specifyExceptionStateVector();
+        specifyExceptionStateVector(); /* done */
       case 6:
         getCPUTime();
       case 7:
         waitForClock();
       case 8:
-        waitForIODevice();
+        waitForIODevice(); /* done */
     }
   }
   else{
@@ -102,8 +102,6 @@ void stateCopy(pcb_PTR p, state_PTR s){
 }
 
 void specifyExceptionStateVector(){
-  
-
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   int exceptionType = syscallOld->s_a1;
   state_PTR oldState = syscallOld->s_a2;
@@ -164,7 +162,47 @@ void passUpOrDie(int exceptionType){
     }
   }
   /* sys 5 hasnt been called before, kill it */
-  terminateProcess();
+  terminateProcess();  
+}
 
-  
+void verhogen(){
+  state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  int mutex = oldSys->s_a1;
+  mutex++;
+  if (mutex <= 0){
+    pcb_PTR temp = removeBlocked(&mutex);
+    insertProcQ(&readyQue, temp);
+  }
+  LDST(&oldSys);
+}
+
+void passeren(){
+  state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  int mutex = oldSys->s_a1;
+  mutex--;
+  if (mutex < 0){
+    insertBlocked(&mutex, currentProcess);
+    currentProcess = NULL;
+    scheduler();
+  }
+  LDST(&oldSys);
+}
+
+void waitForIODevice(){
+  state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  int lineNumber = oldSys->s_a1;
+  int deviceNumber = oldSys->s_a2;
+  int termRead = oldSys->s_a3;
+  int * semAdd = devSemTable[getSemArrayNum(lineNumber, deviceNumber)];
+  semAdd--;
+  if (semAdd < 0) {
+    cpu_t currTime = NULL;
+    STCK(currTime);
+    currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
+    softBlockedCount++;
+    insertBlocked(semAdd, currentProcess);
+    currentProcess = NULL;
+    scheduler();
+  }
+  /* error */
 }

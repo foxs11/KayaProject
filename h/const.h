@@ -11,6 +11,7 @@
 #define PAGESIZE		4096	/* page size in bytes */
 #define WORDLEN			4		/* word size in bytes */
 #define PTEMAGICNO		0x2A
+#define DEVICESEMNUM	49
 
 
 #define ROMPAGESTART	0x20000000	 /* ROM Reserved Page */
@@ -20,6 +21,7 @@
 #define RAMBASEADDR	0x10000000
 #define TODLOADDR	0x1000001C
 #define LINE3INTBITMAP 0x1000003C
+#define 
 #define INTERVALTMR	0x10000020	
 #define TIMESCALEADDR	0x10000024
 

@@ -11,6 +11,8 @@ int softBlockCount;
 pcb_PTR currentProcess;
 pcb_PTR readyQue;
 cpu_t *time;
+int waitFlag;
+int devSemTable[DEVICESEMNUM];
 
 void main(){
   devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -48,6 +50,14 @@ void main(){
 
   initPcbs();
   initASL();
+
+  int i;
+  for(i=0; i<DEVICESEMNUM; i++){
+    (devSemTable[i])->s_semAdd = i+1;
+    (*(devSemTable[i])->s_semAdd) = 0;
+  }
+
+
 
   pcb_PTR p = allocPcb();
   p->p_s.s_sp = ramTop - PAGESIZE;
