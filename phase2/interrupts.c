@@ -24,6 +24,10 @@ unsigned int ackTerminal(int *devSemNum){
 	return intStatus;
 }
 
+int getSemArrayNum(int lineNumber, int deviceNumber){
+	return 1;
+}
+
 void interruptHandler(){
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
   unsigned int cause = interruptOld->s_cause;
@@ -40,6 +44,8 @@ void interruptHandler(){
 
   	/* int handler video 2 */
   	/*get semAdd*/
+
+  	
   	pcb_PTR p = NULL;
   	if (semAdd <= 0) {
   		p = removeBlocked(semAdd);
@@ -67,7 +73,7 @@ void interruptHandler(){
 
   }
   else { /* line number not between 3 and 7 */
-
+  	/*if clock ........*/
   }
 
 

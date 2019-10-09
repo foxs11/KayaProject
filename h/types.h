@@ -97,6 +97,13 @@ typedef struct pcb_t {
 								*p_sib,			/*pointer to sibling */
 								*p_prevsib;	/*pointer to previous sibling */
 	state_t				p_s;				/* process state */
+	state_PTR			p_oldSys;
+	state_PTR			p_newSys;
+	state_PTR			p_oldPgm;
+	state_PTR			p_newPgm;
+	state_PTR			p_oldTLB;
+	state_PTR			p_newTLB;
+	cpu_t				p_time;
 	int						*p_semAdd;	/* pointer to sema4 on which prosess blocked */
 } pcb_t, *pcb_PTR;
 
