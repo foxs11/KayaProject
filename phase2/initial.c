@@ -12,7 +12,9 @@ pcb_PTR currentProcess;
 pcb_PTR readyQue;
 cpu_t *time;
 int waitFlag;
-int devSemTable[DEVICESEMNUM];
+int devSemTable[DEVICESEMNUM]; /*compute number differently */
+
+extern void test();
 
 void main(){
   devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -53,15 +55,12 @@ void main(){
 
   int i;
   for(i=0; i<DEVICESEMNUM; i++){
-    (devSemTable[i])->s_semAdd = i+1;
-    (*(devSemTable[i])->s_semAdd) = 0;
+    devSemTable[i] = 0;
   }
-
-
 
   pcb_PTR p = allocPcb();
   p->p_s.s_sp = ramTop - PAGESIZE;
-  p->p_s.s_pc = (memaddr) phase2testmain;
+  p->p_s.s_pc = (memaddr) test;
   p->p_s.s_status = FIRSTPROCESSSTATUSMASK;
 
   processCount++;

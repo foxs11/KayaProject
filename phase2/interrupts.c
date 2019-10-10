@@ -35,16 +35,14 @@ void interruptHandler(){
   lineNumber = getLineNumber(cause);
   
 
-  if (3 >= lineNumber >= 7){
+  if (3 >= lineNumber >= 7){ /* maybe remove line 5? */
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
   	int devIndex = ((lineNumber - 3) * 8) + deviceNumber - 1;
   	device_t * device = &(foo->devreg[devIndex]);
 
-  	/* int handler video 2 */
-  	/*get semAdd*/
-
+    int * semAdd = &(semDevTable[devIndex]);
   	
   	pcb_PTR p = NULL;
   	if (semAdd <= 0) {

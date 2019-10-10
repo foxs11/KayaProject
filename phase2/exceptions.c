@@ -17,32 +17,44 @@ void sysCallHandler(){
     kernelMode = FALSE;
   }
   if(kernelMode){
-    syscallDispatch(syscallNum);
+    syscallDispatch(syscallNum, kernelMode);
   }
   else{
     //TODO: make program trap for this else
   }
 }
 
-void syscallDispatch(int syscallNum){
+void syscallDispatch(int syscallNum, int kernelMode){
   if(1<= syscallNum <= 8){
-    switch(syscallNum){
-      case 1:
-        createProcess(); /* done */
-      case 2:
-        terminateProcess(); /* done */
-      case 3:
-        verhogen(); /* done */
-      case 4:
-        passeren(); /* done */
-      case 5:
-        specifyExceptionStateVector(); /* done */
-      case 6:
-        getCPUTime();
-      case 7:
-        waitForClock();
-      case 8:
-        waitForIODevice(); /* done */
+    if(kernelMode == TRUE) {
+      switch(syscallNum){
+        case 1:
+          createProcess(); /* done */
+        case 2:
+          terminateProcess(); /* done */
+        case 3:
+          verhogen(); /* done */
+        case 4:
+          passeren(); /* done */
+        case 5:
+          specifyExceptionStateVector(); /* done */
+        case 6:
+          getCPUTime();
+        case 7:
+          waitForClock();
+        case 8:
+          waitForIODevice(); /* done */
+      }
+    }
+    else { /* syscall 1-8 user mode, make it look like a priveleged instruction error */
+      state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+      state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
+      stateCopy(syscallOld, pgmOld);
+
+      unsigned int* cause = &(pgmOld->s_cause);  /*fucky bitwise ops that could go wrong */
+      *cause = *cause | RIMASKON;
+      unsigned int finalCause = ~(*cause) | RIMASKTOTURNOFF;
+      *cause = ~finalCause;
     }
   }
   else{
@@ -93,12 +105,28 @@ void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device
   }
 }
 
-void stateCopy(pcb_PTR p, state_PTR s){
+void stateCopyPCB(pcb_PTR p, state_PTR s){
   p->p_s.s_asid = s->s_asid;
   p->p_s.s_cause = s->s_cause;
   p->p_s.s_status = s->s_status;
   p->p_s.s_pc = s->s_pc;
-  p->p_s.s_reg = s->s_reg;
+
+  int i = 0;
+  for (i; i < STATEREGNUM; i++) {
+    p->p_s.s_reg[i] = s->s_reg[i];
+  }
+}
+
+void stateCopy(state_PTR old, state_PTR new){
+  new->s_asid = old->s_asid;
+  new->s_cause = old->s_cause;
+  new->s_status = old->s_status;
+  new->s_pc = old->s_pc;
+  
+  int i = 0;
+  for (i; i < STATEREGNUM; i++) {
+    new->s_reg[i] = old->s_reg[i];
+  } /*
 }
 
 void specifyExceptionStateVector(){
