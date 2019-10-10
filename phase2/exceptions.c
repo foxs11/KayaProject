@@ -145,7 +145,7 @@ void stateCopy(state_PTR old, state_PTR new){
   int i = 0;
   for (i; i < STATEREGNUM; i++) {
     new->s_reg[i] = old->s_reg[i];
-  } 
+  }
 }
 
 void specifyExceptionStateVector(){
@@ -215,7 +215,7 @@ void passUpOrDie(int exceptionType){
 void verhogen(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int mutex = oldSys->s_a1;
-  mutex++;
+  (*mutex)++;
   if (mutex <= 0){
     pcb_PTR temp = removeBlocked(&mutex);
     insertProcQ(&readyQue, temp);
