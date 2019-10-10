@@ -32,7 +32,3 @@ void scheduler(){
     LDST(&(process->p_s));
   }
 }
-
-void setStatus(unsigned int * status){
-
-}

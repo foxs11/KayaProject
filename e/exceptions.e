@@ -6,5 +6,3 @@
 extern void pgmTrapHandler(){}
 extern void tlbMgmtHandler(){}
 extern void sysCallHandler(){}
-
-
