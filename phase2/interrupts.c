@@ -29,6 +29,10 @@ int getSemArrayNum(int lineNumber, int deviceNumber){
 }
 
 void interruptHandler(){
+  cpu_t currTime = NULL;
+  STCK(currTime);
+  currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
+
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
   unsigned int cause = interruptOld->s_cause;
   int lineNumber = NULL;
@@ -61,17 +65,25 @@ void interruptHandler(){
   			scheduler();
   		}
   		else{
+        STCK(*time);
   			LDST(interruptOld);
   		}
   		
   	}
-  	else {
-  		ERROR
-  	}
-
   }
   else { /* line number not between 3 and 7 */
-  	/*if clock ........*/
+  	if (lineNumber == 1) {
+      scheduler();
+    }
+    else { /* line number 2 */
+      LDIT(100000);
+      semDevTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]++;
+      if (semDevTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE] <= 0){
+        pcb_PTR temp = removeBlocked(&(semDevTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
+        insertProcQ(&readyQue, temp);
+      }
+      LDST(&interruptOld);
+    }
   }
 
 

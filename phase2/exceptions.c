@@ -3,8 +3,30 @@
 #include "../h/types.h"
 #include "../h/const.h"
 
-void pgmTrapHandler(){}
-void tlbMgmtHandler(){}
+void pgmTrapHandler(){
+  if (currentProcess->p_oldPgm == NULL){
+      terminateProcess();
+  }
+  else {
+    state_t *globalPgmOld = (state_t *) PROGRAMTRAPOLDAREA;
+    stateCopy(globalPgmOld, currentProcess->p_oldPgm);
+
+    LDST(&(currentProcess->p_newPgm));
+  }
+}
+
+void tlbMgmtHandler(){
+  if (currentProcess->p_oldTLB == NULL){
+      terminateProcess();
+  }
+  else {
+    state_t *globalTLBOld = (state_t *) TLBMANAGEMENTOLDAREA;
+    stateCopy(globalTLBOld, currentProcess->p_oldTLB);
+
+    LDST(&(currentProcess->p_newTLB));
+  }
+}
+
 void sysCallHandler(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   int syscallNum = syscallOld->s_a0;
@@ -16,12 +38,7 @@ void sysCallHandler(){
   else{
     kernelMode = FALSE;
   }
-  if(kernelMode){
-    syscallDispatch(syscallNum, kernelMode);
-  }
-  else{
-    //TODO: make program trap for this else
-  }
+  syscallDispatch(syscallNum, kernelMode);
 }
 
 void syscallDispatch(int syscallNum, int kernelMode){
@@ -39,7 +56,7 @@ void syscallDispatch(int syscallNum, int kernelMode){
         case 5:
           specifyExceptionStateVector(); /* done */
         case 6:
-          getCPUTime();
+          getCPUTime(); /* done */
         case 7:
           waitForClock();
         case 8:
@@ -55,6 +72,8 @@ void syscallDispatch(int syscallNum, int kernelMode){
       *cause = *cause | RIMASKON;
       unsigned int finalCause = ~(*cause) | RIMASKTOTURNOFF;
       *cause = ~finalCause;
+
+      pgmTrapHandler();
     }
   }
   else{
@@ -126,7 +145,7 @@ void stateCopy(state_PTR old, state_PTR new){
   int i = 0;
   for (i; i < STATEREGNUM; i++) {
     new->s_reg[i] = old->s_reg[i];
-  } /*
+  } 
 }
 
 void specifyExceptionStateVector(){
@@ -210,11 +229,47 @@ void passeren(){
   mutex--;
   if (mutex < 0){
     insertBlocked(&mutex, currentProcess);
+
+    cpu_t currTime = NULL;
+    STCK(currTime);
+    currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
+
     currentProcess = NULL;
     scheduler();
   }
   LDST(&oldSys);
 }
+
+getCPUTime(){
+  state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  
+  cpu_t currTime = NULL;
+  STCK(currTime);
+  currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
+
+  oldSys->s_v0 = currentProcess->p_time;
+
+  LDST(&oldSys);
+}
+
+waitForClock(){
+  state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  int semAdd = semDevTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
+  semAdd--;
+  if (semAdd < 0){
+    insertBlocked(&semAdd, currentProcess);
+
+    cpu_t currTime = NULL;
+    STCK(currTime);
+    currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
+
+    currentProcess = NULL;
+    scheduler();
+  }
+  LDST(&oldSys);
+}
+
+
 
 void waitForIODevice(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;

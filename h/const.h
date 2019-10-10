@@ -21,7 +21,7 @@
 #define RAMBASEADDR	0x10000000
 #define TODLOADDR	0x1000001C
 #define LINE3INTBITMAP 0x1000003C
-#define 
+
 #define INTERVALTMR	0x10000020	
 #define TIMESCALEADDR	0x10000024
 
@@ -84,6 +84,8 @@
 
 #define DEVREGLEN	4	/* device register field length in bytes & regs per dev */
 #define DEVREGSIZE	16 	/* device register size in bytes */
+#define EIGHTDEVLINES    5
+#define DEVSPERLINE 8
 
 /* device register field number for non-terminal devices */
 #define STATUS		0

@@ -12,7 +12,7 @@ pcb_PTR currentProcess;
 pcb_PTR readyQue;
 cpu_t *time;
 int waitFlag;
-int devSemTable[DEVICESEMNUM]; /*compute number differently */
+int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /*compute number differently */
 
 extern void test();
 
@@ -54,7 +54,7 @@ void main(){
   initASL();
 
   int i;
-  for(i=0; i<DEVICESEMNUM; i++){
+  for(i=0; i< (EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1); i++){
     devSemTable[i] = 0;
   }
 
@@ -65,5 +65,8 @@ void main(){
 
   processCount++;
   insertProcQ(&readyQue, p);
+
+  LDIT(100000);
+
   scheduler();
 }

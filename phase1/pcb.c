@@ -224,6 +224,7 @@ HIDDEN void cleanPcb(pcb_PTR x){
   x->p_newPgm = NULL;
   x->p_oldTLB = NULL;
   x->p_newTLB = NULL;
+  x->p_time = 0;
 }
 /***************************************************************/
 
