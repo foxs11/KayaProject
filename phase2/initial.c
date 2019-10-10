@@ -1,3 +1,6 @@
+#ifndef INITIAL
+#define INITIAL
+
 #include "../e/pcb.e"
 #include "../e/asl.e"
 #include "../h/types.h"
@@ -70,3 +73,5 @@ void main(){
 
   scheduler();
 }
+
+#endif

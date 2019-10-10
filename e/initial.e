@@ -1,3 +1,6 @@
+#ifndef INITIAL
+#define INITIAL
+
 #include "../e/pcb.e"
 #include "../e/asl.e"
 #include "../h/types.h"
@@ -12,3 +15,5 @@ extern pcb_PTR currentProcess;
 extern pcb_PTR readyQue;
 extern cpu_t *time;
 extern int devSemTable[];
+
+#endif
