@@ -3,6 +3,6 @@
 #include "../h/types.h"
 #include "../h/const.h"
 
-extern void pgmTrapHandler(){}
-extern void tlbMgmtHandler(){}
-extern void sysCallHandler(){}
+extern void pgmTrapHandler(){};
+extern void tlbMgmtHandler(){};
+extern void sysCallHandler(){};

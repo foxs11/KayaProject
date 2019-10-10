@@ -3,4 +3,4 @@
 #include "../h/types.h"
 #include "../h/const.h"
 
-extern void interruptHandler()
+extern void interruptHandler();
