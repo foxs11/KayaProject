@@ -7,6 +7,7 @@
 #include "../h/const.h"
 #include "../e/exceptions.e"
 #include "../e/scheduler.e"
+#include "../e/interrupts.e"
 
 /* global variables */
 extern int processCount;
