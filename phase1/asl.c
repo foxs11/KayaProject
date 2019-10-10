@@ -15,7 +15,6 @@
 #include "../h/types.h"
 #include "../h/const.h"
 #include "../e/pcb.e"
-#include "pcb.c"
 
 static semd_PTR semd_h; /* pointer to the head of the ASL */
 static semd_PTR semdFree_h; /* pointer to the head of the semd free list */
