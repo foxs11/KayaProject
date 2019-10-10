@@ -97,7 +97,7 @@ void createProcess(){
   else { /* pcb allocated */
     stateCopy(p, newProcState);
     processCount++;
-    insertChild(currentProcess p);
+    insertChild(currentProcess, p);
     insertProcQ(&readyQue, p);
     syscallOld->s_v0 = 1;
     LDST(&syscallOld);
