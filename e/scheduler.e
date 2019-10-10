@@ -5,6 +5,4 @@
 #include "../h/const.h"
 #include "/usr/local/include/umps2/umps/libumps.e"
 
-extern void scheduler(){
-  
-}
+extern void scheduler();
