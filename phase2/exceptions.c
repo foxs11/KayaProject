@@ -115,7 +115,7 @@ void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device
   if (processToKill->p_semAdd != NULL) { /* on ASL */
     freePcb(outBlocked(processToKill));
     processCount--;
-    softBlockedCount--;
+    softBlockCount--;
   }
   else if (processToKill == currentProcess) { /* current proc */
     freePcb(outChild(processToKill));
@@ -285,7 +285,7 @@ void waitForIODevice(){
     cpu_t currTime = NULL;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
-    softBlockedCount++;
+    softBlockCount++;
     insertBlocked(semAdd, currentProcess);
     currentProcess = NULL;
     scheduler();

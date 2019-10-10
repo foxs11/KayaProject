@@ -16,5 +16,6 @@ extern pcb_PTR currentProcess;
 extern pcb_PTR readyQue;
 extern cpu_t *time;
 extern int devSemTable[];
+extern int waitFlag;
 
 #endif

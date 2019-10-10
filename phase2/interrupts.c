@@ -50,17 +50,17 @@ void interruptHandler(){
   	int devIndex = ((lineNumber - 3) * 8) + deviceNumber - 1;
   	device_t * device = &(foo->devreg[devIndex]);
 
-    int * semAdd = &(semDevTable[devIndex]);
+    int * semAdd = &(devSemTable[devIndex]);
   	
   	pcb_PTR p = NULL;
   	if (semAdd <= 0) {
   		p = removeBlocked(semAdd);
   		p->p_s.s_v0 = device->d_status;
   		insertProcQ(&readyQue, p);
-  		softBlockedCount--;
+  		softBlockCount--;
   		/*ack the interrupt */
   		if (lineNumber == 7) {
-  			ackTerminal();
+  			ackTerminal(semAdd);
   		}
   		else{
   			device->d_command = 1;
