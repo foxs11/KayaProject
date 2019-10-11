@@ -30,7 +30,7 @@ void scheduler(){
   }
   else{
     currentProcess = process;
-    setTimer(5000);
+    setTIMER(5000);
     STCK(*time);
     LDST(&(process->p_s));
   }
