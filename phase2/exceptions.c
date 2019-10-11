@@ -7,6 +7,73 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
+void stateCopyPCB(pcb_PTR p, state_PTR s){
+  p->p_s.s_asid = s->s_asid;
+  p->p_s.s_cause = s->s_cause;
+  p->p_s.s_status = s->s_status;
+  p->p_s.s_pc = s->s_pc;
+
+  int i = 0;
+  for (i; i < STATEREGNUM; i++) {
+    p->p_s.s_reg[i] = s->s_reg[i];
+  }
+}
+
+void stateCopy(state_PTR old, state_PTR new){
+  new->s_asid = old->s_asid;
+  new->s_cause = old->s_cause;
+  new->s_status = old->s_status;
+  new->s_pc = old->s_pc;
+  
+  int i = 0;
+  for (i; i < STATEREGNUM; i++) {
+    new->s_reg[i] = old->s_reg[i];
+  }
+}
+
+void createProcess(){
+  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  state_PTR newProcState = syscallOld->s_a1;
+  syscallOld->s_v0 = -1;
+  pcb_PTR p = allocPcb();
+  if (p==NULL) {
+    syscallOld->s_v0 = -1;
+    return;
+  }
+  else { /* pcb allocated */
+    stateCopy(p, newProcState);
+    processCount++;
+    insertChild(currentProcess, p);
+    insertProcQ(&readyQue, p);
+    syscallOld->s_v0 = 1;
+    LDST(&syscallOld);
+  }
+}
+
+void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
+  while (!emptyChild(processToKill)) {
+    terminateRecursively(removeChild(processToKill));
+  }
+  if (processToKill->p_semAdd != NULL) { /* on ASL */
+    freePcb(outBlocked(processToKill));
+    processCount--;
+    softBlockCount--;
+  }
+  else if (processToKill == currentProcess) { /* current proc */
+    freePcb(outChild(processToKill));
+    processCount--;
+  }
+  else { /* pcb is on readyQue */
+    freePcb(outProcQ(&readyQue, processToKill));
+    processCount--;
+  }
+}
+
+void terminateProcess(){
+  terminateRecursively(currentProcess);
+  scheduler();
+}
+
 void pgmTrapHandler(){
   if (currentProcess->p_oldPgm == NULL){
       terminateProcess();
@@ -29,20 +96,6 @@ void tlbMgmtHandler(){
 
     LDST(&(currentProcess->p_newTLB));
   }
-}
-
-void sysCallHandler(){
-  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  int syscallNum = syscallOld->s_a0;
-  int kernelMode;
-  int kernelStatus = syscallOld->s_status & KERNELOFF;
-  if(kernelStatus == ALLOFF){
-   kernelMode = TRUE;
-  }
-  else{
-    kernelMode = FALSE;
-  }
-  syscallDispatch(syscallNum, kernelMode);
 }
 
 void syscallDispatch(int syscallNum, int kernelMode){
@@ -85,71 +138,18 @@ void syscallDispatch(int syscallNum, int kernelMode){
   }
 }
 
-void createProcess(){
+void sysCallHandler(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  state_PTR newProcState = syscallOld->s_a1;
-  syscallOld->s_v0 = -1;
-  pcb_PTR p = allocPcb();
-  if (p==NULL) {
-    syscallOld->s_v0 = -1;
-    return;
+  int syscallNum = syscallOld->s_a0;
+  int kernelMode;
+  int kernelStatus = syscallOld->s_status & KERNELOFF;
+  if(kernelStatus == ALLOFF){
+   kernelMode = TRUE;
   }
-  else { /* pcb allocated */
-    stateCopy(p, newProcState);
-    processCount++;
-    insertChild(currentProcess, p);
-    insertProcQ(&readyQue, p);
-    syscallOld->s_v0 = 1;
-    LDST(&syscallOld);
+  else{
+    kernelMode = FALSE;
   }
-}
-
-void terminateProcess(){
-  terminateRecursively(currentProcess);
-  scheduler();
-}
-
-void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
-  while (!emptyChild(processToKill)) {
-    terminateRecursively(removeChild(processToKill));
-  }
-  if (processToKill->p_semAdd != NULL) { /* on ASL */
-    freePcb(outBlocked(processToKill));
-    processCount--;
-    softBlockCount--;
-  }
-  else if (processToKill == currentProcess) { /* current proc */
-    freePcb(outChild(processToKill));
-    processCount--;
-  }
-  else { /* pcb is on readyQue */
-    freePcb(outProcQ(&readyQue, processToKill));
-    processCount--;
-  }
-}
-
-void stateCopyPCB(pcb_PTR p, state_PTR s){
-  p->p_s.s_asid = s->s_asid;
-  p->p_s.s_cause = s->s_cause;
-  p->p_s.s_status = s->s_status;
-  p->p_s.s_pc = s->s_pc;
-
-  int i = 0;
-  for (i; i < STATEREGNUM; i++) {
-    p->p_s.s_reg[i] = s->s_reg[i];
-  }
-}
-
-void stateCopy(state_PTR old, state_PTR new){
-  new->s_asid = old->s_asid;
-  new->s_cause = old->s_cause;
-  new->s_status = old->s_status;
-  new->s_pc = old->s_pc;
-  
-  int i = 0;
-  for (i; i < STATEREGNUM; i++) {
-    new->s_reg[i] = old->s_reg[i];
-  }
+  syscallDispatch(syscallNum, kernelMode);
 }
 
 void specifyExceptionStateVector(){
