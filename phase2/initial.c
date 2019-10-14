@@ -21,6 +21,7 @@ int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /*compute number
 extern void test();
 
 void main(){
+  addokbuf("In main\n");
   devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
   int ramTop = foo->rambase + foo->ramsize;
 
