@@ -65,6 +65,7 @@ void main(){
   pcb_PTR p = allocPcb();
   p->p_s.s_sp = ramTop - PAGESIZE;
   p->p_s.s_pc = (memaddr) test;
+  p->p_s.s_t9 = (memaddr) test;
   p->p_s.s_status = FIRSTPROCESSSTATUSMASK;
 
   processCount++;
