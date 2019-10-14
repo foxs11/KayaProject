@@ -283,7 +283,7 @@ void waitForIODevice(){
     cpu_t currTime = NULL;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
-    softBlockedCount++;
+    softBlockCount++;
     insertBlocked(semAdd, currentProcess);
     currentProcess = NULL;
     scheduler();
