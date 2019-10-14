@@ -145,16 +145,19 @@ void interruptHandler(){
     }
     else { /* line number 2 */
       LDIT(100000);
-      devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]++;
-      if (devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE] <= 0){
-        pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
-        insertProcQ(&readyQue, temp);
+      if (headblocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
+        devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]++;
+        if (devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE] <= 0){
+          while (headblocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE])) != NULL) {
+            pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
+            insertProcQ(&readyQue, temp);
+          }
+        }
       }
+      
       LDST(&interruptOld);
     }
   }
-
-
 }
 
 

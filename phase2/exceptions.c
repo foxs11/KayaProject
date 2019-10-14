@@ -1,78 +1,7 @@
-#ifndef EXCEPTIONS
-#define EXCEPTIONS
-
-#include "../e/pcb.e"
-#include "../e/asl.e"
+#include "../phase1/pcb.c"
+#include "../phase1/asl.c"
 #include "../h/types.h"
 #include "../h/const.h"
-#include "../e/initial.e"
-
-void stateCopyPCB(pcb_PTR p, state_PTR s){
-  p->p_s.s_asid = s->s_asid;
-  p->p_s.s_cause = s->s_cause;
-  p->p_s.s_status = s->s_status;
-  p->p_s.s_pc = s->s_pc;
-
-  int i = 0;
-  for (i; i < STATEREGNUM; i++) {
-    p->p_s.s_reg[i] = s->s_reg[i];
-  }
-}
-
-void stateCopy(state_PTR old, state_PTR new){
-  new->s_asid = old->s_asid;
-  new->s_cause = old->s_cause;
-  new->s_status = old->s_status;
-  new->s_pc = old->s_pc;
-  
-  int i = 0;
-  for (i; i < STATEREGNUM; i++) {
-    new->s_reg[i] = old->s_reg[i];
-  }
-}
-
-void createProcess(){
-  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  state_PTR newProcState = syscallOld->s_a1;
-  syscallOld->s_v0 = -1;
-  pcb_PTR p = allocPcb();
-  if (p==NULL) {
-    syscallOld->s_v0 = -1;
-    return;
-  }
-  else { /* pcb allocated */
-    stateCopy(p, newProcState);
-    processCount++;
-    insertChild(currentProcess, p);
-    insertProcQ(&readyQue, p);
-    syscallOld->s_v0 = 1;
-    LDST(&syscallOld);
-  }
-}
-
-void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
-  while (!emptyChild(processToKill)) {
-    terminateRecursively(removeChild(processToKill));
-  }
-  if (processToKill->p_semAdd != NULL) { /* on ASL */
-    freePcb(outBlocked(processToKill));
-    processCount--;
-    softBlockCount--;
-  }
-  else if (processToKill == currentProcess) { /* current proc */
-    freePcb(outChild(processToKill));
-    processCount--;
-  }
-  else { /* pcb is on readyQue */
-    freePcb(outProcQ(&readyQue, processToKill));
-    processCount--;
-  }
-}
-
-void terminateProcess(){
-  terminateRecursively(currentProcess);
-  scheduler();
-}
 
 void pgmTrapHandler(){
   if (currentProcess->p_oldPgm == NULL){
@@ -96,6 +25,20 @@ void tlbMgmtHandler(){
 
     LDST(&(currentProcess->p_newTLB));
   }
+}
+
+void sysCallHandler(){
+  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  int syscallNum = syscallOld->s_a0;
+  int kernelMode;
+  int kernelStatus = syscallOld->s_status & KERNELOFF;
+  if(kernelStatus == ALLOFF){
+   kernelMode = TRUE;
+  }
+  else{
+    kernelMode = FALSE;
+  }
+  syscallDispatch(syscallNum, kernelMode);
 }
 
 void syscallDispatch(int syscallNum, int kernelMode){
@@ -138,18 +81,71 @@ void syscallDispatch(int syscallNum, int kernelMode){
   }
 }
 
-void sysCallHandler(){
+void createProcess(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  int syscallNum = syscallOld->s_a0;
-  int kernelMode;
-  int kernelStatus = syscallOld->s_status & KERNELOFF;
-  if(kernelStatus == ALLOFF){
-   kernelMode = TRUE;
+  state_PTR newProcState = syscallOld->s_a1;
+  syscallOld->s_v0 = -1;
+  pcb_PTR p = allocPcb();
+  if (p==NULL) {
+    syscallOld->s_v0 = -1;
+    return;
   }
-  else{
-    kernelMode = FALSE;
+  else { /* pcb allocated */
+    stateCopy(p, newProcState);
+    processCount++;
+    insertChild(currentProc, p);
+    insertProcQ(&readyQue, p);
+    syscallOld->s_v0 = 1;
+    LDST(&syscallOld);
   }
-  syscallDispatch(syscallNum, kernelMode);
+}
+
+void terminateProcess(){
+  terminateRecursively(currentProcess);
+  scheduler();
+}
+
+void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
+  while (!emptyChild(processToKill)) {
+    terminateRecursively(removeChild(processToKill));
+  }
+  if (processToKill->p_semAdd != NULL) { /* on ASL */
+    freePcb(outBlocked(processToKill));
+    processCount--;
+    softBlockedCount--;
+  }
+  else if (processToKill == currentProcess) { /* current proc */
+    freePcb(outChild(processToKill));
+    processCount--;
+  }
+  else { /* pcb is on readyQue */
+    freePcb(outProcQ(&readyQue, processToKill));
+    processCount--;
+  }
+}
+
+void stateCopyPCB(pcb_PTR p, state_PTR s){
+  p->p_s.s_asid = s->s_asid;
+  p->p_s.s_cause = s->s_cause;
+  p->p_s.s_status = s->s_status;
+  p->p_s.s_pc = s->s_pc;
+
+  int i = 0;
+  for (i; i < STATEREGNUM; i++) {
+    p->p_s.s_reg[i] = s->s_reg[i];
+  }
+}
+
+void stateCopy(state_PTR old, state_PTR new){
+  new->s_asid = old->s_asid;
+  new->s_cause = old->s_cause;
+  new->s_status = old->s_status;
+  new->s_pc = old->s_pc;
+  
+  int i = 0;
+  for (i; i < STATEREGNUM; i++) {
+    new->s_reg[i] = old->s_reg[i];
+  } 
 }
 
 void specifyExceptionStateVector(){
@@ -163,8 +159,8 @@ void specifyExceptionStateVector(){
       terminateProcess();
     }
     else {
-      currentProcess->p_oldTLB = oldState;
-      currentProcess->p_newTLB = newState;
+      currentProcess->p_oldTBL = oldState;
+      currentProcess->p_newTBL = newState;
     }
   }
   else if (exceptionType == 1){
@@ -192,24 +188,24 @@ void specifyExceptionStateVector(){
 void passUpOrDie(int exceptionType){
   state_PTR oldState = NULL;
   if (exceptionType == 0) {
-    if (currentProcess->p_oldTLB != NULL) {
+    if (currentProcess->oldTLB != NULL) {
       oldState = (state_t *) TLBMANAGEMENTOLDAREA;
-      currentProcess->p_oldTLB = oldState;
-      LDST(currentProcess->p_newTLB);
+      currentProcess->oldTLB = oldState;
+      LDST(currentProcess->newTLB);
     }
   }
   else if (exceptionType == 1) {
-    if (currentProcess->p_oldPgm != NULL) {
+    if (currentProcess->oldPgm != NULL) {
       oldState = (state_t *) PROGRAMTRAPOLDAREA;
-      currentProcess->p_oldPgm = oldState;
-      LDST(currentProcess->p_newPgm);
+      currentProcess->oldPgm = oldState;
+      LDST(currentProcess->newPgm);
     }
   }
   else if (exceptionType == 2) {
-    if (currentProcess->p_oldSys != NULL) {
+    if (currentProcess->oldSys != NULL) {
       oldState = (state_t *) SYSCALLOLDAREA;
-      currentProcess->p_oldSys = oldState;
-      LDST(currentProcess->p_newSys);
+      currentProcess->oldSys = oldState;
+      LDST(currentProcess->newSys);
     }
   }
   /* sys 5 hasnt been called before, kill it */
@@ -218,8 +214,8 @@ void passUpOrDie(int exceptionType){
 
 void verhogen(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  int *mutex = oldSys->s_a1;
-  *mutex++;
+  int * mutex = oldSys->s_a1;
+  mutex++;
   if (mutex <= 0){
     pcb_PTR temp = removeBlocked(&mutex);
     insertProcQ(&readyQue, temp);
@@ -229,7 +225,7 @@ void verhogen(){
 
 void passeren(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  int mutex = oldSys->s_a1;
+  int * mutex = oldSys->s_a1;
   mutex--;
   if (mutex < 0){
     insertBlocked(&mutex, currentProcess);
@@ -258,7 +254,7 @@ getCPUTime(){
 
 waitForClock(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  int semAdd = devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
+  int semAdd = semDevTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
   semAdd--;
   if (semAdd < 0){
     insertBlocked(&semAdd, currentProcess);
@@ -286,12 +282,10 @@ void waitForIODevice(){
     cpu_t currTime = NULL;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
-    softBlockCount++;
+    softBlockedCount++;
     insertBlocked(semAdd, currentProcess);
     currentProcess = NULL;
     scheduler();
   }
   /* error */
 }
-
-#endif
