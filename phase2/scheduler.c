@@ -32,7 +32,7 @@ void scheduler(){
     currentProcess = process;
     setTIMER(5000);
     STCK(*time);
-    LDST(*process->p_s);
+    LDST(*(process->p_s));
   }
 }
 
