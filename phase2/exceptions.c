@@ -94,7 +94,7 @@ void createProcess(){
   else { /* pcb allocated */
     stateCopy(p, newProcState);
     processCount++;
-    insertChild(currentProc, p);
+    insertChild(currentProcess, p);
     insertProcQ(&readyQue, p);
     syscallOld->s_v0 = 1;
     LDST(&syscallOld);
@@ -113,7 +113,7 @@ void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device
   if (processToKill->p_semAdd != NULL) { /* on ASL */
     freePcb(outBlocked(processToKill));
     processCount--;
-    softBlockedCount--;
+    softBlockCount--;
   }
   else if (processToKill == currentProcess) { /* current proc */
     freePcb(outChild(processToKill));
@@ -160,8 +160,8 @@ void specifyExceptionStateVector(){
       terminateProcess();
     }
     else {
-      currentProcess->p_oldTBL = oldState;
-      currentProcess->p_newTBL = newState;
+      currentProcess->p_oldTLB = oldState;
+      currentProcess->p_newTLB = newState;
     }
   }
   else if (exceptionType == 1){
@@ -189,24 +189,24 @@ void specifyExceptionStateVector(){
 void passUpOrDie(int exceptionType){
   state_PTR oldState = NULL;
   if (exceptionType == 0) {
-    if (currentProcess->oldTLB != NULL) {
+    if (currentProcess->p_oldTLB != NULL) {
       oldState = (state_t *) TLBMANAGEMENTOLDAREA;
-      currentProcess->oldTLB = oldState;
-      LDST(currentProcess->newTLB);
+      currentProcess->p_oldTLB = oldState;
+      LDST(currentProcess->p_newTLB);
     }
   }
   else if (exceptionType == 1) {
-    if (currentProcess->oldPgm != NULL) {
+    if (currentProcess->p_oldPgm != NULL) {
       oldState = (state_t *) PROGRAMTRAPOLDAREA;
-      currentProcess->oldPgm = oldState;
-      LDST(currentProcess->newPgm);
+      currentProcess->p_oldPgm = oldState;
+      LDST(currentProcess->p_newPgm);
     }
   }
   else if (exceptionType == 2) {
-    if (currentProcess->oldSys != NULL) {
+    if (currentProcess->p_oldSys != NULL) {
       oldState = (state_t *) SYSCALLOLDAREA;
-      currentProcess->oldSys = oldState;
-      LDST(currentProcess->newSys);
+      currentProcess->p_oldSys = oldState;
+      LDST(currentProcess->p_newSys);
     }
   }
   /* sys 5 hasnt been called before, kill it */
@@ -255,7 +255,7 @@ getCPUTime(){
 
 waitForClock(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  int semAdd = semDevTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
+  int semAdd = devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
   semAdd--;
   if (semAdd < 0){
     insertBlocked(&semAdd, currentProcess);
