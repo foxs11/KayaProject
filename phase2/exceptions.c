@@ -235,7 +235,8 @@ void verhogen(){
     pcb_PTR temp = removeBlocked(&mutex);
     insertProcQ(&readyQue, temp);
   }
-  LDST(&oldSys);
+  addokbuf("in verhogen 2\n");
+  LDST(&(oldSys));
 }
 
 void passeren(){
