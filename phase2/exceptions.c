@@ -43,11 +43,11 @@ void sysCallHandler(){
   addokbuf("in sysCallHandler 5\n");
   if(kernelStatus == ALLOFF){
    kernelMode = TRUE;
-   /*addokbuf("in sysCallHandler 2\n");*/
+   addokbuf("in sysCallHandler 6\n");
   }
   else{
     kernelMode = FALSE;
-    /*addokbuf("in sysCallHandler 3\n");*/
+    addokbuf("in sysCallHandler 7\n");
   }
   syscallDispatch(syscallNum, kernelMode);
 }
