@@ -6,7 +6,6 @@
 #include "../h/types.h"
 #include "../h/const.h"
 #include "../e/initial.e"
-#include "../phase1/p1test.c"
 
 void pgmTrapHandler(){
   if (currentProcess->p_oldPgm == NULL){
@@ -37,7 +36,7 @@ void sysCallHandler(){
   int syscallNum = syscallOld->s_a0;
   int kernelMode;
   int kernelStatus = syscallOld->s_status & KERNELOFF;
-  /*addokbuf("in sysCallHandler\n");*/
+  addokbuf("in sysCallHandler\n");
   if(kernelStatus == ALLOFF){
    kernelMode = TRUE;
    /*addokbuf("in sysCallHandler 2\n");*/
