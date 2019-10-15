@@ -3,7 +3,7 @@
 #include "../h/types.h"
 #include "../h/const.h"
 #include "../e/initial.e"
-/*#include "../phase1/p1test.c"*/
+#include "../phase1/p1test.c"
 
 void pgmTrapHandler(){
   if (currentProcess->p_oldPgm == NULL){
