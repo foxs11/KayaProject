@@ -7,6 +7,7 @@
 #include "../h/types.h"
 #include "../h/const.h"
 #include "/usr/local/include/umps2/umps/libumps.e"
+#include "../phase1/p1test.c"
 
 void scheduler(){
   pcb_PTR process = removeProcQ(&readyQue);
@@ -31,7 +32,9 @@ void scheduler(){
   else{
     currentProcess = process;
     setTIMER(5000);
+    addokbuf("in scheduler\n");
     STCK(*time);
+    addokbuf("in scheduler 2\n");
     LDST(&(process->p_s));
   }
 }
