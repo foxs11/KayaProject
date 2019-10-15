@@ -230,13 +230,13 @@ void verhogen(){
   addokbuf("in verhogen 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * mutex = oldSys->s_a1;
-  mutex++;
+  *mutex++;
   if (mutex <= 0){
     pcb_PTR temp = removeBlocked(&mutex);
     insertProcQ(&readyQue, temp);
   }
   addokbuf("in verhogen 2\n");
-  LDST(&(oldSys));
+  LDST(&oldSys);
 }
 
 void passeren(){
