@@ -232,10 +232,13 @@ void verhogen(){
   int * mutex = oldSys->s_a1;
   *mutex++;
   if (mutex <= 0){
+    addokbuf("in verhogen 2\n");
     pcb_PTR temp = removeBlocked(&mutex);
+    addokbuf("in verhogen 3\n");
     insertProcQ(&readyQue, temp);
+    addokbuf("in verhogen 4\n");
   }
-  addokbuf("in verhogen 2\n");
+  addokbuf("in verhogen 5\n");
   LDST(&oldSys);
 }
 
