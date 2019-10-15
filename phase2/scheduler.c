@@ -9,15 +9,6 @@
 #include "/usr/local/include/umps2/umps/libumps.e"
 #include "../phase1/p1test.c"
 
-
-void addokbuf(char *strp) {
-	char *tstrp = strp;
-	while ((*mp++ = *strp++) != '\0')
-		;
-	mp--;
-	termprint(tstrp, 0);
-}
-
 void scheduler(){
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
