@@ -32,26 +32,26 @@ void tlbMgmtHandler(){
 }
 
 void sysCallHandler(){
-  addokbuf("in passeren 1\n");
+  addokbuf("in sysCallHandler 1\n");
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  addokbuf("in passeren 2\n");
+  addokbuf("in sysCallHandler 2\n");
   int syscallNum = syscallOld->s_a0;
-  addokbuf("in passeren 3\n");
+  addokbuf("in sysCallHandler 3\n");
   int kernelMode;
-  addokbuf("in passeren 4\n");
+  addokbuf("in sysCallHandler 4\n");
   int kernelStatus = syscallOld->s_status & KERNELOFF;
-  addokbuf("in passeren 5\n");
+  addokbuf("in sysCallHandler 5\n");
   if(kernelStatus == ALLOFF){
-    addokbuf("in passeren 6\n");
+    addokbuf("in sysCallHandler 6\n");
    kernelMode = TRUE;
-   addokbuf("in passeren 7\n");
+   addokbuf("in sysCallHandler 7\n");
   }
   else{
-    addokbuf("in passeren 8\n");
+    addokbuf("in sysCallHandler 8\n");
     kernelMode = FALSE;
-    addokbuf("in passeren 9\n");
+    addokbuf("in sysCallHandler 9\n");
   }
-  addokbuf("in passeren 10\n");
+  addokbuf("in sysCallHandler 10\n");
   syscallDispatch(syscallNum, kernelMode);
 }
 
@@ -227,6 +227,7 @@ void passUpOrDie(int exceptionType){
 }
 
 void verhogen(){
+  addokbuf("in verhogen 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * mutex = oldSys->s_a1;
   mutex++;
