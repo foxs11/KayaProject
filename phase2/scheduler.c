@@ -33,7 +33,7 @@ void scheduler(){
     currentProcess = process;
     setTIMER(5000);
     addokbuf("in scheduler\n");
-    STCK(*time);
+    STCK(time);
     addokbuf("in scheduler 2\n");
     LDST(&(process->p_s));
   }
