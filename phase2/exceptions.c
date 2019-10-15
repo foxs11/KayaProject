@@ -34,26 +34,26 @@ void tlbMgmtHandler(){
 }
 
 void sysCallHandler(){
-  addokbuf("in sysCallHandler 1\n");
+  /*addokbuf("in sysCallHandler 1\n");*/
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  addokbuf("in sysCallHandler 2\n");
+  /*addokbuf("in sysCallHandler 2\n");*/
   int syscallNum = syscallOld->s_a0;
-  addokbuf("in sysCallHandler 3\n");
+  /*addokbuf("in sysCallHandler 3\n");*/
   int kernelMode;
-  addokbuf("in sysCallHandler 4\n");
+  /*addokbuf("in sysCallHandler 4\n");*/
   int kernelStatus = syscallOld->s_status & KERNELOFF;
-  addokbuf("in sysCallHandler 5\n");
+  /*addokbuf("in sysCallHandler 5\n");*/
   if(kernelStatus == ALLOFF){
-    addokbuf("in sysCallHandler 6\n");
+    /*addokbuf("in sysCallHandler 6\n");*/
    kernelMode = TRUE;
-   addokbuf("in sysCallHandler 7\n");
+   /*addokbuf("in sysCallHandler 7\n");*/
   }
   else{
-    addokbuf("in sysCallHandler 8\n");
+    /*addokbuf("in sysCallHandler 8\n");*/
     kernelMode = FALSE;
-    addokbuf("in sysCallHandler 9\n");
+    /*addokbuf("in sysCallHandler 9\n");*/
   }
-  addokbuf("in sysCallHandler 10\n");
+  /*addokbuf("in sysCallHandler 10\n");*/
   syscallDispatch(syscallNum, kernelMode);
 }
 
@@ -237,18 +237,18 @@ void passUpOrDie(int exceptionType){
 }
 
 void verhogen(){
-  addokbuf("in verhogen 1\n");
+  /*addokbuf("in verhogen 1\n");*/
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int *mutex = oldSys->s_a1;
   (*mutex)++;
   if (*mutex <= 0){
-    addokbuf("in verhogen 2\n");
+    /*addokbuf("in verhogen 2\n");*/
     pcb_PTR temp = removeBlocked(&mutex);
-    addokbuf("in verhogen 3\n");
+    /*addokbuf("in verhogen 3\n");*/
     insertProcQ(&readyQue, temp);
-    addokbuf("in verhogen 4\n");
+    /*addokbuf("in verhogen 4\n");*/
   }
-  addokbuf("in verhogen 5\n");
+  /*addokbuf("in verhogen 5\n");*/
   LDST(oldSys);
 }
 
