@@ -63,20 +63,28 @@ void syscallDispatch(int syscallNum, int kernelMode){
       switch(syscallNum){
         case 1:
           createProcess(); /* done */
+          break;
         case 2:
           terminateProcess(); /* done */
+          break;
         case 3:
           verhogen(); /* done */
+          break;
         case 4:
           passeren(); /* done */
+          break;
         case 5:
           specifyExceptionStateVector(); /* done */
+          break;
         case 6:
           getCPUTime(); /* done */
+          break;
         case 7:
           waitForClock();
+          break;
         case 8:
           waitForIODevice(); /* done */
+          break;
       }
     }
     else { /* syscall 1-8 user mode, make it look like a priveleged instruction error */
