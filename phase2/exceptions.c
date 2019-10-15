@@ -241,7 +241,7 @@ void verhogen(){
     addokbuf("in verhogen 4\n");
   }
   addokbuf("in verhogen 5\n");
-  LDST(&oldSys);
+  LDST(oldSys);
 }
 
 void passeren(){
