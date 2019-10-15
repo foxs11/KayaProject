@@ -229,9 +229,9 @@ void passUpOrDie(int exceptionType){
 void verhogen(){
   addokbuf("in verhogen 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  int * mutex = oldSys->s_a1;
-  *mutex++;
-  if (mutex <= 0){
+  int *mutex = oldSys->s_a1;
+  (*mutex)++;
+  if (*mutex <= 0){
     addokbuf("in verhogen 2\n");
     pcb_PTR temp = removeBlocked(&mutex);
     addokbuf("in verhogen 3\n");
@@ -248,9 +248,9 @@ void passeren(){
   addokbuf("in passeren 2\n");
   int * mutex = oldSys->s_a1;
   addokbuf("in passeren 3\n");
-  mutex--;
+  (*mutex)--;
   addokbuf("in passeren 4\n");
-  if (mutex < 0){
+  if (*mutex < 0){
     addokbuf("in passeren 5\n");
     insertBlocked(&mutex, currentProcess);
     addokbuf("in passeren 6\n");

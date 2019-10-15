@@ -138,7 +138,7 @@ void test() {
 	
 	SYSCALL(VERHOGEN, (int)&testsem, 0, 0);					/* V(testsem)   */
 
-	/*print("p1 v(testsem)\n");*/
+	print("p1 v(testsem)\n");
 
 	/* set up states of the other processes */
 
