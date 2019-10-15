@@ -32,11 +32,15 @@ void tlbMgmtHandler(){
 }
 
 void sysCallHandler(){
+  addokbuf("in sysCallHandler 1\n");
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  addokbuf("in sysCallHandler 2\n");
   int syscallNum = syscallOld->s_a0;
+  addokbuf("in sysCallHandler 3\n");
   int kernelMode;
+  addokbuf("in sysCallHandler 4\n");
   int kernelStatus = syscallOld->s_status & KERNELOFF;
-  addokbuf("in sysCallHandler\n");
+  addokbuf("in sysCallHandler 5\n");
   if(kernelStatus == ALLOFF){
    kernelMode = TRUE;
    /*addokbuf("in sysCallHandler 2\n");*/
