@@ -16,6 +16,7 @@
 #include "../h/const.h"
 #include "../h/types.h"
 #include "/usr/local/include/umps2/umps/libumps.e"
+#include "../phase1/p1test.c"
 
 typedef unsigned int devregtr;
 
@@ -135,8 +136,11 @@ void print(char *msg) {
 /*                 p1 -- the root process                            */
 /*                                                                   */
 void test() {	
+	addokbuf("in p2test\n");
 	
 	SYSCALL(VERHOGEN, (int)&testsem, 0, 0);					/* V(testsem)   */
+	
+	addokbuf("in p2test 2\n");
 
 	print("p1 v(testsem)\n");
 
