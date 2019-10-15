@@ -224,13 +224,21 @@ void passUpOrDie(int exceptionType){
 }
 
 void verhogen(){
+  addokbuf("in verhogen 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  addokbuf("in verhogen 2\n");
   int * mutex = oldSys->s_a1;
+  addokbuf("in verhogen 3\n");
   mutex++;
+  addokbuf("in verhogen 4\n");
   if (mutex <= 0){
+    addokbuf("in verhogen 5\n");
     pcb_PTR temp = removeBlocked(&mutex);
+    addokbuf("in verhogen 6\n");
     insertProcQ(&readyQue, temp);
+    addokbuf("in verhogen 7\n");
   }
+  addokbuf("in verhogen 8\n");
   LDST(&oldSys);
 }
 
