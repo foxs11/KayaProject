@@ -32,22 +32,15 @@ void tlbMgmtHandler(){
 }
 
 void sysCallHandler(){
-  addokbuf("in sysCallHandler 1\n");
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  addokbuf("in sysCallHandler 2\n");
   int syscallNum = syscallOld->s_a0;
-  addokbuf("in sysCallHandler 3\n");
   int kernelMode;
-  addokbuf("in sysCallHandler 4\n");
   int kernelStatus = syscallOld->s_status & KERNELOFF;
-  addokbuf("in sysCallHandler 5\n");
   if(kernelStatus == ALLOFF){
    kernelMode = TRUE;
-   addokbuf("in sysCallHandler 6\n");
   }
   else{
     kernelMode = FALSE;
-    addokbuf("in sysCallHandler 7\n");
   }
   syscallDispatch(syscallNum, kernelMode);
 }
@@ -224,21 +217,13 @@ void passUpOrDie(int exceptionType){
 }
 
 void verhogen(){
-  addokbuf("in verhogen 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  addokbuf("in verhogen 2\n");
   int * mutex = oldSys->s_a1;
-  addokbuf("in verhogen 3\n");
   mutex++;
-  addokbuf("in verhogen 4\n");
   if (mutex <= 0){
-    addokbuf("in verhogen 5\n");
     pcb_PTR temp = removeBlocked(&mutex);
-    addokbuf("in verhogen 6\n");
     insertProcQ(&readyQue, temp);
-    addokbuf("in verhogen 7\n");
   }
-  addokbuf("in verhogen 8\n");
   LDST(&oldSys);
 }
 
@@ -291,6 +276,7 @@ waitForClock(){
 
 
 void waitForIODevice(){
+  addokbuf("in waitForIoDevice 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int lineNumber = oldSys->s_a1;
   int deviceNumber = oldSys->s_a2;
