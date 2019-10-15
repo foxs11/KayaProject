@@ -8,6 +8,7 @@
 #include "../e/initial.e"
 
 void pgmTrapHandler(){
+  addokbuf("in pgmTrapHandler 1\n");
   if (currentProcess->p_oldPgm == NULL){
       terminateProcess();
   }
@@ -20,6 +21,7 @@ void pgmTrapHandler(){
 }
 
 void tlbMgmtHandler(){
+  addokbuf("in tlbMgmtHandle 1\n");
   if (currentProcess->p_oldTLB == NULL){
       terminateProcess();
   }
