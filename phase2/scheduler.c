@@ -7,6 +7,8 @@
 #include "../h/types.h"
 #include "../h/const.h"
 #include "/usr/local/include/umps2/umps/libumps.e"
+#include "../phase1/p1test.c"
+
 
 void addokbuf(char *strp) {
 	char *tstrp = strp;

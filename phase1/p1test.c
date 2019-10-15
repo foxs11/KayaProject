@@ -123,7 +123,7 @@ void adderrbuf(char *strp) {
 
 
 
-void main() {
+void main2() {
 	int i;
 
 	initPcbs();
