@@ -14,7 +14,7 @@ int processCount;
 int softBlockCount;
 pcb_PTR currentProcess;
 pcb_PTR readyQue;
-cpu_t *time;
+cpu_t time;
 int waitFlag;
 int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /*compute number differently */
 
@@ -75,7 +75,7 @@ void main(){
   LDIT(100000);
   addokbuf("in initial 2\n");
 
-  /**time = 0;*/
+  time = 0;
   addokbuf("in initial 3\n");
 
   scheduler();
