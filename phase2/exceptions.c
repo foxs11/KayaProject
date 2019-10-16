@@ -286,12 +286,19 @@ void waitForIODevice(){
   int * semAdd = devSemTable[getSemArrayNum(lineNumber, deviceNumber)];
   semAdd--;
   if (semAdd < 0) {
+    addokbuf("in waitForIoDevice 2\n");
     cpu_t currTime = 0;
+    addokbuf("in waitForIoDevice 3\n");
     STCK(currTime);
+    addokbuf("in waitForIoDevice 4\n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
+    addokbuf("in waitForIoDevice 5\n");
     softBlockCount++;
+    addokbuf("in waitForIoDevice 6\n");
     insertBlocked(semAdd, currentProcess);
+    addokbuf("in waitForIoDevice 7\n");
     currentProcess = NULL;
+    addokbuf("in waitForIoDevice 8\n");
     scheduler();
   }
   /* error */
