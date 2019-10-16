@@ -280,12 +280,17 @@ waitForClock(){
 void waitForIODevice(){
   addokbuf("in waitForIoDevice 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  int lineNumber = oldSys->s_a1;
-  int deviceNumber = oldSys->s_a2;
-  int termRead = oldSys->s_a3;
-  int * semAdd = devSemTable[getSemArrayNum(lineNumber, deviceNumber)];
-  semAdd--;
   addokbuf("in waitForIoDevice 1.1\n");
+  int lineNumber = oldSys->s_a1;
+  addokbuf("in waitForIoDevice 1.2\n");
+  int deviceNumber = oldSys->s_a2;
+  addokbuf("in waitForIoDevice 1.3\n");
+  int termRead = oldSys->s_a3;
+  addokbuf("in waitForIoDevice 1.4\n");
+  int * semAdd = devSemTable[getSemArrayNum(lineNumber, deviceNumber)];
+  addokbuf("in waitForIoDevice 1.5\n");
+  semAdd--;
+  addokbuf("in waitForIoDevice 1.6\n");
   if (semAdd < 0) {
     addokbuf("in waitForIoDevice 2\n");
     cpu_t currTime = 0;
