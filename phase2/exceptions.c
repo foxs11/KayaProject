@@ -97,7 +97,7 @@ void createProcess(){
     insertChild(currentProcess, p);
     insertProcQ(&readyQue, p);
     syscallOld->s_v0 = 1;
-    LDST(&syscallOld);
+    LDST(syscallOld);
   }
 }
 
@@ -183,7 +183,7 @@ void specifyExceptionStateVector(){
     }
   }
 
-  LDST(&syscallOld);
+  LDST(syscallOld);
 }
 
 void passUpOrDie(int exceptionType){
@@ -214,6 +214,7 @@ void passUpOrDie(int exceptionType){
 }
 
 void verhogen(){
+  addokbuf("entered verhogen 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int *mutex = oldSys->s_a1;
   (*mutex)++;
@@ -222,11 +223,11 @@ void verhogen(){
     insertProcQ(&readyQue, temp);
   }
   aDebug(oldSys->s_pc, 0);
-  /* oldSys->s_pc++; */
   LDST(oldSys);
 }
 
 void passeren(){
+  addokbuf("entered passeren 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * mutex = oldSys->s_a1;
   (*mutex)--;
