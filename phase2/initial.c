@@ -75,7 +75,7 @@ void main(){
   LDIT(100000);
   addokbuf("in initial 2\n");
 
-  *time = 0;
+  /**time = 0;*/
   addokbuf("in initial 3\n");
 
   scheduler();
