@@ -114,7 +114,7 @@ void interruptHandler(){
   	int devIndex = ((lineNumber - 3) * 8) + deviceNumber - 1;
   	device_t * device = &(foo->devreg[devIndex]);
 
-    int * semAdd = &(devSemTable[devIndex]);
+    int * semAdd = &(devSemTable[devIndex]);  /*change for terminal math */
   	
   	pcb_PTR p = NULL;
   	if (semAdd <= 0) {
@@ -155,7 +155,7 @@ void interruptHandler(){
         }
       }
       
-      LDST(&interruptOld);
+      LDST(interruptOld);
     }
   }
 }

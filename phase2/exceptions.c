@@ -8,7 +8,6 @@
 #include "../e/initial.e"
 
 void pgmTrapHandler(){
-  addokbuf("in pgmTrapHandler 1\n");
   if (currentProcess->p_oldPgm == NULL){
       terminateProcess();
   }
@@ -34,26 +33,16 @@ void tlbMgmtHandler(){
 }
 
 void sysCallHandler(){
-  /*addokbuf("in sysCallHandler 1\n");*/
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  /*addokbuf("in sysCallHandler 2\n");*/
   int syscallNum = syscallOld->s_a0;
-  /*addokbuf("in sysCallHandler 3\n");*/
   int kernelMode;
-  /*addokbuf("in sysCallHandler 4\n");*/
   int kernelStatus = syscallOld->s_status & KERNELOFF;
-  /*addokbuf("in sysCallHandler 5\n");*/
   if(kernelStatus == ALLOFF){
-    /*addokbuf("in sysCallHandler 6\n");*/
    kernelMode = TRUE;
-   /*addokbuf("in sysCallHandler 7\n");*/
   }
   else{
-    /*addokbuf("in sysCallHandler 8\n");*/
     kernelMode = FALSE;
-    /*addokbuf("in sysCallHandler 9\n");*/
   }
-  /*addokbuf("in sysCallHandler 10\n");*/
   syscallDispatch(syscallNum, kernelMode);
 }
 
@@ -237,46 +226,29 @@ void passUpOrDie(int exceptionType){
 }
 
 void verhogen(){
-  /*addokbuf("in verhogen 1\n");*/
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int *mutex = oldSys->s_a1;
   (*mutex)++;
   if (*mutex <= 0){
-    /*addokbuf("in verhogen 2\n");*/
     pcb_PTR temp = removeBlocked(&mutex);
-    /*addokbuf("in verhogen 3\n");*/
     insertProcQ(&readyQue, temp);
-    /*addokbuf("in verhogen 4\n");*/
   }
-  /*addokbuf("in verhogen 5\n");*/
   LDST(oldSys);
 }
 
 void passeren(){
-  addokbuf("in passeren 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  addokbuf("in passeren 2\n");
   int * mutex = oldSys->s_a1;
-  addokbuf("in passeren 3\n");
   (*mutex)--;
-  addokbuf("in passeren 4\n");
   if (*mutex < 0){
-    addokbuf("in passeren 5\n");
     insertBlocked(&mutex, currentProcess);
-    addokbuf("in passeren 6\n");
     cpu_t currTime = NULL;
-    addokbuf("in passeren 7\n");
     STCK(currTime);
-    addokbuf("in passeren 8\n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
-    addokbuf("in passeren 9\n");
     currentProcess = NULL;
-    addokbuf("in passeren 10\n");
     scheduler();
-    addokbuf("in passeren 11\n");
   }
-  addokbuf("in passeren 12\n");
-  LDST(&oldSys);
+  LDST(oldSys);
 }
 
 getCPUTime(){
@@ -288,7 +260,7 @@ getCPUTime(){
 
   oldSys->s_v0 = currentProcess->p_time;
 
-  LDST(&oldSys);
+  LDST(oldSys);
 }
 
 waitForClock(){
@@ -305,7 +277,7 @@ waitForClock(){
     currentProcess = NULL;
     scheduler();
   }
-  LDST(&oldSys);
+  LDST(oldSys);
 }
 
 
