@@ -19,12 +19,11 @@ void pgmTrapHandler(){
     state_t *globalPgmOld = (state_t *) PROGRAMTRAPOLDAREA;
     stateCopy(globalPgmOld, currentProcess->p_oldPgm);
 
-    LDST(&(currentProcess->p_newPgm));
+    LDST((currentProcess->p_newPgm));
   }
 }
 
 void tlbMgmtHandler(){
-  addokbuf("in tlbMgmtHandle 1\n");
   if (currentProcess->p_oldTLB == NULL){
       terminateProcess();
   }
@@ -32,7 +31,7 @@ void tlbMgmtHandler(){
     state_t *globalTLBOld = (state_t *) TLBMANAGEMENTOLDAREA;
     stateCopy(globalTLBOld, currentProcess->p_oldTLB);
 
-    LDST(&(currentProcess->p_newTLB));
+    LDST((currentProcess->p_newTLB));
   }
 }
 
@@ -238,6 +237,7 @@ void verhogen(){
     insertProcQ(&readyQue, temp);
   }
   aDebug(oldSys->s_pc, 0);
+  /* oldSys->s_pc++; */
   LDST(oldSys);
 }
 
