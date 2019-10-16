@@ -309,6 +309,7 @@ void waitForIODevice(){
     addokbuf("in waitForIoDevice 8\n");
     scheduler();
   }
+  addokbuf("in waitForIoDevice 9\n");
   /* error */
 }
 
