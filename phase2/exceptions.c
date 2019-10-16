@@ -289,7 +289,7 @@ void waitForIODevice(){
   addokbuf("in waitForIoDevice 1.4\n");
   int semNumber = getSemArrayNum(lineNumber, deviceNumber);
   addokbuf("in waitForIoDevice 1.5\n");
-  int *semAdd = devSemTable[semNumber];
+  int *semAdd = &(devSemTable[semNumber]);
   addokbuf("in waitForIoDevice 1.6\n");
   *semAdd--;
   addokbuf("in waitForIoDevice 1.7\n");
