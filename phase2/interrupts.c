@@ -91,8 +91,11 @@ unsigned int ackTerminal(int *devSemNum){
 }
 
 int getSemArrayNum(int lineNumber, int deviceNumber, int termOffset){
+	addokbuf("in getSemArrayNum 1\n");
 	int arrayNum = ((lineNumber-3)*8);
+	addokbuf("in getSemArrayNum 2\n");
 	arrayNum = arrayNum + deviceNumber + termOffset;
+	addokbuf("in getSemArrayNum 3\n");
 	return arrayNum;
 }
 
