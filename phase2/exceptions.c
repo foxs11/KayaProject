@@ -278,40 +278,22 @@ waitForClock(){
 
 
 void waitForIODevice(){
-  addokbuf("in waitForIoDevice 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  addokbuf("in waitForIoDevice 1.1\n");
   int lineNumber = oldSys->s_a1;
-  addokbuf("in waitForIoDevice 1.2\n");
   int deviceNumber = oldSys->s_a2;
-  addokbuf("in waitForIoDevice 1.3\n");
   int termRead = oldSys->s_a3;
-  addokbuf("in waitForIoDevice 1.4\n");
   int semNumber = getSemArrayNum(lineNumber, deviceNumber, 0);
-  addokbuf("in waitForIoDevice 1.5\n");
-  int semAdd;
-  addokbuf("in waitForIoDevice 1.5.1\n");
-  semAdd = devSemTable[semNumber];
-  addokbuf("in waitForIoDevice 1.6\n");
+  int semAdd = devSemTable[semNumber];
   semAdd--;
-  addokbuf("in waitForIoDevice 1.7\n");
   if (semAdd < 0) {
-    addokbuf("in waitForIoDevice 2\n");
     cpu_t currTime = 0;
-    addokbuf("in waitForIoDevice 3\n");
     STCK(currTime);
-    addokbuf("in waitForIoDevice 4\n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-    addokbuf("in waitForIoDevice 5\n");
     softBlockCount++;
-    addokbuf("in waitForIoDevice 6\n");
     insertBlocked(semAdd, currentProcess);
-    addokbuf("in waitForIoDevice 7\n");
     currentProcess = NULL;
-    addokbuf("in waitForIoDevice 8\n");
     scheduler();
   }
-  addokbuf("in waitForIoDevice 9\n");
   /* error */
 }
 
