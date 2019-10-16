@@ -283,7 +283,7 @@ void waitForIODevice(){
   semAdd--;
   if (semAdd < 0) {
     cpu_t currTime = 0;
-    STCK(&currTime);
+    STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
     softBlockCount++;
     insertBlocked(semAdd, currentProcess);
