@@ -70,10 +70,13 @@ void main(){
 
   processCount++;
   insertProcQ(&readyQue, p);
+  addokbuf("in initial 1\n");
 
   LDIT(100000);
+  addokbuf("in initial 2\n");
 
   *time = 0;
+  addokbuf("in initial 3\n");
 
   scheduler();
 }
