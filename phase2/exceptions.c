@@ -12,31 +12,16 @@ void aDebug(unsigned int a, unsigned int b) {
 }
 
 void pgmTrapHandler(){
-  if (currentProcess->p_oldPgm == NULL){
-      terminateProcess();
-  }
-  else {
-    state_t *globalPgmOld = (state_t *) PROGRAMTRAPOLDAREA;
-    stateCopy(globalPgmOld, currentProcess->p_oldPgm);
-
-    LDST((currentProcess->p_newPgm));
-  }
+  passUpOrDie(1);
 }
 
 void tlbMgmtHandler(){
-  if (currentProcess->p_oldTLB == NULL){
-      terminateProcess();
-  }
-  else {
-    state_t *globalTLBOld = (state_t *) TLBMANAGEMENTOLDAREA;
-    stateCopy(globalTLBOld, currentProcess->p_oldTLB);
-
-    LDST((currentProcess->p_newTLB));
-  }
+  passUpOrDie(0);
 }
 
 void sysCallHandler(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  syscallOld->s_pc = syscallOld->s_pc + 4;
   int syscallNum = syscallOld->s_a0;
   int kernelMode;
   int kernelStatus = syscallOld->s_status & KERNELOFF;
@@ -93,7 +78,7 @@ void syscallDispatch(int syscallNum, int kernelMode){
     }
   }
   else{
-    passUpOrDie();
+    passUpOrDie(2); /* no parameter???? */
   }
 }
 

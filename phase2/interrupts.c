@@ -90,10 +90,15 @@ unsigned int ackTerminal(int *devSemNum){
 	return intStatus;
 }
 
-int getSemArrayNum(int lineNumber, int deviceNumber){
+int getSemArrayNum(int lineNumber, int deviceNumber, int termOffset){
 	int arrayNum = ((lineNumber-3)*8);
-	arrayNum = arrayNum + deviceNumber;
+	arrayNum = arrayNum + deviceNumber + termOffset;
 	return arrayNum;
+}
+
+int getDevRegIndex(int lineNumber, int deviceNumber) {
+  int devIndex = ((lineNumber - 3) * 8) + deviceNumber - 1;
+  return &(foo->devreg[devIndex]);
 }
 
 void interruptHandler(){
@@ -111,20 +116,30 @@ void interruptHandler(){
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
-  	int devIndex = ((lineNumber - 3) * 8) + deviceNumber - 1;
-  	device_t * device = &(foo->devreg[devIndex]);
 
-    int * semAdd = &(devSemTable[devIndex]);  /*change for terminal math */
-  	
+    int termOffset = 0;
+
+  	int devRegIndex = getDevRegIndex(lineNumber, deviceNumber);
+    device_t * device = &(foo->devreg[devRegIndex]);
+
+    if (lineNumber == 7){
+      intStatus = device.t_transm_status;
+      if ((intStatus & 0x0F) == READY) { /* recv */
+        termOffset = 8; 
+      }
+    }
+
+    int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
+  	/* increment or decrement sem here? */
   	pcb_PTR p = NULL;
-  	if (semAdd <= 0) {
+  	if ((*semAdd) <= 0) {
   		p = removeBlocked(semAdd);
   		p->p_s.s_v0 = device->d_status;
   		insertProcQ(&readyQue, p);
   		softBlockCount--;
   		/*ack the interrupt */
   		if (lineNumber == 7) {
-  			ackTerminal(semAdd);
+  			ackTerminal(*devRegIndex);
   		}
   		else{
   			device->d_command = 1;
