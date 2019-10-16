@@ -98,7 +98,7 @@ int getSemArrayNum(int lineNumber, int deviceNumber, int termOffset){
 
 int getDevRegIndex(int lineNumber, int deviceNumber) {
   int devIndex = ((lineNumber - 3) * 8) + deviceNumber - 1;
-  return &(foo->devreg[devIndex]);
+  return devIndex;
 }
 
 void interruptHandler(){
@@ -123,7 +123,7 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
-      intStatus = device.t_transm_status;
+      unsigned int intStatus = device->t_transm_status;
       if ((intStatus & 0x0F) == READY) { /* recv */
         termOffset = 8; 
       }
