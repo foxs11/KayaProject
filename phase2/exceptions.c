@@ -12,10 +12,14 @@ void aDebug(unsigned int a, unsigned int b) {
 }
 
 void pgmTrapHandler(){
+  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  syscallOld->s_pc = syscallOld->s_pc + 4;
   passUpOrDie(1);
 }
 
 void tlbMgmtHandler(){
+  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  syscallOld->s_pc = syscallOld->s_pc + 4;
   passUpOrDie(0);
 }
 
