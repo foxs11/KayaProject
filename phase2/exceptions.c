@@ -12,14 +12,10 @@ void aDebug(unsigned int a, unsigned int b) {
 }
 
 void pgmTrapHandler(){
-  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  syscallOld->s_pc = syscallOld->s_pc + 4;
   passUpOrDie(1);
 }
 
 void tlbMgmtHandler(){
-  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  syscallOld->s_pc = syscallOld->s_pc + 4;
   passUpOrDie(0);
 }
 
@@ -192,7 +188,9 @@ void specifyExceptionStateVector(){
 
 void passUpOrDie(int exceptionType){
   state_PTR oldState = NULL;
+  addokbuf("in passUpOrDie 1\n");
   if (exceptionType == 0) {
+    addokbuf("in passUpOrDie 2\n");
     if (currentProcess->p_oldTLB != NULL) {
       oldState = (state_t *) TLBMANAGEMENTOLDAREA;
       currentProcess->p_oldTLB = oldState;
@@ -200,6 +198,7 @@ void passUpOrDie(int exceptionType){
     }
   }
   else if (exceptionType == 1) {
+    addokbuf("in passUpOrDie 3\n");
     if (currentProcess->p_oldPgm != NULL) {
       oldState = (state_t *) PROGRAMTRAPOLDAREA;
       currentProcess->p_oldPgm = oldState;
@@ -207,6 +206,7 @@ void passUpOrDie(int exceptionType){
     }
   }
   else if (exceptionType == 2) {
+    addokbuf("in passUpOrDie 4\n");
     if (currentProcess->p_oldSys != NULL) {
       oldState = (state_t *) SYSCALLOLDAREA;
       currentProcess->p_oldSys = oldState;
