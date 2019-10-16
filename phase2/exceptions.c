@@ -7,6 +7,10 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
+void aDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+}
+
 void pgmTrapHandler(){
   if (currentProcess->p_oldPgm == NULL){
       terminateProcess();
@@ -233,6 +237,7 @@ void verhogen(){
     pcb_PTR temp = removeBlocked(&mutex);
     insertProcQ(&readyQue, temp);
   }
+  aDebug(oldSys->s_pc, 0);
   LDST(oldSys);
 }
 
