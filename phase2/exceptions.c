@@ -287,7 +287,7 @@ void waitForIODevice(){
   addokbuf("in waitForIoDevice 1.3\n");
   int termRead = oldSys->s_a3;
   addokbuf("in waitForIoDevice 1.4\n");
-  int semNumber = getSemArrayNum(lineNumber, deviceNumber);
+  int semNumber = getSemArrayNum(lineNumber, deviceNumber, 0);
   addokbuf("in waitForIoDevice 1.5\n");
   int semAdd;
   addokbuf("in waitForIoDevice 1.5.1\n");
