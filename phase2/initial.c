@@ -73,6 +73,8 @@ void main(){
 
   LDIT(100000);
 
+  *time = 0;
+
   scheduler();
 }
 
