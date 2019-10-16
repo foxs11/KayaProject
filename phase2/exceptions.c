@@ -293,7 +293,7 @@ void waitForIODevice(){
   addokbuf("in waitForIoDevice 1.6\n");
   *semAdd--;
   addokbuf("in waitForIoDevice 1.7\n");
-  if (*semAdd < 0) {
+  if (**semAdd < 0) {
     addokbuf("in waitForIoDevice 2\n");
     cpu_t currTime = 0;
     addokbuf("in waitForIoDevice 3\n");
