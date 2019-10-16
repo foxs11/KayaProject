@@ -234,7 +234,7 @@ void passeren(){
   if (*mutex < 0){
     insertBlocked(&mutex, currentProcess);
     cpu_t currTime = NULL;
-    STCK(currTime);
+    STCK(&currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
     currentProcess = NULL;
     scheduler();
@@ -246,7 +246,7 @@ getCPUTime(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   
   cpu_t currTime = NULL;
-  STCK(currTime);
+  STCK(&currTime);
   currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
 
   oldSys->s_v0 = currentProcess->p_time;
@@ -262,7 +262,7 @@ waitForClock(){
     insertBlocked(&semAdd, currentProcess);
 
     cpu_t currTime = NULL;
-    STCK(currTime);
+    STCK(&currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
 
     currentProcess = NULL;
@@ -283,7 +283,7 @@ void waitForIODevice(){
   semAdd--;
   if (semAdd < 0) {
     cpu_t currTime = NULL;
-    STCK(currTime);
+    STCK(&currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
     softBlockCount++;
     insertBlocked(semAdd, currentProcess);

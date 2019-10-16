@@ -103,7 +103,7 @@ int getDevRegIndex(int lineNumber, int deviceNumber) {
 
 void interruptHandler(){
   cpu_t currTime = NULL;
-  STCK(currTime);
+  STCK(&currTime);
   currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
 
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
@@ -148,7 +148,7 @@ void interruptHandler(){
   			scheduler();
   		}
   		else{
-        STCK(*time);
+        STCK(time);
   			LDST(interruptOld);
   		}
   		
