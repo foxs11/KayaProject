@@ -139,7 +139,7 @@ void interruptHandler(){
   		softBlockCount--;
   		/*ack the interrupt */
   		if (lineNumber == 7) {
-  			ackTerminal(*devRegIndex);
+  			ackTerminal(&devRegIndex);
   		}
   		else{
   			device->d_command = 1;
