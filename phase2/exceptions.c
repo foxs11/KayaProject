@@ -233,7 +233,7 @@ void passeren(){
   (*mutex)--;
   if (*mutex < 0){
     insertBlocked(&mutex, currentProcess);
-    cpu_t currTime = NULL;
+    cpu_t currTime = 0;
     STCK(&currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
     currentProcess = NULL;
@@ -245,7 +245,7 @@ void passeren(){
 getCPUTime(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   
-  cpu_t currTime = NULL;
+  cpu_t currTime = 0;
   STCK(&currTime);
   currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
 
@@ -261,7 +261,7 @@ waitForClock(){
   if (semAdd < 0){
     insertBlocked(&semAdd, currentProcess);
 
-    cpu_t currTime = NULL;
+    cpu_t currTime = 0;
     STCK(&currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
 
@@ -282,7 +282,7 @@ void waitForIODevice(){
   int * semAdd = devSemTable[getSemArrayNum(lineNumber, deviceNumber)];
   semAdd--;
   if (semAdd < 0) {
-    cpu_t currTime = NULL;
+    cpu_t currTime = 0;
     STCK(&currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (*time));
     softBlockCount++;
