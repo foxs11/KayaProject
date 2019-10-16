@@ -285,6 +285,7 @@ void waitForIODevice(){
   int termRead = oldSys->s_a3;
   int * semAdd = devSemTable[getSemArrayNum(lineNumber, deviceNumber)];
   semAdd--;
+  addokbuf("in waitForIoDevice 1.1\n");
   if (semAdd < 0) {
     addokbuf("in waitForIoDevice 2\n");
     cpu_t currTime = 0;
