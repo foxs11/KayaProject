@@ -36,7 +36,8 @@ void scheduler(){
         cp0status = cp0status | SCHEDULERINTSUNMASKED;
         bDebug(cp0status, 1);
         addokbuf("in scheduler 9\n");
-        setSTATUS(cp0status); /* has a return value...? */
+        unsigned int garbage = 0;
+        garbage = setSTATUS(cp0status); /* has a return value...? */
         addokbuf("in scheduler 10\n");
         waitFlag = 1;
         addokbuf("in scheduler 11\n");
