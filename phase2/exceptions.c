@@ -201,7 +201,7 @@ void passUpOrDie(int exceptionType){
   }
   else if (exceptionType == 1) {
     addokbuf("in passUpOrDie 3\n");
-    aDebug((unsigned int) currentProcess->p_oldPgm, 0);
+    aDebug(currentProcess->p_oldPgm, 1);
     if (currentProcess->p_oldPgm != NULL) {
       addokbuf("in passUpOrDie 4\n");
       oldState = (state_t *) PROGRAMTRAPOLDAREA;
