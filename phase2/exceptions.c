@@ -202,6 +202,7 @@ void passUpOrDie(int exceptionType){
     if (currentProcess->p_oldPgm != NULL) {
       oldState = (state_t *) PROGRAMTRAPOLDAREA;
       currentProcess->p_oldPgm = oldState;
+      addokbuf("in passUpOrDie LDST\n");
       LDST(currentProcess->p_newPgm);
     }
   }
@@ -214,6 +215,7 @@ void passUpOrDie(int exceptionType){
     }
   }
   /* sys 5 hasnt been called before, kill it */
+  addokbuf("in passUpOrDie terminate\n");
   terminateProcess();  
 }
 
