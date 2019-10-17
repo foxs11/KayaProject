@@ -200,14 +200,17 @@ void passUpOrDie(int exceptionType){
   else if (exceptionType == 1) {
     addokbuf("in passUpOrDie 3\n");
     if (currentProcess->p_oldPgm != NULL) {
+      addokbuf("in passUpOrDie 4\n");
       oldState = (state_t *) PROGRAMTRAPOLDAREA;
+      addokbuf("in passUpOrDie 5\n");
       currentProcess->p_oldPgm = oldState;
       addokbuf("in passUpOrDie LDST\n");
       LDST(currentProcess->p_newPgm);
     }
+    addokbuf("in passUpOrDie 6\n");
   }
   else if (exceptionType == 2) {
-    addokbuf("in passUpOrDie 4\n");
+    addokbuf("in passUpOrDie 7\n");
     if (currentProcess->p_oldSys != NULL) {
       oldState = (state_t *) SYSCALLOLDAREA;
       currentProcess->p_oldSys = oldState;
