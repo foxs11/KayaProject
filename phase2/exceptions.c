@@ -12,10 +12,12 @@ void aDebug(unsigned int a, unsigned int b) {
 }
 
 void pgmTrapHandler(){
+  addokbuf("in prgmTrapHandler\n");
   passUpOrDie(1);
 }
 
 void tlbMgmtHandler(){
+  addokbuf("in tlbMgmtHandler\n");
   passUpOrDie(0);
 }
 
