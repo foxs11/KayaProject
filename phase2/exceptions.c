@@ -278,14 +278,22 @@ waitForClock(){
 
 
 void waitForIODevice(){
+  addokbuf("Wait for IO 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  addokbuf("Wait for IO 2\n");
   int lineNumber = oldSys->s_a1;
+  addokbuf("Wait for IO 3\n");
   int deviceNumber = oldSys->s_a2;
+  addokbuf("Wait for IO 4\n");
   int termRead = oldSys->s_a3;
+  addokbuf("Wait for IO 5\n");
   int semNumber = getSemArrayNum(lineNumber, deviceNumber, 0);
+  addokbuf("Wait for IO 6\n");
   int semAdd = devSemTable[semNumber];
+  addokbuf("Wait for IO 6\n");
   semAdd--;
   if (semAdd < 0) {
+    addokbuf("Wait for IO 6\n");
     cpu_t currTime = 0;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
