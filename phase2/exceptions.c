@@ -13,6 +13,9 @@ void aDebug(unsigned int a, unsigned int b) {
 
 void pgmTrapHandler(){
   addokbuf("in prgmTrapHandler\n");
+  state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
+  unsigned int cause = pgmOld->s_cause;
+  aDebug(cause, 1);
   passUpOrDie(1);
 }
 
