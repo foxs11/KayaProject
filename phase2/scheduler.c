@@ -32,6 +32,7 @@ void scheduler(){
       else{
         addokbuf("in scheduler 7\n");
         unsigned int cp0status = getSTATUS();
+        bDebug(cp0status, 1);
         addokbuf("in scheduler 8\n");
         cp0status = cp0status | SCHEDULERINTSUNMASKED;
         bDebug(cp0status, 1);
