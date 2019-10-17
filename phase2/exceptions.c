@@ -287,12 +287,18 @@ void waitForIODevice(){
   addokbuf("Wait for IO 4\n");
   int termRead = oldSys->s_a3;
   addokbuf("Wait for IO 5\n");
-  int semNumber = getSemArrayNum(lineNumber, deviceNumber, 0);
+  int offset = 0;
+  if (lineNumber == 7) {
+    if (termRead == TRUE) {
+      offset = 8;
+    }
+  }
+  int semNumber = getSemArrayNum(lineNumber, deviceNumber, offset);
   addokbuf("Wait for IO 6\n");
-  int semAdd = devSemTable[semNumber];
+  int * semAdd = &(devSemTable[semNumber]);
   addokbuf("Wait for IO 6\n");
-  semAdd--;
-  if (semAdd < 0) {
+  (*semAdd)--;
+  if ((*semAdd) < 0) {
     addokbuf("Wait for IO 6\n");
     cpu_t currTime = 0;
     STCK(currTime);
