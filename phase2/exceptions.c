@@ -234,7 +234,6 @@ void verhogen(){
     pcb_PTR temp = removeBlocked(&mutex);
     insertProcQ(&readyQue, temp);
   }
-  aDebug(oldSys->s_pc, 0);
   LDST(oldSys);
 }
 
