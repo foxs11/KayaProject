@@ -29,7 +29,7 @@ void scheduler(){
         addokbuf("in scheduler 7\n");
         unsigned int cp0status = getSTATUS();
         addokbuf("in scheduler 8\n");
-        cp0status = cp0status | SCHEDULERINTSUNMASKED;
+        cp0status = cp0status | (unsigned int) SCHEDULERINTSUNMASKED;
         addokbuf("in scheduler 9\n");
         setSTATUS(cp0status); /* has a return value...? */
         addokbuf("in scheduler 10\n");
