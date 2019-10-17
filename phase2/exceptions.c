@@ -193,7 +193,7 @@ void passUpOrDie(int exceptionType){
     addokbuf("in passUpOrDie 2\n");
     if (currentProcess->p_oldTLB != NULL) {
       oldState = (state_t *) TLBMANAGEMENTOLDAREA;
-      currentProcess->p_oldTLB = oldState;
+      stateCopy(oldState, currentProcess->p_oldTLB);
       LDST(currentProcess->p_newTLB);
     }
   }
@@ -203,7 +203,7 @@ void passUpOrDie(int exceptionType){
       addokbuf("in passUpOrDie 4\n");
       oldState = (state_t *) PROGRAMTRAPOLDAREA;
       addokbuf("in passUpOrDie 5\n");
-      currentProcess->p_oldPgm = oldState;
+      stateCopy(oldState, currentProcess->p_oldPgm);
       addokbuf("in passUpOrDie LDST\n");
       LDST(currentProcess->p_newPgm);
     }
@@ -213,7 +213,7 @@ void passUpOrDie(int exceptionType){
     addokbuf("in passUpOrDie 7\n");
     if (currentProcess->p_oldSys != NULL) {
       oldState = (state_t *) SYSCALLOLDAREA;
-      currentProcess->p_oldSys = oldState;
+      stateCopy(oldState, currentProcess->p_oldSys);
       LDST(currentProcess->p_newSys);
     }
   }
