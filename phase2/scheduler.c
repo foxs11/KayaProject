@@ -14,6 +14,7 @@ void bDebug(unsigned int a, unsigned int b) {
 }
 
 void scheduler(){
+  unsigned int cp0status;
   addokbuf("in scheduler 1\n");
   pcb_PTR process = removeProcQ(&readyQue);
   addokbuf("in scheduler 2\n");
@@ -31,7 +32,7 @@ void scheduler(){
       }
       else{
         addokbuf("in scheduler 7\n");
-        unsigned int cp0status = getSTATUS();
+        cp0status = getSTATUS();
         bDebug(cp0status, 1);
         addokbuf("in scheduler 8\n");
         cp0status = cp0status | SCHEDULERINTSUNMASKED;
