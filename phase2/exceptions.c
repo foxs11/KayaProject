@@ -7,7 +7,7 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
-void aDebug(unsigned int a, unsigned int b) {
+void aDebug(unsigned int a, unsigned int b, unsigned int c) {
   int i = 0;
 }
 
@@ -15,7 +15,11 @@ void pgmTrapHandler(){
   addokbuf("in prgmTrapHandler\n");
   state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
   unsigned int cause = pgmOld->s_cause;
-  aDebug(cause, 1);
+  unsigned int status = pgmOld->s_status;
+  unsigned int sp = pgmOld->s_sp;
+  devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
+  unsigned int ramTop = foo->rambase + foo->ramsize;
+  aDebug(status, sp, ramTop);
   passUpOrDie(1);
 }
 
