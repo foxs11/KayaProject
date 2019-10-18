@@ -32,10 +32,10 @@ void scheduler(){
       }
       else{
         addokbuf("in scheduler 7\n");
-        cp0status = getSTATUS();
+        
         bDebug(cp0status, 1);
         addokbuf("in scheduler 8\n");
-        cp0status = cp0status | SCHEDULERINTSUNMASKED;
+        cp0status = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
         bDebug(cp0status, 1);
         addokbuf("in scheduler 9\n");
         setSTATUS(cp0status); /* has a return value...?  */
