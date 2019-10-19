@@ -9,6 +9,8 @@
 #include "/usr/local/include/umps2/umps/libumps.e"
 #include "../phase1/p1test.c"
 
+state_t * waitState;
+
 void bDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
@@ -31,16 +33,19 @@ void scheduler(){
         PANIC();
       }
       else{
-        addokbuf("in scheduler 7\n");
+        waitFlag = 1;
+        LDST(waitState);
+
+        /*addokbuf("in scheduler 7\n");
         addokbuf("in scheduler 8\n");
         cp0status = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
         bDebug(cp0status, 1);
         addokbuf("in scheduler 9\n");
         setSTATUS(cp0status); /* has a return value...?  */
-        addokbuf("in scheduler 10\n");
+        /*addokbuf("in scheduler 10\n");
         waitFlag = 1;
         addokbuf("in scheduler 11\n");
-        WAIT();
+        WAIT(); */
       }
     }
   }
@@ -51,6 +56,12 @@ void scheduler(){
     STCK(time);
     addokbuf("in scheduler 13\n");
     LDST(&(process->p_s));
+  }
+}
+
+void wait(){
+  while (TRUE) {
+    int i = 42;
   }
 }
 
