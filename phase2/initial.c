@@ -17,6 +17,7 @@ pcb_PTR readyQue;
 cpu_t time;
 int waitFlag;
 int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /*compute number differently */
+state_t * waitState;
 
 extern void test();
 

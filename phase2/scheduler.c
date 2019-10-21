@@ -9,7 +9,7 @@
 #include "/usr/local/include/umps2/umps/libumps.e"
 #include "../phase1/p1test.c"
 
-state_t * waitState;
+/* state_t * waitState; */
 
 void bDebug(unsigned int a, unsigned int b) {
   int i = 0;
