@@ -33,8 +33,10 @@ void scheduler(){
         PANIC();
       }
       else{
+        addokbuf("in scheduler 7\n");
         waitFlag = 1;
-        LDST(waitState);
+        addokbuf("in scheduler 8\n");
+        LDST(&waitState);
 
         /*addokbuf("in scheduler 7\n");
         addokbuf("in scheduler 8\n");
