@@ -33,6 +33,7 @@ void scheduler(){
         PANIC();
       }
       else{
+        addokbuf("in scheduler 7\n");
         waitFlag = 1;
         LDST(&waitState);
 
