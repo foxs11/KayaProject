@@ -17,6 +17,7 @@ pcb_PTR readyQue;
 cpu_t time;
 int waitFlag;
 int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /*compute number differently */
+state_t * waitState;
 
 extern void test();
 
@@ -35,7 +36,6 @@ void main(){
   addokbuf("in initial 6\n");
   state_t * interruptNew = (state_t *) INTERRUPTNEWAREA;
   addokbuf("in initial 7\n");
-  state_t * waitState;
 
   sysCallNew->s_sp = ramTop;
   addokbuf("in initial 8\n");
