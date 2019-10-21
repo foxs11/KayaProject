@@ -34,7 +34,7 @@ void scheduler(){
       }
       else{
         waitFlag = 1;
-        LDST(waitState);
+        LDST(&waitState);
 
         /*addokbuf("in scheduler 7\n");
         addokbuf("in scheduler 8\n");
