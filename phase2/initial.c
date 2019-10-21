@@ -17,7 +17,7 @@ pcb_PTR readyQue;
 cpu_t time;
 int waitFlag;
 int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /*compute number differently */
-state_t * waitState;
+state_t waitState;
 
 extern void test();
 
@@ -45,7 +45,7 @@ void main(){
   addokbuf("in initial 10\n");
   interruptNew->s_sp = ramTop;
   addokbuf("in initial 11\n");
-  waitState->s_sp = ramTop;
+  waitState.s_sp = ramTop;
 
   sysCallNew->s_pc = (memaddr) sysCallHandler;
   addokbuf("in initial 12\n");
@@ -55,7 +55,7 @@ void main(){
   addokbuf("in initial 14\n");
   interruptNew->s_pc = (memaddr) interruptHandler;
   addokbuf("in initial 15\n");
-  waitState->s_pc = (memaddr) wait;
+  waitState.s_pc = (memaddr) wait;
 
   sysCallNew->s_t9 = (memaddr) sysCallHandler;
   addokbuf("in initial 16\n");
@@ -65,7 +65,7 @@ void main(){
   addokbuf("in initial 18\n");
   interruptNew->s_t9 = (memaddr) interruptHandler;
   addokbuf("in initial 19\n");
-  waitState->s_t9 = (memaddr) wait;
+  waitState.s_t9 = (memaddr) wait;
   addokbuf("in initial 20\n");
 
   sysCallNew->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
@@ -76,7 +76,7 @@ void main(){
   addokbuf("in initial 23\n");
   interruptNew->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
   addokbuf("in initial 24\n");
-  waitState->s_status = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
+  waitState.s_status = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
 
   processCount = 0;
   addokbuf("in initial 25\n");
