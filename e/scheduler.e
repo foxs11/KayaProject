@@ -8,8 +8,6 @@
 #include "../h/const.h"
 #include "/usr/local/include/umps2/umps/libumps.e"
 
-extern state_t * waitState;
-
 extern void scheduler();
 extern void wait();
 
