@@ -59,14 +59,16 @@ void main(){
   currentProcess = NULL;
   readyQue = mkEmptyProcQ();
 
+  addokbuf("in initial 2\n");
   initPcbs();
+  addokbuf("in initial 3\n");
   initASL();
 
   int i;
   for(i=0; i< (EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1); i++){
     devSemTable[i] = 0;
   }
-
+  addokbuf("in initial 4\n");
   pcb_PTR p = allocPcb();
   p->p_s.s_sp = ramTop - PAGESIZE;
   p->p_s.s_pc = (memaddr) test;
