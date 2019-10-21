@@ -45,7 +45,7 @@ void main(){
   addokbuf("in initial 10\n");
   interruptNew->s_sp = ramTop;
   addokbuf("in initial 11\n");
-  waitState->s_sp = ramTop;
+  /*waitState->s_sp = ramTop;*/
 
   sysCallNew->s_pc = (memaddr) sysCallHandler;
   addokbuf("in initial 12\n");
