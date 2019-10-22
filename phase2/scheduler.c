@@ -36,7 +36,7 @@ void scheduler(){
         addokbuf("in scheduler 7\n");
         waitFlag = 1;
         addokbuf("in scheduler 8\n");
-        waitState = (state_t) (SCHEDULERINTSUNMASKED | PROCLOCALTIMEON);
+        waitState->s_status = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
         LDST(&waitState);
 
         /*addokbuf("in scheduler 7\n");
