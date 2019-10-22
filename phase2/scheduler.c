@@ -36,7 +36,7 @@ void scheduler(){
         addokbuf("in scheduler 7\n");
         waitFlag = 1;
         addokbuf("in scheduler 8\n");
-        /*bDebug(waitState, 1);*/
+        waitState = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
         LDST(&waitState);
 
         /*addokbuf("in scheduler 7\n");
