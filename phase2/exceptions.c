@@ -15,6 +15,7 @@ void pgmTrapHandler(){
   addokbuf("in prgmTrapHandler\n");
   state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
   unsigned int cause = pgmOld->s_cause;
+  aDebug(cause, 1);
   unsigned int status = pgmOld->s_status;
   unsigned int sp = pgmOld->s_sp;
   devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
