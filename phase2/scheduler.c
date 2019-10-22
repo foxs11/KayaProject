@@ -62,6 +62,7 @@ void scheduler(){
 }
 
 void wait(){
+  addokbuf("in wait state\n");
   while (TRUE) {
     int i = 42;
   }
