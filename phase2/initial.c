@@ -76,7 +76,7 @@ void main(){
   addokbuf("in initial 23\n");
   interruptNew->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
   addokbuf("in initial 24\n");
-  waitState.s_status = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
+  waitState.s_status = SCHEDULERINTSUNMASKED;
 
   processCount = 0;
   addokbuf("in initial 25\n");
