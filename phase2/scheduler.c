@@ -11,7 +11,7 @@
 
 /* state_t * waitState; */
 
-void bDebug(state_t a, unsigned int b) {
+void bDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
 
@@ -36,7 +36,7 @@ void scheduler(){
         addokbuf("in scheduler 7\n");
         waitFlag = 1;
         addokbuf("in scheduler 8\n");
-        bDebug(waitState, 1);
+        /*bDebug(waitState, 1);*/
         LDST(&waitState);
 
         /*addokbuf("in scheduler 7\n");
