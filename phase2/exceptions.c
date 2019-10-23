@@ -197,6 +197,9 @@ void specifyExceptionStateVector(){
 }
 
 void passUpOrDie(int exceptionType){
+  if(currentProcess == NULL){
+    addokbuf("currentProcess is null\n");
+  }
   state_PTR oldState = NULL;
   addokbuf("in passUpOrDie 1\n");
   if (exceptionType == 0) {
