@@ -38,7 +38,6 @@ void scheduler(){
         addokbuf("in scheduler 7\n");
         waitFlag = 1;
         addokbuf("in scheduler 8\n");
-        bDebug(getSTATUS(), 1);
         LDST(&waitState);
 
         /* addokbuf("in scheduler 7\n");
