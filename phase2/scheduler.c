@@ -41,15 +41,11 @@ void scheduler(){
         bDebug(waitState.s_status, 1);
         LDST(&waitState);
 
-        /*addokbuf("in scheduler 7\n");
-        addokbuf("in scheduler 8\n");
+        /* addokbuf("in scheduler 7\n");
         cp0status = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
         bDebug(cp0status, 1);
-        addokbuf("in scheduler 9\n");
         setSTATUS(cp0status); /* has a return value...?  */
-        /*addokbuf("in scheduler 10\n");
-        waitFlag = 1;
-        addokbuf("in scheduler 11\n");
+        /*waitFlag = 1;
         WAIT(); */
       }
     }
