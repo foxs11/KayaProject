@@ -61,7 +61,6 @@ void scheduler(){
 }
 
 void wait(){
-  waitState.s_status = 0x0000FF04;
   waitDebug(1,1);
   while (TRUE) {
     int i = 42;
