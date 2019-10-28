@@ -107,8 +107,9 @@ int getDevRegIndex(int lineNumber, int deviceNumber) {
 void interruptHandler(){
   cpu_t currTime = 0;
   STCK(currTime);
-  currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-
+	if(currentProcess != NULL){
+  	currentProcess->p_time = currentProcess->p_time + (currTime - (time));
+	}
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
   unsigned int cause = interruptOld->s_cause;
   int lineNumber = NULL;

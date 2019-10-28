@@ -35,17 +35,17 @@ void scheduler(){
         PANIC();
       }
       else{
-        addokbuf("in scheduler 7\n");
+        /* addokbuf("in scheduler 7\n");
         waitFlag = 1;
         addokbuf("in scheduler 8\n");
-        LDST(&waitState);
+        LDST(&waitState); */
 
-        /* addokbuf("in scheduler 7\n");
+        addokbuf("in scheduler 7\n");
         cp0status = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
         bDebug(cp0status, 1);
         setSTATUS(cp0status); /* has a return value...?  */
-        /*waitFlag = 1;
-        WAIT(); */
+        waitFlag = 1;
+        WAIT();
       }
     }
   }
