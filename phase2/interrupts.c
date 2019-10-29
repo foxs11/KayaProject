@@ -7,6 +7,10 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
+void addressDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+} 
+
 void interruptDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
@@ -43,6 +47,7 @@ int getLineNumber(unsigned int cause){
 int getDeviceNumber(int lineNumber){
 	if (2 < lineNumber && lineNumber < 8){
   		unsigned int address = (lineNumber - 3) * 8 + LINE3INTBITMAP;
+			addressDebug(address, 0);
   		unsigned int bitMap = (memaddr) address;
 
   		int deviceNumber = NULL;
