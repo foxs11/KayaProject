@@ -19,36 +19,23 @@ void waitDebug(unsigned int a, unsigned int b) {
 
 void scheduler(){
   unsigned int cp0status;
-  addokbuf("in scheduler 1\n");
   pcb_PTR process = removeProcQ(&readyQue);
-  addokbuf("in scheduler 2\n");
   if(process == NULL){
-    addokbuf("in scheduler 3\n");
     if(processCount == 0){
-      addokbuf("in scheduler 4\n");
       HALT();
     }
     else{
-      addokbuf("in scheduler 5\n");
       if(softBlockCount == 0){
-        addokbuf("in scheduler 6\n");
         PANIC();
       }
       else{
-        /* addokbuf("in scheduler 7\n");
-        waitFlag = 1;
-        addokbuf("in scheduler 8\n");
+        /* waitFlag = 1;
         LDST(&waitState); */
 
-        addokbuf("in scheduler 7\n");
         cp0status = SCHEDULERINTSUNMASKED;
-        addokbuf("in scheduler 8\n");
-        addokbuf("in scheduler 9\n");
         bDebug(cp0status, 1);
         setSTATUS(cp0status); /* has a return value...?  */
-        addokbuf("in scheduler 10\n");
         waitFlag = 1;
-        addokbuf("in scheduler 11\n");
         WAIT();
       }
     }
@@ -56,18 +43,9 @@ void scheduler(){
   else{
     currentProcess = process;
     setTIMER(5000);
-    addokbuf("in scheduler 12\n");
     STCK(time);
-    addokbuf("in scheduler 13\n");
     LDST(&(process->p_s));
   }
 }
-
-/* void wait(){
-  waitDebug(1,1);
-  while (TRUE) {
-    int i = 42;
-  }
-} */
 
 #endif

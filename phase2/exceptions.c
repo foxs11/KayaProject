@@ -12,7 +12,6 @@ void aDebug(int a, unsigned int b, unsigned int c) {
 }
 
 void pgmTrapHandler(){
-  addokbuf("in prgmTrapHandler\n");
   state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
   unsigned int cause = pgmOld->s_cause;
   aDebug(cause, 1, 1);
@@ -25,7 +24,6 @@ void pgmTrapHandler(){
 }
 
 void tlbMgmtHandler(){
-  addokbuf("in tlbMgmtHandler\n");
   passUpOrDie(0);
 }
 
@@ -41,16 +39,13 @@ void sysCallHandler(){
   else{
     kernelMode = FALSE;
   }
-  addokbuf("in syscallHandler 1\n");
   syscallDispatch(syscallNum, kernelMode);
 }
 
 void syscallDispatch(int syscallNum, int kernelMode){
   aDebug(syscallNum, 0, 0);
   if(syscallNum > 0 && syscallNum < 9){
-    addokbuf("in syscallDispatch 1\n");
     if(kernelMode == TRUE) {
-      addokbuf("in syscallDispatch 2\n");
       switch(syscallNum){
         case 1:
           createProcess(); /* done */
@@ -79,7 +74,6 @@ void syscallDispatch(int syscallNum, int kernelMode){
       }
     }
     else { /* syscall 1-8 user mode, make it look like a priveleged instruction error */
-      addokbuf("in syscallDispatch 3\n");
       state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
       state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
       stateCopy(syscallOld, pgmOld);
@@ -98,7 +92,6 @@ void syscallDispatch(int syscallNum, int kernelMode){
 }
 
 void createProcess(){
-  addokbuf("in createProcess\n");
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   state_PTR newProcState = syscallOld->s_a1;
   syscallOld->s_v0 = -1;
@@ -118,7 +111,6 @@ void createProcess(){
 }
 
 void terminateProcess(){
-  addokbuf("in terminateProcess\n");
   terminateRecursively(currentProcess);
   scheduler();
 }
@@ -170,7 +162,6 @@ void stateCopy(state_PTR old, state_PTR new){
 }
 
 void specifyExceptionStateVector(){
-  addokbuf("in specifyExceptionStateVector\n");
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   int exceptionType = syscallOld->s_a1;
   state_PTR oldState = syscallOld->s_a2;
@@ -209,12 +200,9 @@ void specifyExceptionStateVector(){
 
 void passUpOrDie(int exceptionType){
   if(currentProcess == NULL){
-    addokbuf("currentProcess is null\n");
   }
   state_PTR oldState = NULL;
-  addokbuf("in passUpOrDie 1\n");
   if (exceptionType == 0) {
-    addokbuf("in passUpOrDie 2\n");
     if (currentProcess->p_oldTLB != NULL) {
       oldState = (state_t *) TLBMANAGEMENTOLDAREA;
       stateCopy(oldState, currentProcess->p_oldTLB);
@@ -222,35 +210,24 @@ void passUpOrDie(int exceptionType){
     }
   }
   else if (exceptionType == 1) {
-    addokbuf("in passUpOrDie 3\n");
-    /*aDebug(currentProcess->p_oldPgm, 1);*/
     if (currentProcess->p_oldPgm != NULL) {
-      addokbuf("in passUpOrDie 4\n");
       oldState = (state_t *) PROGRAMTRAPOLDAREA;
-      addokbuf("in passUpOrDie 5\n");
       stateCopy(oldState, currentProcess->p_oldPgm);
-      addokbuf("in passUpOrDie LDST\n");
       LDST(currentProcess->p_newPgm);
     }
-    addokbuf("in passUpOrDie 6\n");
   }
   else if (exceptionType == 2) {
-    addokbuf("in passUpOrDie 7\n");
     if (currentProcess->p_oldSys != NULL) {
       oldState = (state_t *) SYSCALLOLDAREA;
-      addokbuf("in passUpOrDie 8\n");
       stateCopy(oldState, currentProcess->p_oldSys);
-      addokbuf("in passUpOrDie 9\n");
       LDST(currentProcess->p_newSys);
     }
   }
   /* sys 5 hasnt been called before, kill it */
-  addokbuf("in passUpOrDie terminate\n");
   terminateProcess();  
 }
 
 void verhogen(){
-  addokbuf("entered verhogen 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int *mutex = oldSys->s_a1;
   (*mutex)++;
@@ -262,7 +239,6 @@ void verhogen(){
 }
 
 void passeren(){
-  addokbuf("entered passeren 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * mutex = oldSys->s_a1;
   (*mutex)--;
@@ -278,7 +254,6 @@ void passeren(){
 }
 
 getCPUTime(){
-  addokbuf("in getCPUTime\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   
   cpu_t currTime = 0;
@@ -291,7 +266,6 @@ getCPUTime(){
 }
 
 waitForClock(){
-  addokbuf("in waitForClock\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int semAdd = devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
   semAdd--;
@@ -311,15 +285,10 @@ waitForClock(){
 
 
 void waitForIODevice(){
-  addokbuf("Wait for IO 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  addokbuf("Wait for IO 2\n");
   int lineNumber = oldSys->s_a1;
-  addokbuf("Wait for IO 3\n");
   int deviceNumber = oldSys->s_a2;
-  addokbuf("Wait for IO 4\n");
   int termRead = oldSys->s_a3;
-  addokbuf("Wait for IO 5\n");
   int offset = 0;
   if (lineNumber == 7) {
     if (termRead == TRUE) {
@@ -327,24 +296,15 @@ void waitForIODevice(){
     }
   }
   int semNumber = getSemArrayNum(lineNumber, deviceNumber, offset);
-  addokbuf("Wait for IO 6\n");
   int * semAdd = &(devSemTable[semNumber]);
-  addokbuf("Wait for IO 7\n");
   (*semAdd)--;
   if ((*semAdd) < 0) {
-    addokbuf("Wait for IO 8\n");
     cpu_t currTime = 0;
-    addokbuf("Wait for IO 9\n");
     STCK(currTime);
-    addokbuf("Wait for IO 10\n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-    addokbuf("Wait for IO 11\n");
     softBlockCount++;
-    addokbuf("Wait for IO 12\n");
     insertBlocked(semAdd, currentProcess);
-    addokbuf("Wait for IO 13\n");
     currentProcess = NULL;
-    addokbuf("Wait for IO 14\n");
     scheduler();
   }
   /* error */
