@@ -79,6 +79,7 @@ void syscallDispatch(int syscallNum, int kernelMode){
       }
     }
     else { /* syscall 1-8 user mode, make it look like a priveleged instruction error */
+      addokbuf("in syscallDispatch 3\n");
       state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
       state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
       stateCopy(syscallOld, pgmOld);
