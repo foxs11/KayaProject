@@ -50,7 +50,7 @@ int getLineNumber(unsigned int cause){
 
 int getDeviceNumber(int lineNumber){
 	if (2 < lineNumber && lineNumber < 8){
-  		unsigned int address = (lineNumber - 3) * 8 + LINE3INTBITMAP;
+  		unsigned int address = (lineNumber - 3) * 4 + LINE3INTBITMAP;
 			addressDebug(address, 0);
   		unsigned int bitMap = (memaddr) address;
 
