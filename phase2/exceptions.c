@@ -76,8 +76,6 @@ void syscallDispatch(int syscallNum, int kernelMode){
         case 8:
           waitForIODevice(); /* done */
           break;
-        default:
-          addokbuf("in syscallDispatch default\n");
       }
     }
     else { /* syscall 1-8 user mode, make it look like a priveleged instruction error */
