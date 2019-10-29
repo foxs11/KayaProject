@@ -50,23 +50,23 @@ int getLineNumber(unsigned int cause){
 
 int getDeviceNumber(int lineNumber){
 	if (2 < lineNumber && lineNumber < 8){
-  		intDevBitMap_t bitMap = (intDevBitMap_t) LINE3INTBITMAP;
+  		intDevBitMap_PTR bitMap = (intDevBitMap_PTR) LINE3INTBITMAP;
       unsigned int lineNumberBitMap;
       switch (lineNumber){
         case 3: 
-          lineNumberBitMap = bitMap.i_lineThree;
+          lineNumberBitMap = bitMap->i_lineThree;
           break;
         case 4: 
-          lineNumberBitMap = bitMap.i_lineFour;
+          lineNumberBitMap = bitMap->i_lineFour;
           break;
         case 5: 
-          lineNumberBitMap = bitMap.i_lineFive;
+          lineNumberBitMap = bitMap->i_lineFive;
           break;
         case 6: 
-          lineNumberBitMap = bitMap.i_lineSix;
+          lineNumberBitMap = bitMap->i_lineSix;
           break;
         case 7: 
-          lineNumberBitMap = bitMap.i_lineSeven;
+          lineNumberBitMap = bitMap->i_lineSeven;
           break;
 
       }
