@@ -41,6 +41,7 @@ void sysCallHandler(){
   else{
     kernelMode = FALSE;
   }
+  addokbuf("in syscallHandler 1\n");
   syscallDispatch(syscallNum, kernelMode);
 }
 
