@@ -19,6 +19,10 @@ void waitDebug(unsigned int a, unsigned int b) {
 
 void scheduler(){
   unsigned int cp0status;
+  if(headProcQ(&readyQue) == NULL){
+    addokbuf("readyQue head is null \n");
+  }
+  addokbuf("readyQue head is not null \n");
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
     if(processCount == 0){
