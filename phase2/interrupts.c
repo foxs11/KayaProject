@@ -14,28 +14,28 @@ void interruptDebug(unsigned int a, unsigned int b) {
 int getLineNumber(unsigned int cause){
 	int lineNumber = NULL;
 
-	if (CHECK_BIT(cause, 10)) {
+	if (CHECK_BIT(cause, 8)) {
   	lineNumber = 0;
   }
-  else if (CHECK_BIT(cause, 11)) {
+  else if (CHECK_BIT(cause, 9)) {
   	lineNumber = 1;
   }
-  else if (CHECK_BIT(cause, 12)) {
+  else if (CHECK_BIT(cause, 10)) {
   	lineNumber = 2;
   }
-  else if (CHECK_BIT(cause, 13)) {
+  else if (CHECK_BIT(cause, 11)) {
   	lineNumber = 3;
   }
-  else if (CHECK_BIT(cause, 14)) {
+  else if (CHECK_BIT(cause, 12)) {
   	lineNumber = 4;
   }
-  else if (CHECK_BIT(cause, 15)) {
+  else if (CHECK_BIT(cause, 13)) {
   	lineNumber = 5;
   }
-  else if (CHECK_BIT(cause, 16)) {
+  else if (CHECK_BIT(cause, 14)) {
   	lineNumber = 6;
   }
-  else if (CHECK_BIT(cause, 17)) {
+  else if (CHECK_BIT(cause, 15)) {
   	lineNumber = 7;
   }
 }
