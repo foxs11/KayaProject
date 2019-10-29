@@ -55,6 +55,7 @@ void scheduler(){
     addokbuf("asdfasfasdf 4\n");
     STCK(time);
     addokbuf("asdfasfasdf 5\n");
+    waitDebug(0, 0);
     LDST(&(process->p_s));
   }
 }
