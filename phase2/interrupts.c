@@ -169,6 +169,9 @@ void interruptHandler(){
   		p = removeBlocked(semAdd);
   		p->p_s.s_v0 = device->d_status;
   		insertProcQ(&readyQue, p);
+			if(headProcQ(&readyQue) == NULL){
+				addokbuf("readyQue head is null \n");
+			}
   		softBlockCount--;
   		/*ack the interrupt */
   		if (lineNumber == 7) {
