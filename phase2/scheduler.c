@@ -46,6 +46,7 @@ void scheduler(){
     }
   }
   else{
+    addokbuf("asdfasfasdf\n");
     waitFlag = 0;
     currentProcess = process;
     setTIMER(5000);
