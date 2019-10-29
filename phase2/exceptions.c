@@ -47,7 +47,7 @@ void sysCallHandler(){
 
 void syscallDispatch(int syscallNum, int kernelMode){
   aDebug(syscallNum, 0, 0);
-  if(1<= syscallNum <= 8){
+  if(syscallNum > 0 && syscallNum < 9){
     addokbuf("in syscallDispatch 1\n");
     if(kernelMode == TRUE) {
       addokbuf("in syscallDispatch 2\n");
