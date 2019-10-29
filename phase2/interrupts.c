@@ -143,7 +143,7 @@ void interruptHandler(){
     }
 
     int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
-  	/* increment or decrement sem here? */
+  	(*semAdd)++;
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
   		p = removeBlocked(semAdd);

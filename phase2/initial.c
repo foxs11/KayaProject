@@ -17,6 +17,8 @@ pcb_PTR readyQue;
 cpu_t time;
 int waitFlag;
 int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /*compute number differently */
+#define clockSem devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
+
 
 extern void test();
 
