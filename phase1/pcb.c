@@ -94,6 +94,7 @@ pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
 *  Update the process queue’s tail pointer if necessary. */
 pcb_PTR removeProcQ (pcb_PTR *tp){
   if(emptyProcQ(*tp)){ /* is the queue empty? */
+    addokbuff("fuck me \n");
     return NULL;
   }
   else{ /* queue is not empty, remove the head via outProcQ */
