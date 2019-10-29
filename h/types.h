@@ -54,6 +54,15 @@ typedef struct state_t {
 
 } state_t, *state_PTR;
 
+typedef struct intDevBitMap_t {
+	unsigned int	i_lineThree;
+	unsigned int	i_lineFour;
+	unsigned int	i_lineFive;
+	unsigned int 	i_lineSix;
+	unsigned int	i_lineSeven;
+
+} intDevBitMap_t, *intDevBitMap_PTR;
+
 #define	s_at	s_reg[0]
 #define	s_v0	s_reg[1]
 #define s_v1	s_reg[2]

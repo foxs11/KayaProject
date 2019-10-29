@@ -50,33 +50,52 @@ int getLineNumber(unsigned int cause){
 
 int getDeviceNumber(int lineNumber){
 	if (2 < lineNumber && lineNumber < 8){
-  		unsigned int address = (lineNumber - 3) * 4 + LINE3INTBITMAP;
+  		
 			addressDebug(address, 0);
-  		unsigned int bitMap = (memaddr) address;
+  		intDevBitMap bitMap = (memaddr) LINE3INTBITMAP;
+      unsigned int lineNumberBitMap;
+      switch (lineNumber){
+        case 3: 
+          lineNumberBitMap = bitMap.i_lineThree;
+          break;
+        case 4: 
+          lineNumberBitMap = bitMap.i_lineFour;
+          break;
+        case 5: 
+          lineNumberBitMap = bitMap.i_lineFive;
+          break;
+        case 6: 
+          lineNumberBitMap = bitMap.i_lineSix;
+          break;
+        case 7: 
+          lineNumberBitMap = bitMap.i_lineSeven;
+          break;
+
+      }
 
   		int deviceNumber = NULL;
-  		if (CHECK_BIT(bitMap, 0)) {
+  		if (CHECK_BIT(lineNumberBitMap, 0)) {
   			deviceNumber = 0;
 	  	}
-	  	else if (CHECK_BIT(bitMap, 1)) {
+	  	else if (CHECK_BIT(lineNumberBitMap, 1)) {
 	  		deviceNumber = 1;
 			}
-	  	else if (CHECK_BIT(bitMap, 2)) {
+	  	else if (CHECK_BIT(lineNumberBitMap, 2)) {
 	  		deviceNumber = 2;
 	  	}
-	  	else if (CHECK_BIT(bitMap, 3)) {
+	  	else if (CHECK_BIT(lineNumberBitMap, 3)) {
 	  		deviceNumber = 3;
 	  	}
-	  	else if (CHECK_BIT(bitMap, 4)) {
+	  	else if (CHECK_BIT(lineNumberBitMap, 4)) {
 	  		deviceNumber = 4;
 	  	}
-	  	else if (CHECK_BIT(bitMap, 5)) {
+	  	else if (CHECK_BIT(lineNumberBitMap, 5)) {
 	  		deviceNumber = 5;
 	  	}
-	 	 else if (CHECK_BIT(bitMap, 6)) {
+	 	 else if (CHECK_BIT(lineNumberBitMap, 6)) {
 	  		deviceNumber = 6;
 	 	}
-	 	 else if (CHECK_BIT(bitMap, 7)) {
+	 	 else if (CHECK_BIT(lineNumberBitMap, 7)) {
 		  	deviceNumber = 7;
 	  	}
 	  	return deviceNumber;
