@@ -116,7 +116,7 @@ void interruptHandler(){
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
-		addokbuf("in intHandler 1");
+		addokbuf("in intHandler 1 \n");
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -127,7 +127,7 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
-			addokbuf("in intHandler 2");
+			addokbuf("in intHandler 2 \n");
       unsigned int intStatus = device->t_transm_status;
       if ((intStatus & 0x0F) == READY) { /* recv */
         termOffset = 8; 
@@ -165,20 +165,20 @@ void interruptHandler(){
     }
     else { /* line number 2 */
       LDIT(100000);
-			addokbuf("in line2 1");
+			addokbuf("in line2 1 \n");
       if (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
-				addokbuf("in line2 2");
+				addokbuf("in line2 2 \n");
 				devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]++;
-        addokbuf("in line2 3");
+        addokbuf("in line2 3 \n");
 				if (devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE] <= 0){
-				  addokbuf("in line2 4");
+				  addokbuf("in line2 4 \n");
 					while (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) {
 						pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
             insertProcQ(&readyQue, temp);
           }
         }
       }
-      addokbuf("in line2");
+      addokbuf("in line2 5 \n");
       LDST(interruptOld);
     }
   }
