@@ -323,16 +323,22 @@ void waitForIODevice(){
   int semNumber = getSemArrayNum(lineNumber, deviceNumber, offset);
   addokbuf("Wait for IO 6\n");
   int * semAdd = &(devSemTable[semNumber]);
-  addokbuf("Wait for IO 6\n");
+  addokbuf("Wait for IO 7\n");
   (*semAdd)--;
   if ((*semAdd) < 0) {
-    addokbuf("Wait for IO 6\n");
+    addokbuf("Wait for IO 8\n");
     cpu_t currTime = 0;
+    addokbuf("Wait for IO 9\n");
     STCK(currTime);
+    addokbuf("Wait for IO 10\n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
+    addokbuf("Wait for IO 11\n");
     softBlockCount++;
+    addokbuf("Wait for IO 12\n");
     insertBlocked(semAdd, currentProcess);
+    addokbuf("Wait for IO 13\n");
     currentProcess = NULL;
+    addokbuf("Wait for IO 14\n");
     scheduler();
   }
   /* error */
