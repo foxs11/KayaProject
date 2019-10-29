@@ -7,7 +7,7 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
-void aDebug(int a, unsigned int b, unsigned int c) {
+void aDebug(unsigned int a, unsigned int b, unsigned int c) {
   int i = 0;
 }
 
@@ -297,6 +297,7 @@ void waitForIODevice(){
   }
   int semNumber = getSemArrayNum(lineNumber, deviceNumber, offset);
   int * semAdd = &(devSemTable[semNumber]);
+  aDebug(semAdd, 0, 0);
   (*semAdd)--;
   if ((*semAdd) < 0) {
     cpu_t currTime = 0;

@@ -96,7 +96,6 @@ int getDeviceNumber(int lineNumber){
 	 	 else if (CHECK_BIT(lineNumberBitMap, 7)) {
 		  	deviceNumber = 7;
 	  	}
-			addressDebug(deviceNumber, 0);
 	  	return deviceNumber;
 	}
 }
@@ -143,7 +142,6 @@ void interruptHandler(){
   unsigned int cause = interruptOld->s_cause;
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
-	lineDebug(lineNumber, 0);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
 		addokbuf("in intHandler 1 \n");
   	int deviceNumber = getDeviceNumber(lineNumber);
@@ -161,10 +159,9 @@ void interruptHandler(){
       }
     }
 
-		unsigned int devSemNum = getSemArrayNum(lineNumber, deviceNumber, termOffset);
-		interruptDebug(devSemNum, 0);
     int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
-  	addokbuf("in intHandler 3 \n");
+  	interruptDebug(semAdd, 0);
+		addokbuf("in intHandler 3 \n");
 		(*semAdd)++;
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
