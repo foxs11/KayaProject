@@ -41,7 +41,7 @@ void scheduler(){
         LDST(&waitState); */
 
         addokbuf("in scheduler 7\n");
-        cp0status = SCHEDULERINTSUNMASKED | PROCLOCALTIMEON;
+        cp0status = SCHEDULERINTSUNMASKED;
         bDebug(cp0status, 1);
         setSTATUS(cp0status); /* has a return value...?  */
         waitFlag = 1;
