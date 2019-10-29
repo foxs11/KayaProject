@@ -66,6 +66,7 @@ int getDeviceNumber(int lineNumber){
           lineNumberBitMap = bitMap->i_lineSix;
           break;
         case 7: 
+					addressDebug(bitMap->i_lineSeven, 0);
           lineNumberBitMap = bitMap->i_lineSeven;
           break;
 
@@ -140,12 +141,10 @@ void interruptHandler(){
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
   unsigned int cause = interruptOld->s_cause;
   int lineNumber = NULL;
-	addokbuf("in intHandler 1.0 \n");
   lineNumber = getLineNumber(cause);
-	addokbuf("in intHandler 1.1 \n");
 	lineDebug(lineNumber, 0);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
-		addokbuf("in intHandler 1.2 \n");
+		addokbuf("in intHandler 1 \n");
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
