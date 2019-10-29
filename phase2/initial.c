@@ -17,10 +17,8 @@ pcb_PTR readyQue;
 cpu_t time;
 int waitFlag;
 int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /*compute number differently */
-state_t waitState;
 
 extern void test();
-extern void wait();
 
 void main(){
   devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -35,25 +33,21 @@ void main(){
   pgmTrapNew->s_sp = ramTop;
   tlbMgmtNew->s_sp = ramTop;
   interruptNew->s_sp = ramTop;
-  waitState.s_sp = ramTop;
 
   sysCallNew->s_pc = (memaddr) sysCallHandler;
   pgmTrapNew->s_pc = (memaddr) pgmTrapHandler;
   tlbMgmtNew->s_pc = (memaddr) tlbMgmtHandler;
   interruptNew->s_pc = (memaddr) interruptHandler;
-  waitState.s_pc = (memaddr) wait;
 
   sysCallNew->s_t9 = (memaddr) sysCallHandler;
   pgmTrapNew->s_t9 = (memaddr) pgmTrapHandler;
   tlbMgmtNew->s_t9 = (memaddr) tlbMgmtHandler;
   interruptNew->s_t9 = (memaddr) interruptHandler;
-  waitState.s_t9 = (memaddr) wait;
 
   sysCallNew->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
   pgmTrapNew->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
   tlbMgmtNew->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
   interruptNew->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
-  waitState.s_status = SCHEDULERINTSUNMASKED;
 
   processCount = 0;
   softBlockCount = 0;
