@@ -128,11 +128,12 @@ int getSemArrayNum(int lineNumber, int deviceNumber, int termOffset){
 }
 
 int getDevRegIndex(int lineNumber, int deviceNumber) {
-  int devIndex = ((lineNumber - 3) * 8) + deviceNumber - 1;
+  int devIndex = ((lineNumber - 3) * 8) + deviceNumber;
   return devIndex;
 }
 
 void interruptHandler(){
+	int termOffset = 0;
   cpu_t currTime = 0;
   STCK(currTime);
 	if(currentProcess != NULL){
@@ -148,8 +149,6 @@ void interruptHandler(){
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
-
-    int termOffset = 0;
 
   	int devRegIndex = getDevRegIndex(lineNumber, deviceNumber);
     device_t * device = &(foo->devreg[devRegIndex]);
