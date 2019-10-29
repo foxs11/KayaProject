@@ -30,56 +30,56 @@ void tlbMgmtHandler(){
 }
 
 void sysCallHandler(){
-  addokbuf("in sysCallHandler 1\n");
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  addokbuf("in sysCallHandler 2\n");
   syscallOld->s_pc = syscallOld->s_pc + 4;
-  addokbuf("in sysCallHandler 3\n");
   int syscallNum = syscallOld->s_a0;
-  addokbuf("in sysCallHandler 4\n");
   int kernelMode;
-  addokbuf("in sysCallHandler 5\n");
   int kernelStatus = syscallOld->s_status & KERNELOFF;
-  addokbuf("in sysCallHandler 6\n");
   if(kernelStatus == ALLOFF){
-    addokbuf("in sysCallHandler 7\n");
    kernelMode = TRUE;
   }
   else{
-    addokbuf("in sysCallHandler 8\n");
     kernelMode = FALSE;
   }
-  addokbuf("in sysCallHandler 9\n");
   syscallDispatch(syscallNum, kernelMode);
 }
 
 void syscallDispatch(int syscallNum, int kernelMode){
   if(1<= syscallNum <= 8){
+    addokbuf("in syscallDispatch 1\n");
     if(kernelMode == TRUE) {
+      addokbuf("in syscallDispatch 2\n");
       switch(syscallNum){
         case 1:
+          addokbuf("in syscallDispatch 3\n");
           createProcess(); /* done */
           break;
         case 2:
+          addokbuf("in syscallDispatch 4\n");
           terminateProcess(); /* done */
           break;
         case 3:
+          addokbuf("in syscallDispatch 5\n");
           verhogen(); /* done */
           break;
         case 4:
+          addokbuf("in syscallDispatch 6\n");
           passeren(); /* done */
           break;
         case 5:
+          addokbuf("in syscallDispatch 7\n");
           specifyExceptionStateVector(); /* done */
           break;
         case 6:
+          addokbuf("in syscallDispatch 8\n");
           getCPUTime(); /* done */
           break;
         case 7:
+          addokbuf("in syscallDispatch 9\n");
           waitForClock();
           break;
         case 8:
-          addokbuf("in waitForIODevice\n");
+          addokbuf("in waitForIODevice 10\n");
           waitForIODevice(); /* done */
           break;
       }
