@@ -113,10 +113,8 @@ void interruptHandler(){
 	}
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
   unsigned int cause = interruptOld->s_cause;
-	interruptDebug(cause, 0);
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
-	interruptDebug(lineNumber, 0);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
