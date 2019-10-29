@@ -127,7 +127,7 @@ void print(char *msg) {
 			PANIC();
 		s++;	
 	}
-	SYSCALL(VERHOGEN, (int)&term_mut, 0, 0);				/* V(term_mut) */
+	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* V(term_mut) */
 }
 
 
