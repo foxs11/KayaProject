@@ -43,8 +43,8 @@ void scheduler(){
         addokbuf("in scheduler 7\n");
         cp0status = SCHEDULERINTSUNMASKED;
         addokbuf("in scheduler 8\n");
-        bDebug(cp0status, 1);
         addokbuf("in scheduler 9\n");
+        bDebug(cp0status, 1);
         setSTATUS(cp0status); /* has a return value...?  */
         addokbuf("in scheduler 10\n");
         waitFlag = 1;
