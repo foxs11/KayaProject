@@ -11,6 +11,10 @@ void addressDebug(unsigned int a, unsigned int b) {
   int i = 0;
 } 
 
+void lineDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+} 
+
 void interruptDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
@@ -120,6 +124,7 @@ void interruptHandler(){
   unsigned int cause = interruptOld->s_cause;
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
+	lineDebug(lineNumber, 0);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
 		addokbuf("in intHandler 1 \n");
   	int deviceNumber = getDeviceNumber(lineNumber);
