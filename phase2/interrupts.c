@@ -135,24 +135,30 @@ void interruptHandler(){
     }
 
     int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
-  	(*semAdd)++;
+  	addokbuf("in intHandler 3 \n");
+		(*semAdd)++;
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
+			addokbuf("in intHandler 4 \n");
   		p = removeBlocked(semAdd);
   		p->p_s.s_v0 = device->d_status;
   		insertProcQ(&readyQue, p);
   		softBlockCount--;
   		/*ack the interrupt */
   		if (lineNumber == 7) {
+				addokbuf("in intHandler 5 \n");
   			ackTerminal(&devRegIndex);
   		}
   		else{
+				addokbuf("in intHandler 6 \n");
   			device->d_command = 1;
   		}
   		if (waitFlag == 1) {
+				addokbuf("in intHandler 7 \n");
   			scheduler();
   		}
   		else{
+				addokbuf("in intHandler 8 \n");
         STCK(time);
   			LDST(interruptOld);
   		}
