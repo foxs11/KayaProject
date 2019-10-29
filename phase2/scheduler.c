@@ -46,11 +46,15 @@ void scheduler(){
     }
   }
   else{
-    addokbuf("asdfasfasdf\n");
+    addokbuf("asdfasfasdf 1\n");
     waitFlag = 0;
+    addokbuf("asdfasfasdf 2\n");
     currentProcess = process;
+    addokbuf("asdfasfasdf 3\n");
     setTIMER(5000);
+    addokbuf("asdfasfasdf 4\n");
     STCK(time);
+    addokbuf("asdfasfasdf 5\n");
     LDST(&(process->p_s));
   }
 }
