@@ -282,6 +282,7 @@ waitForClock(){
 
 
 void waitForIODevice(){
+  addokbuf("in sys8 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int lineNumber = oldSys->s_a1;
   int deviceNumber = oldSys->s_a2;
