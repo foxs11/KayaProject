@@ -25,13 +25,11 @@ void scheduler(){
       HALT();
     }
     else{
+    bDebug(softBlockCount, 0);
       if(softBlockCount == 0){
         PANIC();
       }
       else{
-        /* waitFlag = 1;
-        LDST(&waitState); */
-
         cp0status = SCHEDULERINTSUNMASKED;
         bDebug(cp0status, 1);
         waitFlag = 1;
@@ -41,6 +39,7 @@ void scheduler(){
     }
   }
   else{
+    waitFlag = 0;
     currentProcess = process;
     setTIMER(5000);
     STCK(time);
