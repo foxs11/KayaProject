@@ -45,27 +45,35 @@ void syscallDispatch(int syscallNum, int kernelMode){
     if(kernelMode == TRUE) {
       switch(syscallNum){
         case 1:
+          addokbuf("in syscallDispatch 1\n");
           createProcess(); /* done */
           break;
         case 2:
+          addokbuf("in syscallDispatch 2\n");
           terminateProcess(); /* done */
           break;
         case 3:
+          addokbuf("in syscallDispatch 3\n");
           verhogen(); /* done */
           break;
         case 4:
+          addokbuf("in syscallDispatch 4\n");
           passeren(); /* done */
           break;
         case 5:
+          addokbuf("in syscallDispatch 5\n");
           specifyExceptionStateVector(); /* done */
           break;
         case 6:
+          addokbuf("in syscallDispatch 6\n");
           getCPUTime(); /* done */
           break;
         case 7:
+          addokbuf("in syscallDispatch 7\n");
           waitForClock();
           break;
         case 8:
+          addokbuf("in syscallDispatch 8\n");
           waitForIODevice(); /* done */
           break;
       }
