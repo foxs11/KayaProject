@@ -19,7 +19,7 @@ void waitDebug(unsigned int a, unsigned int b) {
 
 void scheduler(){
   unsigned int cp0status;
-  if(emptyProcQ(&readyQue) == NULL){
+  if(emptyProcQ(&readyQue)){
     addokbuf("readyQue head is null \n");
   }
   addokbuf("readyQue head is not null \n");
