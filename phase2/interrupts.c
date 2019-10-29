@@ -7,6 +7,10 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
+void interruptDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+}
+
 int getLineNumber(unsigned int cause){
 	int lineNumber = NULL;
 
@@ -118,7 +122,8 @@ void interruptHandler(){
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
   addokbuf("in intHandler 3\n");
-  if (3 >= lineNumber >= 7){ /* maybe remove line 5? */
+	interruptDebug(lineNumber, 0);
+  if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
 		addokbuf("in intHandler 4\n");
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
@@ -164,15 +169,21 @@ void interruptHandler(){
   }
   else { /* line number not between 3 and 7 */
   	if (lineNumber == 1) {
+			addokbuf("in intHandler 6\n");
       scheduler();
     }
     else { /* line number 2 */
+			addokbuf("in intHandler 7\n");
       LDIT(100000);
+			addokbuf("in intHandler 8\n");
       if (headBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
-        devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]++;
+        addokbuf("in intHandler 9\n");
+				devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]++;
         if (devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE] <= 0){
-          while (headBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE])) != NULL) {
-            pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
+         	addokbuf("in intHandler 6\n");
+				  while (headBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE])) != NULL) {
+            addokbuf("in intHandler 6\n");
+						pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
             insertProcQ(&readyQue, temp);
           }
         }

@@ -59,11 +59,11 @@ void scheduler(){
   }
 }
 
-void wait(){
+/* void wait(){
   waitDebug(1,1);
   while (TRUE) {
     int i = 42;
   }
-}
+} */
 
 #endif
