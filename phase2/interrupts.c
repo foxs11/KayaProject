@@ -172,6 +172,7 @@ void interruptHandler(){
 			if(headProcQ(&readyQue) == NULL){
 				addokbuf("readyQue head is null \n");
 			}
+			addokbuf("readyQue head is not null \n");
   		softBlockCount--;
   		/*ack the interrupt */
   		if (lineNumber == 7) {
