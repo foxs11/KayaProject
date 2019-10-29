@@ -14,12 +14,10 @@ void aDebug(unsigned int a, unsigned int b, unsigned int c) {
 void pgmTrapHandler(){
   state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
   unsigned int cause = pgmOld->s_cause;
-  aDebug(cause, 1, 1);
   unsigned int status = pgmOld->s_status;
   unsigned int sp = pgmOld->s_sp;
   devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
   unsigned int ramTop = foo->rambase + foo->ramsize;
-  aDebug(status, sp, ramTop);
   passUpOrDie(1);
 }
 
@@ -43,7 +41,6 @@ void sysCallHandler(){
 }
 
 void syscallDispatch(int syscallNum, int kernelMode){
-  aDebug(syscallNum, 0, 0);
   if(syscallNum > 0 && syscallNum < 9){
     if(kernelMode == TRUE) {
       switch(syscallNum){
