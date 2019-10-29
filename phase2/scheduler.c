@@ -27,6 +27,7 @@ void scheduler(){
     else{
     bDebug(softBlockCount, 0);
       if(softBlockCount == 0){
+        addokbuf("scheduler panic\n");
         PANIC();
       }
       else{
