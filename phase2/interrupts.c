@@ -66,7 +66,6 @@ int getDeviceNumber(int lineNumber){
           lineNumberBitMap = bitMap->i_lineSix;
           break;
         case 7: 
-					addressDebug(bitMap->i_lineSeven, 0);
           lineNumberBitMap = bitMap->i_lineSeven;
           break;
 
@@ -97,6 +96,7 @@ int getDeviceNumber(int lineNumber){
 	 	 else if (CHECK_BIT(lineNumberBitMap, 7)) {
 		  	deviceNumber = 7;
 	  	}
+			addressDebug(deviceNumber, 0);
 	  	return deviceNumber;
 	}
 }
