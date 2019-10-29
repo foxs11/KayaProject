@@ -22,7 +22,9 @@ void scheduler(){
   if(headProcQ(readyQue) == NULL){
     addokbuf("readyQue head is null \n");
   }
-  addokbuf("readyQue head is not null \n");
+  else {
+    addokbuf("readyQue head is not null \n");
+  }
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
     if(processCount == 0){
