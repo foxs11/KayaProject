@@ -34,8 +34,8 @@ void scheduler(){
 
         cp0status = SCHEDULERINTSUNMASKED;
         bDebug(cp0status, 1);
-        setSTATUS(cp0status); /* has a return value...?  */
         waitFlag = 1;
+        setSTATUS(cp0status); /* has a return value...?  */
         WAIT();
       }
     }
