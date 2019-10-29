@@ -164,19 +164,19 @@ void interruptHandler(){
     else { /* line number 2 */
       LDIT(100000);
 			addokbuf("in line2 1");
-      if (headBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
+      if (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
 				addokbuf("in line2 2");
-				devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]++;
+				devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]++;
         addokbuf("in line2 3");
-				if (devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE] <= 0){
+				if (devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE] <= 0){
 				  addokbuf("in line2 4");
-					while (headBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE])) != NULL) {
+					while (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) {
 						pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
             insertProcQ(&readyQue, temp);
           }
         }
       }
-      
+      addokbuf("in line2 5");
       LDST(interruptOld);
     }
   }
