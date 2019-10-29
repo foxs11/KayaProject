@@ -52,35 +52,27 @@ void syscallDispatch(int syscallNum, int kernelMode){
       addokbuf("in syscallDispatch 2\n");
       switch(syscallNum){
         case 1:
-          addokbuf("in syscallDispatch 3\n");
           createProcess(); /* done */
           break;
         case 2:
-          addokbuf("in syscallDispatch 4\n");
           terminateProcess(); /* done */
           break;
         case 3:
-          addokbuf("in syscallDispatch 5\n");
           verhogen(); /* done */
           break;
         case 4:
-          addokbuf("in syscallDispatch 6\n");
           passeren(); /* done */
           break;
         case 5:
-          addokbuf("in syscallDispatch 7\n");
           specifyExceptionStateVector(); /* done */
           break;
         case 6:
-          addokbuf("in syscallDispatch 8\n");
           getCPUTime(); /* done */
           break;
         case 7:
-          addokbuf("in syscallDispatch 9\n");
           waitForClock();
           break;
         case 8:
-          addokbuf("in waitForIODevice 10\n");
           waitForIODevice(); /* done */
           break;
       }
@@ -104,6 +96,7 @@ void syscallDispatch(int syscallNum, int kernelMode){
 }
 
 void createProcess(){
+  addokbuf("in createProcess\n");
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   state_PTR newProcState = syscallOld->s_a1;
   syscallOld->s_v0 = -1;
@@ -123,6 +116,7 @@ void createProcess(){
 }
 
 void terminateProcess(){
+  addokbuf("in terminateProcess\n");
   terminateRecursively(currentProcess);
   scheduler();
 }
@@ -171,6 +165,7 @@ void stateCopy(state_PTR old, state_PTR new){
 }
 
 void specifyExceptionStateVector(){
+  addokbuf("in specifyExceptionStateVector\n");
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   int exceptionType = syscallOld->s_a1;
   state_PTR oldState = syscallOld->s_a2;
@@ -276,6 +271,7 @@ void passeren(){
 }
 
 getCPUTime(){
+  addokbuf("in getCPUTime\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   
   cpu_t currTime = 0;
@@ -288,6 +284,7 @@ getCPUTime(){
 }
 
 waitForClock(){
+  addokbuf("in waitForClock\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int semAdd = devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
   semAdd--;
