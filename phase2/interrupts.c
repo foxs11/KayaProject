@@ -119,6 +119,7 @@ void interruptHandler(){
 	addokbuf("in intHandler 2\n");
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
   unsigned int cause = interruptOld->s_cause;
+	interruptDebug(cause, 0);
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
   addokbuf("in intHandler 3\n");
