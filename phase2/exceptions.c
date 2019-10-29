@@ -7,7 +7,7 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
-void aDebug(unsigned int a, unsigned int b, unsigned int c) {
+void aDebug(int a, unsigned int b, unsigned int c) {
   int i = 0;
 }
 
