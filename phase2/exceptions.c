@@ -70,6 +70,7 @@ void syscallDispatch(int syscallNum, int kernelMode){
           waitForClock();
           break;
         case 8:
+          addokbuf("in waitForIODevice\n");
           waitForIODevice(); /* done */
           break;
       }
