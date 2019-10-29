@@ -237,7 +237,9 @@ void passUpOrDie(int exceptionType){
     addokbuf("in passUpOrDie 7\n");
     if (currentProcess->p_oldSys != NULL) {
       oldState = (state_t *) SYSCALLOLDAREA;
+      addokbuf("in passUpOrDie 8\n");
       stateCopy(oldState, currentProcess->p_oldSys);
+      addokbuf("in passUpOrDie 9\n");
       LDST(currentProcess->p_newSys);
     }
   }
