@@ -116,6 +116,7 @@ void interruptHandler(){
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
+		addokbuf("in intHandler 1");
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -126,6 +127,7 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
+			addokbuf("in intHandler 2");
       unsigned int intStatus = device->t_transm_status;
       if ((intStatus & 0x0F) == READY) { /* recv */
         termOffset = 8; 
@@ -176,7 +178,7 @@ void interruptHandler(){
           }
         }
       }
-      addokbuf("in line2 5");
+      addokbuf("in line2");
       LDST(interruptOld);
     }
   }
