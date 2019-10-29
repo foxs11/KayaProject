@@ -134,6 +134,8 @@ void interruptHandler(){
       }
     }
 
+		unsigned int devSemNum = getSemArrayNum(lineNumber, deviceNumber, termOffset);
+		interruptDebug(devSemNum, 0);
     int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
   	addokbuf("in intHandler 3 \n");
 		(*semAdd)++;
@@ -161,8 +163,7 @@ void interruptHandler(){
 				addokbuf("in intHandler 8 \n");
         STCK(time);
   			LDST(interruptOld);
-  		}
-  		
+			}
   	}
   }
   else { /* line number not between 3 and 7 */
