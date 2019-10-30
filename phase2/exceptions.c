@@ -239,7 +239,6 @@ void verhogen(){
   if (*mutex <= 0){
     pcb_PTR temp = removeBlocked(&mutex);
     if(temp != NULL){
-      softBlockCount--;
     }
     insertProcQ(&readyQue, temp);
   }
@@ -252,7 +251,6 @@ void passeren(){
   (*mutex)--;
   if (*mutex < 0){
     insertBlocked(&mutex, currentProcess);
-    softBlockCount++;
     cpu_t currTime = 0;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
@@ -280,6 +278,7 @@ waitForClock(){
   semAdd--;
   if (semAdd < 0){
     insertBlocked(&semAdd, currentProcess);
+    softBlockCount++;
 
     cpu_t currTime = 0;
     STCK(currTime);
