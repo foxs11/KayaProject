@@ -160,7 +160,7 @@ void interruptHandler(){
     }
 
     int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
-  	interruptDebug(semAdd, 0);
+  	interruptDebug(*semAdd, 0);
 		addokbuf("in intHandler 3 \n");
 		(*semAdd)++;
   	pcb_PTR p = NULL;
