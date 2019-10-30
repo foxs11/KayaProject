@@ -206,6 +206,7 @@ void interruptHandler(){
 					while (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) {
 						pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
             insertProcQ(&readyQue, temp);
+            softBlockCount--;
           }
         }
       }
