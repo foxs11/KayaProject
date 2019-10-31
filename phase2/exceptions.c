@@ -286,6 +286,8 @@ waitForClock(){
 
 void waitForIODevice(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  unsigned int pc = oldSys->s_pc;
+  aDebug(pc, 0, 0);
   int lineNumber = oldSys->s_a1;
   int deviceNumber = oldSys->s_a2;
   int termRead = oldSys->s_a3;

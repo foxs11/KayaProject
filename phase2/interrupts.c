@@ -7,6 +7,10 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
+void intDebug(unsigned int a, unsigned int b){
+  int i;
+  i = 42;
+}
 
 int getLineNumber(unsigned int cause){
 	int lineNumber = NULL;
@@ -155,6 +159,7 @@ void interruptHandler(){
   		p = removeBlocked(semAdd);
   		p->p_s.s_v0 = device->d_status;
   		insertProcQ(&readyQue, p);
+      intDebug(p->p_s.s_pc, 0);
   		softBlockCount--;
   		/*ack the interrupt */
   		if (lineNumber == 7) {

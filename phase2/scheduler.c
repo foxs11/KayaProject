@@ -9,6 +9,11 @@
 #include "/usr/local/include/umps2/umps/libumps.e"
 #include "../phase1/p1test.c"
 
+void bDebug(unsigned int a, unsigned int b) {
+  int i;
+  i = 42;
+}
+
 void scheduler(){
   unsigned int cp0status;
   pcb_PTR process = removeProcQ(&readyQue);
@@ -25,6 +30,7 @@ void scheduler(){
         cp0status = SCHEDULERINTSUNMASKED;
         bDebug(cp0status, 1);
         waitFlag = 1;
+        bDebug(unsigned int a, unsigned int b)
         setSTATUS(cp0status); /* has a return value...?  */
         WAIT();
       }
