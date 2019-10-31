@@ -45,35 +45,27 @@ void syscallDispatch(int syscallNum, int kernelMode){
     if(kernelMode == TRUE) {
       switch(syscallNum){
         case 1:
-          addokbuf("in syscallDispatch 1\n");
           createProcess(); /* done */
           break;
         case 2:
-          addokbuf("in syscallDispatch 2\n");
           terminateProcess(); /* done */
           break;
         case 3:
-          addokbuf("in syscallDispatch 3\n");
           verhogen(); /* done */
           break;
         case 4:
-          addokbuf("in syscallDispatch 4\n");
           passeren(); /* done */
           break;
         case 5:
-          addokbuf("in syscallDispatch 5\n");
           specifyExceptionStateVector(); /* done */
           break;
         case 6:
-          addokbuf("in syscallDispatch 6\n");
           getCPUTime(); /* done */
           break;
         case 7:
-          addokbuf("in syscallDispatch 7\n");
           waitForClock();
           break;
         case 8:
-          addokbuf("in syscallDispatch 8\n");
           waitForIODevice(); /* done */
           break;
       }
@@ -233,7 +225,6 @@ void passUpOrDie(int exceptionType){
 }
 
 void verhogen(){
-  addokbuf("in v\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int *mutex = oldSys->s_a1;
   (*mutex)++;
@@ -247,7 +238,6 @@ void verhogen(){
 }
 
 void passeren(){
-  addokbuf("in p\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * mutex = oldSys->s_a1;
   (*mutex)--;
@@ -295,9 +285,7 @@ waitForClock(){
 
 
 void waitForIODevice(){
-  addokbuf("in sys8 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  aDebug(oldSys->s_pc, 0, 0);
   int lineNumber = oldSys->s_a1;
   int deviceNumber = oldSys->s_a2;
   int termRead = oldSys->s_a3;
@@ -313,7 +301,6 @@ void waitForIODevice(){
   if ((*semAdd) < 0) {
     cpu_t currTime = 0;
     STCK(currTime);
-    aDebug(currentProcess->p_s.s_pc, 0, 0);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
     softBlockCount++;
     insertBlocked(semAdd, currentProcess);
