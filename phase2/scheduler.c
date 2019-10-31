@@ -22,13 +22,13 @@ void scheduler(){
       HALT();
     }
     else{
-      bDebug(softBlockCount, 0);
+      /*bDebug(softBlockCount, 0);*/
       if(softBlockCount == 0){
         PANIC();
       }
       else{
         cp0status = SCHEDULERINTSUNMASKED;
-        bDebug(cp0status, 1);
+        /*bDebug(cp0status, 1);*/
         waitFlag = 1;
         setSTATUS(cp0status); /* has a return value...?  */
         WAIT();
