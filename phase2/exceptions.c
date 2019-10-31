@@ -27,7 +27,9 @@ void tlbMgmtHandler(){
 
 void sysCallHandler(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  aDebug(syscallOld->s_pc, 0, 0);
   syscallOld->s_pc = syscallOld->s_pc + 4;
+  aDebug(syscallOld->s_pc, 0, 0);
   int syscallNum = syscallOld->s_a0;
   int kernelMode;
   int kernelStatus = syscallOld->s_status & KERNELOFF;
@@ -295,6 +297,7 @@ waitForClock(){
 void waitForIODevice(){
   addokbuf("in sys8 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  aDebug(oldSys->s_pc, 0, 0);
   int lineNumber = oldSys->s_a1;
   int deviceNumber = oldSys->s_a2;
   int termRead = oldSys->s_a3;
@@ -306,7 +309,6 @@ void waitForIODevice(){
   }
   int semNumber = getSemArrayNum(lineNumber, deviceNumber, offset);
   int * semAdd = &(devSemTable[semNumber]);
-  aDebug(semAdd, 0, 0);
   (*semAdd)--;
   if ((*semAdd) < 0) {
     cpu_t currTime = 0;
