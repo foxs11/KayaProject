@@ -114,6 +114,9 @@ void	p5sys(),p8root(),child1(),child2(),p8leaf();
 void p2testDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
+void p2testPrintDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+}
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
@@ -124,6 +127,7 @@ void print(char *msg) {
 	
 	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
 	while (*s != EOS) {
+		p2testPrintDebug(0, 0);
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
 		if ((status & TERMSTATMASK) != RECVD)
