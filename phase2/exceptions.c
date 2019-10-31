@@ -27,9 +27,7 @@ void tlbMgmtHandler(){
 
 void sysCallHandler(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  aDebug(syscallOld->s_pc, 0, 0);
   syscallOld->s_pc = syscallOld->s_pc + 4;
-  aDebug(syscallOld->s_pc, 0, 0);
   int syscallNum = syscallOld->s_a0;
   int kernelMode;
   int kernelStatus = syscallOld->s_status & KERNELOFF;
@@ -315,6 +313,7 @@ void waitForIODevice(){
   if ((*semAdd) < 0) {
     cpu_t currTime = 0;
     STCK(currTime);
+    aDebug(currentProcess->p_s.s_pc, 0, 0);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
     softBlockCount++;
     insertBlocked(semAdd, currentProcess);

@@ -13,10 +13,6 @@ void bDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
 
-void waitDebug(unsigned int a, unsigned int b) {
-  int i = 0;
-} 
-
 void scheduler(){
   unsigned int cp0status;
   if(headProcQ(readyQue) == NULL){
@@ -57,7 +53,7 @@ void scheduler(){
     currentProcess = process;
     setTIMER(5000);
     STCK(time);
-    waitDebug(0, 0);
+    bDebug(process->p_s.s_pc, 0);
     LDST(&(process->p_s));
   }
 }
