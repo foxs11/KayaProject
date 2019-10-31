@@ -35,6 +35,7 @@ int getLineNumber(unsigned int cause){
   else if (CHECK_BIT(cause, 15)) {
   	lineNumber = 7;
   }
+	return lineNumber;
 }
 
 int getDeviceNumber(int lineNumber){
