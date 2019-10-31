@@ -147,7 +147,6 @@ void interruptHandler(){
     }
 
     int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
-  	interruptDebug(*semAdd, 0);
 		(*semAdd)++;
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
