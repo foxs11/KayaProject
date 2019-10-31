@@ -9,10 +9,6 @@
 #include "/usr/local/include/umps2/umps/libumps.e"
 #include "../phase1/p1test.c"
 
-void bDebug(unsigned int a, unsigned int b) {
-  int i = 0;
-}
-
 void scheduler(){
   unsigned int cp0status;
   pcb_PTR process = removeProcQ(&readyQue);
