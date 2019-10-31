@@ -10,7 +10,8 @@
 #include "../phase1/p1test.c"
 
 void bDebug(unsigned int a, unsigned int b) {
-  int i = 0;
+  int i;
+  i = 42;
 }
 
 void scheduler(){
