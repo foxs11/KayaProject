@@ -235,6 +235,7 @@ void passUpOrDie(int exceptionType){
 }
 
 void verhogen(){
+  addokbuf("in v\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int *mutex = oldSys->s_a1;
   (*mutex)++;
@@ -248,6 +249,7 @@ void verhogen(){
 }
 
 void passeren(){
+  addokbuf("in p\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * mutex = oldSys->s_a1;
   (*mutex)--;
