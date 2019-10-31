@@ -111,6 +111,9 @@ memaddr *p5MemLocation = 0;		/* To cause a p5 trap */
 void	p2(),p3(),p4(),p5(),p5a(),p5b(),p6(),p7(),p7a(),p5prog(),p5mm();
 void	p5sys(),p8root(),child1(),child2(),p8leaf();
 
+void p2testDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+}
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
@@ -135,6 +138,8 @@ void print(char *msg) {
 /*                 p1 -- the root process                            */
 /*                                                                   */
 void test() {	
+
+	p2testDebug(0, 0);
 	
 	SYSCALL(VERHOGEN, (int)&testsem, 0, 0);					/* V(testsem)   */
 
