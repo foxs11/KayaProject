@@ -27,20 +27,27 @@ void scheduler(){
   }
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
+    addokbuf("scheduler panic\n");
     if(processCount == 0){
       HALT();
     }
     else{
-    bDebug(softBlockCount, 0);
+      addokbuf("scheduler 1\n");
+      bDebug(softBlockCount, 0);
       if(softBlockCount == 0){
-        addokbuf("scheduler panic\n");
+        addokbuf("scheduler 2\n");
         PANIC();
       }
       else{
+        addokbuf("scheduler 3\n");
         cp0status = SCHEDULERINTSUNMASKED;
+        addokbuf("scheduler 4\n");
         bDebug(cp0status, 1);
+        addokbuf("scheduler 5\n");
         waitFlag = 1;
+        addokbuf("scheduler 6\n");
         setSTATUS(cp0status); /* has a return value...?  */
+        addokbuf("scheduler 7\n");
         WAIT();
       }
     }
