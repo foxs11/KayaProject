@@ -314,7 +314,7 @@ void waitForIODevice(){
     cpu_t currTime = 0;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-    currentProcess->p_s->s_pc = currentProcess->p_s->s_pc + 4;
+    currentProcess->p_s.s_pc = currentProcess->p_s.s_pc + 4;
     softBlockCount++;
     insertBlocked(semAdd, currentProcess);
     currentProcess = NULL;
