@@ -305,25 +305,20 @@ void waitForIODevice(){
   int termRead = oldSys->s_a3;
   int offset = 0;
   if (lineNumber == 7) {
-    addokbuf("in sys8 2\n");
     if (termRead == TRUE) {
-      addokbuf("in sys8 3\n");
       offset = 8;
     }
   }
-  addokbuf("in sys8 4\n");
   int semNumber = getSemArrayNum(lineNumber, deviceNumber, offset);
   int * semAdd = &(devSemTable[semNumber]);
   (*semAdd)--;
   if ((*semAdd) < 0) {
-    addokbuf("in sys8 5\n");
     cpu_t currTime = 0;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
     softBlockCount++;
     insertBlocked(semAdd, currentProcess);
     currentProcess = NULL;
-    addokbuf("in sys8 6\n");
     scheduler();
   }
   /* error */
