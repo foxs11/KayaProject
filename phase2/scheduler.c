@@ -30,7 +30,6 @@ void scheduler(){
         cp0status = SCHEDULERINTSUNMASKED;
         bDebug(cp0status, 1);
         waitFlag = 1;
-        bDebug(unsigned int a, unsigned int b)
         setSTATUS(cp0status); /* has a return value...?  */
         WAIT();
       }
