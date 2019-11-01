@@ -114,6 +114,9 @@ void	p5sys(),p8root(),child1(),child2(),p8leaf();
 void p2TestDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
+void p2PanicDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+}
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
@@ -128,6 +131,7 @@ void print(char *msg) {
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
 		if ((status & TERMSTATMASK) != RECVD)
+			p2PanicDebug(0, 0);
 			PANIC();
 		s++;	
 	}
