@@ -117,6 +117,9 @@ void p2TestDebug(unsigned int a, unsigned int b) {
 void p2PanicDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
+void p2StatusDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+}
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
@@ -130,6 +133,7 @@ void print(char *msg) {
 		p2TestDebug(0, 0);
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
+		p2StatusDebug(status, 0);
 		if ((status & TERMSTATMASK) != RECVD)
 			p2PanicDebug(0, 0);
 			PANIC();
