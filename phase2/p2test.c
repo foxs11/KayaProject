@@ -124,6 +124,7 @@ void print(char *msg) {
 	
 	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
 	while (*s != EOS) {
+		p2TestDebug(0, 0);
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
 		if ((status & TERMSTATMASK) != RECVD)
@@ -138,8 +139,6 @@ void print(char *msg) {
 /*                 p1 -- the root process                            */
 /*                                                                   */
 void test() {	
-
-	p2TestDebug(0, 0);
 
 	SYSCALL(VERHOGEN, (int)&testsem, 0, 0);					/* V(testsem)   */
 
