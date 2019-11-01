@@ -128,6 +128,7 @@ int getDevRegIndex(int lineNumber, int deviceNumber) {
 
 void interruptHandler(){
 	addokbuf("in interuptHandler 1 \n");
+	unsigned int status = 0;
 	int termOffset = 0;
   cpu_t currTime = 0;
   STCK(currTime);
@@ -149,7 +150,7 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
-			unsigned int status = ackTerminal(&devRegIndex);
+			status = ackTerminal(&devRegIndex);
 			addokbuf("in interuptHandler 4 \n");
       if ((status & 0x0F) == READY) { /* recv */
 				addokbuf("in interuptHandler 5 \n");
