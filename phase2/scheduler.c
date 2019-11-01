@@ -18,15 +18,18 @@ void scheduler(){
   unsigned int cp0status;
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
+    addokbuf("in scheduler 1 \n");
     if(processCount == 0){
       HALT();
     }
     else{
+      addokbuf("in scheduler 2 \n");
       /*bDebug(softBlockCount, 0);*/
       if(softBlockCount == 0){
         PANIC();
       }
       else{
+        addokbuf("in scheduler 3 \n");
         cp0status = SCHEDULERINTSUNMASKED;
         /*bDebug(cp0status, 1);*/
         waitFlag = 1;
@@ -36,6 +39,7 @@ void scheduler(){
     }
   }
   else{
+    addokbuf("in scheduler 4 \n");
     waitFlag = 0;
     currentProcess = process;
     setTIMER(5000);
