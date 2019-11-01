@@ -149,13 +149,16 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
+			unsinged int status = ackTerminal(&devRegIndex);
 			addokbuf("in interuptHandler 4 \n");
-      unsigned int intStatus = device->t_transm_status;
-      if ((intStatus & 0x0F) == READY) { /* recv */
+      if ((status & 0x0F) == READY) { /* recv */
 				addokbuf("in interuptHandler 5 \n");
         termOffset = 8; 
       }
     }
+		else{
+  			device->d_command = 1;
+  	}
 
     int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
 		(*semAdd)++;
@@ -163,17 +166,12 @@ void interruptHandler(){
   	if ((*semAdd) <= 0) {
 			addokbuf("in interuptHandler 6 \n");
   		p = removeBlocked(semAdd);
-  		p->p_s.s_v0 = device->d_status;
+			if(lineNumber ==7){
+				p->p_s.s_v0 = status;
+			}
+  		p->p_s.s_v0 = status;
   		insertProcQ(&readyQue, p);
   		softBlockCount--;
-  		/*ack the interrupt */
-  		if (lineNumber == 7) {
-				addokbuf("in interuptHandler 7 \n");
-  			ackTerminal(&devRegIndex);
-  		}
-  		else{
-  			device->d_command = 1;
-  		}
   		if (waitFlag == 1) {
 				addokbuf("in interuptHandler 8 \n");
   			scheduler();
