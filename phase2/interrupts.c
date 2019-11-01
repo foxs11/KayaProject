@@ -131,6 +131,7 @@ void interruptHandler(){
   cpu_t currTime = 0;
   STCK(currTime);
 	if(currentProcess != NULL){
+		addokbuf("in interuptHandler 2 \n");
   	currentProcess->p_time = currentProcess->p_time + (currTime - (time));
 	}
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
@@ -138,6 +139,7 @@ void interruptHandler(){
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
+		addokbuf("in interuptHandler 3 \n");
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -146,8 +148,10 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
+			addokbuf("in interuptHandler 4 \n");
       unsigned int intStatus = device->t_transm_status;
       if ((intStatus & 0x0F) == READY) { /* recv */
+				addokbuf("in interuptHandler 5 \n");
         termOffset = 8; 
       }
     }
@@ -156,6 +160,7 @@ void interruptHandler(){
 		(*semAdd)++;
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
+			addokbuf("in interuptHandler 6 \n");
   		p = removeBlocked(semAdd);
   		p->p_s.s_v0 = device->d_status;
   		insertProcQ(&readyQue, p);
@@ -163,12 +168,14 @@ void interruptHandler(){
   		softBlockCount--;
   		/*ack the interrupt */
   		if (lineNumber == 7) {
+				addokbuf("in interuptHandler 7 \n");
   			ackTerminal(&devRegIndex);
   		}
   		else{
   			device->d_command = 1;
   		}
   		if (waitFlag == 1) {
+				addokbuf("in interuptHandler 8 \n");
   			scheduler();
   		}
   		else{
@@ -179,10 +186,12 @@ void interruptHandler(){
   }
   else { /* line number not between 3 and 7 */
   	if (lineNumber == 1) {
+			addokbuf("in interuptHandler 9 \n");
       scheduler();
     }
     else { /* line number 2 */
       LDIT(100000);
+			addokbuf("in interuptHandler 10 \n");
       if (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
 				devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]++;
 				if (devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE] <= 0){
