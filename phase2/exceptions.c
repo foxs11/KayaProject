@@ -305,7 +305,9 @@ void waitForIODevice(){
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
     softBlockCount++;
+    aDebug(currentProcess->p_s.s_pc, 0, 0);
     stateCopy(oldSys, &(currentProcess->p_s));
+    aDebug(currentProcess->p_s.s_pc, 0, 0);
     insertBlocked(semAdd, currentProcess);
     currentProcess = NULL;
     scheduler();
