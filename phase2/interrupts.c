@@ -149,7 +149,7 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
-			unsinged int status = ackTerminal(&devRegIndex);
+			unsigned int status = ackTerminal(&devRegIndex);
 			addokbuf("in interuptHandler 4 \n");
       if ((status & 0x0F) == READY) { /* recv */
 				addokbuf("in interuptHandler 5 \n");
