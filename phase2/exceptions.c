@@ -28,6 +28,7 @@ void tlbMgmtHandler(){
 void sysCallHandler(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   syscallOld->s_pc = syscallOld->s_pc + 4;
+  stateCopy(syscallOld, &(currentProcess->p_s));
   int syscallNum = syscallOld->s_a0;
   int kernelMode;
   int kernelStatus = syscallOld->s_status & KERNELOFF;
@@ -305,9 +306,6 @@ void waitForIODevice(){
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
     softBlockCount++;
-    aDebug(currentProcess->p_s.s_pc, 0, 0);
-    stateCopy(oldSys, &(currentProcess->p_s));
-    aDebug(currentProcess->p_s.s_pc, 0, 0);
     insertBlocked(semAdd, currentProcess);
     currentProcess = NULL;
     scheduler();

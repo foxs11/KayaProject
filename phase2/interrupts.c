@@ -101,6 +101,7 @@ unsigned int ackTerminal(int *devSemNum){
 	deviceRegs = (devregarea_t *) RAMBASEADDR;
 
 	intStatus = deviceRegs->devreg[(*devSemNum)].t_transm_status;
+	intDebug(intStatus, 0);
 	if ((intStatus & 0x0F) != READY) {
 		deviceRegs->devreg[(*devSemNum)].t_transm_command = ACK;
 	}
@@ -164,7 +165,6 @@ void interruptHandler(){
   		p = removeBlocked(semAdd);
   		p->p_s.s_v0 = device->d_status;
   		insertProcQ(&readyQue, p);
-      intDebug(p->p_s.s_pc, 0);
   		softBlockCount--;
   		/*ack the interrupt */
   		if (lineNumber == 7) {
