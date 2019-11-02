@@ -286,6 +286,7 @@ waitForClock(){
 
 
 void waitForIODevice(){
+  addokbuf("in waitForIo 1");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   unsigned int pc = oldSys->s_pc;
   aDebug(pc, 0, 0);
@@ -298,16 +299,24 @@ void waitForIODevice(){
       offset = 8;
     }
   }
+  addokbuf("in waitForIo 2");
   int semNumber = getSemArrayNum(lineNumber, deviceNumber, offset);
   int * semAdd = &(devSemTable[semNumber]);
   (*semAdd)--;
   if ((*semAdd) < 0) {
+    addokbuf("in waitForIo 3");
     cpu_t currTime = 0;
+    addokbuf("in waitForIo 4");
     STCK(currTime);
+    addokbuf("in waitForIo 5");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
+    addokbuf("in waitForIo 6");
     softBlockCount++;
+    addokbuf("in waitForIo 7");
     insertBlocked(semAdd, currentProcess);
+    addokbuf("in waitForIo 8");
     currentProcess = NULL;
+    addokbuf("in waitForIo 9");
     scheduler();
   }
   /* error */
