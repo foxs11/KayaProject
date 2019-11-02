@@ -111,17 +111,52 @@ memaddr *p5MemLocation = 0;		/* To cause a p5 trap */
 void	p2(),p3(),p4(),p5(),p5a(),p5b(),p6(),p7(),p7a(),p5prog(),p5mm();
 void	p5sys(),p8root(),child1(),child2(),p8leaf();
 
+void testDebug1(unsigned int a, unsigned int b){
+	int i;
+  i = 42;
+}
+void testDebug2(unsigned int a, unsigned int b){
+	int i;
+  i = 42;
+}
+void testDebug3(unsigned int a, unsigned int b){
+	int i;
+  i = 42;
+}
+void testDebug4(unsigned int a, unsigned int b){
+	int i;
+  i = 42;
+}
+void testDebug5(unsigned int a, unsigned int b){
+	int i;
+  i = 42;
+}
+void testDebug6(unsigned int a, unsigned int b){
+	int i;
+  i = 42;
+}
+void testDebug7(unsigned int a, unsigned int b){
+	int i;
+  i = 42;
+}
+
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
-
+	testDebug1(0, 0);
 	char * s = msg;
 	devregtr * base = (devregtr *) (TERM0ADDR);
+	testDebug2(0, 0);
 	devregtr status;
 	
+	testDebug3(0, 0);
 	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
+	testDebug4(0, 0);
 	while (*s != EOS) {
+		testDebug5(0, 0);
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
+		testDebug6(0, 0);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
+		testDebug7(0, 0);
 		if ((status & TERMSTATMASK) != RECVD)
 			PANIC();
 		s++;	
@@ -137,7 +172,7 @@ void test() {
 
 	SYSCALL(VERHOGEN, (int)&testsem, 0, 0);					/* V(testsem)   */
 
-	print("p1 v(testsem)\n");
+	/* print("p1 v(testsem)\n"); */
 
 	/* set up states of the other processes */
 
