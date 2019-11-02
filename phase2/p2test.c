@@ -135,8 +135,8 @@ void print(char *msg) {
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
 		p2StatusDebug(status, 0);
 		if ((status & TERMSTATMASK) != RECVD)
-			p2PanicDebug(0, 0);
 			PANIC();
+		p2PanicDebug(0, 0);
 		s++;	
 	}
 	SYSCALL(VERHOGEN, (int)&term_mut, 0, 0);				/* V(term_mut) */
