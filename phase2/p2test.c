@@ -155,7 +155,6 @@ void test() {
 
 	print("p1 v(testsem)\n");
 
-	p2GoodDebug(0, 0);
 	/* set up states of the other processes */
 
 	/* set up p2's state */
@@ -237,6 +236,8 @@ void test() {
 	
 	/* create process p2 */
 	SYSCALL(CREATETHREAD, (int)&p2state,0 , 0);				/* start p2     */
+
+	p2GoodDebug(0, 0);
 
 	print("p2 was started\n");
 
