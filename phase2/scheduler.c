@@ -41,10 +41,13 @@ void scheduler(){
   else{
     addokbuf("in scheduler 4 \n");
     waitFlag = 0;
+    addokbuf("in scheduler 5 \n");
     currentProcess = process;
+    addokbuf("in scheduler 6 \n");
     setTIMER(5000);
+    addokbuf("in scheduler 7 \n");
     STCK(time);
-    bDebug(process->p_s.s_pc, 0);
+    addokbuf("in scheduler 8 \n");
     LDST(&(process->p_s));
   }
 }

@@ -111,19 +111,6 @@ memaddr *p5MemLocation = 0;		/* To cause a p5 trap */
 void	p2(),p3(),p4(),p5(),p5a(),p5b(),p6(),p7(),p7a(),p5prog(),p5mm();
 void	p5sys(),p8root(),child1(),child2(),p8leaf();
 
-void p2TestDebug(unsigned int a, unsigned int b) {
-  int i = 0;
-}
-void p2PanicDebug(unsigned int a, unsigned int b) {
-  int i = 0;
-}
-void p2StatusDebug(unsigned int a, unsigned int b) {
-  int i = 0;
-}
-void p2GoodDebug(unsigned int a, unsigned int b) {
-  int i = 0;
-}
-
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
 
@@ -133,13 +120,10 @@ void print(char *msg) {
 	
 	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
 	while (*s != EOS) {
-		p2TestDebug(0, 0);
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
-		p2StatusDebug(status, 0);
 		if ((status & TERMSTATMASK) != RECVD)
 			PANIC();
-		p2PanicDebug(0, 0);
 		s++;	
 	}
 	SYSCALL(VERHOGEN, (int)&term_mut, 0, 0);				/* V(term_mut) */
@@ -236,8 +220,6 @@ void test() {
 	
 	/* create process p2 */
 	SYSCALL(CREATETHREAD, (int)&p2state,0 , 0);				/* start p2     */
-
-	p2GoodDebug(0, 0);
 
 	print("p2 was started\n");
 
