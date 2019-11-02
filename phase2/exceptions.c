@@ -100,7 +100,6 @@ void syscallDispatch(int syscallNum, int kernelMode){
 void createProcess(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   state_PTR newProcState = syscallOld->s_a1;
-  syscallOld->s_v0 = -1;
   pcb_PTR p = allocPcb();
   if (p==NULL) {
     syscallOld->s_v0 = -1;
