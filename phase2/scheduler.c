@@ -15,20 +15,22 @@ void bDebug(unsigned int a, unsigned int b) {
 }
 
 void scheduler(){
+  addokbuf("in scheduler 1")
   unsigned int cp0status;
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
+    addokbuf("in scheduler 2")
     if(processCount == 0){
       HALT();
     }
     else{
-      /*bDebug(softBlockCount, 0);*/
+      addokbuf("in scheduler 3")
       if(softBlockCount == 0){
         PANIC();
       }
       else{
+        addokbuf("in scheduler 4")
         cp0status = SCHEDULERINTSUNMASKED;
-        /*bDebug(cp0status, 1);*/
         waitFlag = 1;
         setSTATUS(cp0status); /* has a return value...?  */
         WAIT();
@@ -36,10 +38,13 @@ void scheduler(){
     }
   }
   else{
+    addokbuf("in scheduler 5")
     waitFlag = 0;
     currentProcess = process;
     setTIMER(5000);
+    addokbuf("in scheduler 6")
     STCK(time);
+    addokbuf("in scheduler 7")
     LDST(&(process->p_s));
   }
 }

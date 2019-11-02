@@ -142,21 +142,14 @@ void testDebug7(unsigned int a, unsigned int b){
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
-	testDebug1(0, 0);
 	char * s = msg;
 	devregtr * base = (devregtr *) (TERM0ADDR);
-	testDebug2(0, 0);
 	devregtr status;
 	
-	testDebug3(0, 0);
 	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
-	testDebug4(0, 0);
 	while (*s != EOS) {
-		testDebug5(0, 0);
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
-		testDebug6(0, 0);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
-		testDebug7(0, 0);
 		if ((status & TERMSTATMASK) != RECVD)
 			PANIC();
 		s++;	
