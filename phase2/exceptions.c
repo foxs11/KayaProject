@@ -46,27 +46,35 @@ void syscallDispatch(int syscallNum, int kernelMode){
     if(kernelMode == TRUE) {
       switch(syscallNum){
         case 1:
+          addokbuf("about to enter 1\n");
           createProcess(); /* done */
           break;
         case 2:
+        addokbuf("about to enter 2\n");
           terminateProcess(); /* done */
           break;
         case 3:
+        addokbuf("about to enter 3\n");
           verhogen(); /* done */
           break;
         case 4:
+        addokbuf("about to enter 4\n");
           passeren(); /* done */
           break;
         case 5:
+        addokbuf("about to enter 5\n");
           specifyExceptionStateVector(); /* done */
           break;
         case 6:
+        addokbuf("about to enter 6\n");
           getCPUTime(); /* done */
           break;
         case 7:
+        addokbuf("about to enter 7\n");
           waitForClock();
           break;
         case 8:
+        addokbuf("about to enter 8\n");
           waitForIODevice(); /* done */
           break;
       }
@@ -286,7 +294,7 @@ waitForClock(){
 
 
 void waitForIODevice(){
-  addokbuf("in waitForIo 1");
+  addokbuf("in waitForIo 1 \n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   unsigned int pc = oldSys->s_pc;
   aDebug(pc, 0, 0);
@@ -299,24 +307,24 @@ void waitForIODevice(){
       offset = 8;
     }
   }
-  addokbuf("in waitForIo 2");
+  addokbuf("in waitForIo 2 \n");
   int semNumber = getSemArrayNum(lineNumber, deviceNumber, offset);
   int * semAdd = &(devSemTable[semNumber]);
   (*semAdd)--;
   if ((*semAdd) < 0) {
-    addokbuf("in waitForIo 3");
+    addokbuf("in waitForIo 3 \n");
     cpu_t currTime = 0;
-    addokbuf("in waitForIo 4");
+    addokbuf("in waitForIo 4 \n");
     STCK(currTime);
-    addokbuf("in waitForIo 5");
+    addokbuf("in waitForIo 5 \n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-    addokbuf("in waitForIo 6");
+    addokbuf("in waitForIo 6 \n");
     softBlockCount++;
-    addokbuf("in waitForIo 7");
+    addokbuf("in waitForIo 7 \n");
     insertBlocked(semAdd, currentProcess);
-    addokbuf("in waitForIo 8");
+    addokbuf("in waitForIo 8 \n");
     currentProcess = NULL;
-    addokbuf("in waitForIo 9");
+    addokbuf("in waitForIo 9 \n");
     scheduler();
   }
   /* error */
