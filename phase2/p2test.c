@@ -120,6 +120,9 @@ void p2PanicDebug(unsigned int a, unsigned int b) {
 void p2StatusDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
+void p2GoodDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+}
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
@@ -152,6 +155,7 @@ void test() {
 
 	print("p1 v(testsem)\n");
 
+	p2GoodDebug(0, 0);
 	/* set up states of the other processes */
 
 	/* set up p2's state */
