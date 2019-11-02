@@ -127,13 +127,11 @@ int getDevRegIndex(int lineNumber, int deviceNumber) {
 }
 
 void interruptHandler(){
-	addokbuf("in interuptHandler 1 \n");
 	unsigned int status = 0;
 	int termOffset = 0;
   cpu_t currTime = 0;
   STCK(currTime);
 	if(currentProcess != NULL){
-		addokbuf("in interuptHandler 2 \n");
   	currentProcess->p_time = currentProcess->p_time + (currTime - (time));
 	}
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
@@ -141,7 +139,6 @@ void interruptHandler(){
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
-		addokbuf("in interuptHandler 3 \n");
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -151,9 +148,7 @@ void interruptHandler(){
 
     if (lineNumber == 7){
 			status = ackTerminal(&devRegIndex);
-			addokbuf("in interuptHandler 4 \n");
       if ((status & 0x0F) == READY) { /* recv */
-				addokbuf("in interuptHandler 5 \n");
         termOffset = 8; 
       }
     }
@@ -165,7 +160,6 @@ void interruptHandler(){
 		(*semAdd)++;
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
-			addokbuf("in interuptHandler 6 \n");
   		p = removeBlocked(semAdd);
 			if(lineNumber ==7){
 				p->p_s.s_v0 = status;
@@ -174,7 +168,6 @@ void interruptHandler(){
   		insertProcQ(&readyQue, p);
   		softBlockCount--;
   		if (waitFlag == 1) {
-				addokbuf("in interuptHandler 8 \n");
   			scheduler();
   		}
   		else{
@@ -185,12 +178,10 @@ void interruptHandler(){
   }
   else { /* line number not between 3 and 7 */
   	if (lineNumber == 1) {
-			addokbuf("in interuptHandler 9 \n");
       scheduler();
     }
     else { /* line number 2 */
       LDIT(100000);
-			addokbuf("in interuptHandler 10 \n");
       if (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
 				devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]++;
 				if (devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE] <= 0){
