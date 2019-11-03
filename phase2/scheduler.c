@@ -38,6 +38,7 @@ void scheduler(){
     currentProcess = process;
     setTIMER(5000);
     STCK(time);
+    addokbuf("loading process from scheduler \n");
     LDST(&(process->p_s));
   }
 }
