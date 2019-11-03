@@ -8,6 +8,7 @@
 #include "../h/const.h"
 #include "/usr/local/include/umps2/umps/libumps.e"
 #include "../phase1/p1test.c"
+#include "p2test.c"
 
 void bDebug(unsigned int a, unsigned int b) {
   int i;
@@ -39,6 +40,8 @@ void scheduler(){
     setTIMER(5000);
     STCK(time);
     addokbuf("loading process from scheduler \n");
+    bDebug((memaddr) p2, 0);
+    bDebug(process->p_s.s_pc, 0);
     LDST(&(process->p_s));
   }
 }
