@@ -174,6 +174,7 @@ void test() {
 	
 	p2state.s_sp = p2state.s_sp - QPAGE;			/* stack of p2 should sit above    */
 	p2state.s_pc = p2state.s_t9 = (memaddr)p2;		/* p2 starts executing function p2 */
+	testDebug1((memaddr) p2, 0);
 	p2state.s_status = p2state.s_status | IEPBITON | CAUSEINTMASK;
 		
 
