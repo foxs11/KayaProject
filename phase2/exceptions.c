@@ -280,9 +280,9 @@ getCPUTime(){
 waitForClock(){
   addokbuf("waitForClock 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  int semAdd = devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
-  semAdd--;
-  if (semAdd < 0){
+  int * semAdd = devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
+  (*semAdd)--;
+  if ((*semAdd) < 0){
     addokbuf("waitForClock 2\n");
     insertBlocked(semAdd, currentProcess);
     addokbuf("waitForClock 3\n");
