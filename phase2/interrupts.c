@@ -181,9 +181,9 @@ void interruptHandler(){
     else { /* line number 2 */
       LDIT(100000);
       if (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
-				devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]++;
 				if (devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE] <= 0){
 					while (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) {
+						devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]++;
 						pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
             insertProcQ(&readyQue, temp);
             softBlockCount--;
