@@ -39,7 +39,7 @@ void scheduler(){
     setTIMER(5000);
     STCK(time);
     addokbuf("loading process from scheduler \n");
-    bDebug(process->p_s.s_pc, 0);
+    bDebug(process->p_s.s_status, 0);
     LDST(&(process->p_s));
   }
 }
