@@ -28,7 +28,6 @@ void tlbMgmtHandler(){
 void sysCallHandler(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   syscallOld->s_pc = syscallOld->s_pc + 4;
-  
   int syscallNum = syscallOld->s_a0;
   int kernelMode;
   int kernelStatus = syscallOld->s_status & KERNELOFF;
@@ -250,6 +249,7 @@ void passeren(){
   addokbuf("passeren1.0\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   addokbuf("passeren1.1\n");
+  aDebug(oldSys->s_pc);
   int * mutex = oldSys->s_a1;
   addokbuf("passeren1.2\n");
   (*mutex)--;
