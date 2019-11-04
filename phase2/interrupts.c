@@ -135,23 +135,15 @@ int getDevRegIndex(int lineNumber, int deviceNumber) {
 }
 
 void interruptHandler(){
-	addokbuf("in interruptHandler1\n");
 	unsigned int status = 0;
-	addokbuf("in interruptHandler2\n");
 	int termOffset = 0;
-	addokbuf("in interruptHandler3\n");
   cpu_t currTime = 0;
-	addokbuf("in interruptHandler4\n");
   STCK(currTime);
-	addokbuf("in interruptHandler5\n");
 	if(currentProcess != NULL){
-		addokbuf("in interruptHandler6\n");
   	currentProcess->p_time = currentProcess->p_time + (currTime - (time));
 	}
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
-	addokbuf("in interruptHandler7\n");
   unsigned int cause = interruptOld->s_cause;
-	addokbuf("in interruptHandler8\n");
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
