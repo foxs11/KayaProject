@@ -241,18 +241,30 @@ void verhogen(){
 }
 
 void passeren(){
+  addokbuf("p1");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  addokbuf("p2");
   int * mutex = oldSys->s_a1;
+  addokbuf("p3");
   (*mutex)--;
+  addokbuf("p4");
   if (*mutex < 0){
+    addokbuf("p5");
     cpu_t currTime = 0;
+    addokbuf("p6");
     STCK(currTime);
+    addokbuf("p7");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
+    addokbuf("p8");
     insertBlocked(&mutex, currentProcess);
+    addokbuf("p9");
     softBlockCount++;
+    addokbuf("p10");
     currentProcess = NULL;
+    addokbuf("p11");
     scheduler();
   }
+  addokbuf("p12");
   LDST(oldSys);
 }
 
