@@ -247,10 +247,13 @@ void verhogen(){
 }
 
 void passeren(){
-  addokbuf("passeren1\n");
+  addokbuf("passeren1.0\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  addokbuf("passeren1.1\n");
   int * mutex = oldSys->s_a1;
+  addokbuf("passeren1.2\n");
   (*mutex)--;
+  addokbuf("passeren1.3\n");
   if (*mutex < 0){
     addokbuf("passeren2\n");
     cpu_t currTime = 0;
