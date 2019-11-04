@@ -250,7 +250,7 @@ void test() {
 	/* create process p2 */
 	SYSCALL(CREATETHREAD, (int)&p2state,0 , 0);				/* start p2     */
 
-	print("p2 was started\n");
+	/* print("p2 was started\n"); */
 
 	SYSCALL(VERHOGEN, (int)&startp2, 0, 0);					/* V(startp2)   */
 
