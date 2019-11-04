@@ -46,35 +46,27 @@ void syscallDispatch(int syscallNum, int kernelMode){
     if(kernelMode == TRUE) {
       switch(syscallNum){
         case 1:
-          addokbuf("about to enter 1\n");
           createProcess(); /* done */
           break;
         case 2:
-        addokbuf("about to enter 2\n");
           terminateProcess(); /* done */
           break;
         case 3:
-        addokbuf("about to enter 3\n");
           verhogen(); /* done */
           break;
         case 4:
-        addokbuf("about to enter 4\n");
           passeren(); /* done */
           break;
         case 5:
-        addokbuf("about to enter 5\n");
           specifyExceptionStateVector(); /* done */
           break;
         case 6:
-        addokbuf("about to enter 6\n");
           getCPUTime(); /* done */
           break;
         case 7:
-        addokbuf("about to enter 7\n");
           waitForClock();
           break;
         case 8:
-          addokbuf("about to enter 8\n");
           waitForIODevice(); /* done */
           break;
       }
@@ -102,7 +94,6 @@ void createProcess(){
   state_PTR newProcState = syscallOld->s_a1;
   pcb_PTR p = allocPcb();
   if (p==NULL) {
-    addokbuf("p is null");
     syscallOld->s_v0 = -1;
     return;
   }
@@ -276,30 +267,18 @@ getCPUTime(){
 }
 
 waitForClock(){
-  addokbuf("waitForClock 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * semAdd = &(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]);
   (*semAdd)--;
-    if ((*semAdd) < 0){
-    if(currentProcess == NULL){
-      addokbuf("current process is null\n");
-    }
-    addokbuf("waitForClock 2\n");
+  if ((*semAdd) < 0){
     insertBlocked(semAdd, currentProcess);
-    addokbuf("waitForClock 3\n");
     softBlockCount++;
-    addokbuf("waitForClock 4\n");
     cpu_t currTime = 0;
-    addokbuf("waitForClock 5\n");
     STCK(currTime);
-    addokbuf("waitForClock 6\n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-    addokbuf("waitForClock 7\n");
     currentProcess = NULL;
-    addokbuf("waitForClock 8\n");
     scheduler();
   }
-  addokbuf("waitForClock 9\n");
   LDIT(100000);
   LDST(oldSys);
 }

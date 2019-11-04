@@ -23,7 +23,6 @@ void scheduler(){
     }
     else{
       if(softBlockCount == 0){
-        addokbuf("scheduler panic \n");
         PANIC();
       }
       else{
@@ -39,7 +38,6 @@ void scheduler(){
     currentProcess = process;
     setTIMER(5000);
     STCK(time);
-    addokbuf("loading process from scheduler \n");
     bDebug(process->p_s.s_status, 0);
     LDST(&(process->p_s));
   }
