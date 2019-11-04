@@ -33,17 +33,28 @@ int emptyProcQ (pcb_PTR tp){
 *  tail-pointer is pointed to bytp. Note the double indirection through
 *  tp to allow for the possible updating of the tail pointer as well. */
 void insertProcQ (pcb_PTR *tp, pcb_PTR p){
+  addokbuf("insertProcQ 1\n");
   if(emptyProcQ(*tp)){
+    addokbuf("insertProcQ 2\n");
     *tp = p;
+    addokbuf("insertProcQ 3\n");
     p->p_prev = p;
+    addokbuf("insertProcQ 4\n");
     p->p_next = p;
+    addokbuf("insertProcQ 5\n");
   }
   else{
+    addokbuf("insertProcQ 6\n");
     (*tp)->p_next->p_prev = p; /* head prev */
+    addokbuf("insertProcQ 7\n");
     p->p_next = (*tp)->p_next;  /* new node next */
+    addokbuf("insertProcQ 8\n");
     (*tp)->p_next = p; /* old tail next*/
+    addokbuf("insertProcQ 9\n");
     p->p_prev = *tp; /* new node prev*/
+    addokbuf("insertProcQ 10\n");
     *tp = p; /* new tail pointer*/
+    addokbuf("insertProcQ 11\n");
   }
 }
 

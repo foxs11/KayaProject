@@ -55,7 +55,6 @@ int insertBlocked (int *semAdd, pcb_PTR p){
     insertProcQ(&(newSemd->s_procQ), p);
     addokbuf("insertBlock 9\n");
     p->p_semAdd = semAdd;
-    addokbuf("insertBlock 10\n");
     return FALSE;
   }
 }
