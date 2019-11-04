@@ -284,7 +284,7 @@ waitForClock(){
   semAdd--;
   if (semAdd < 0){
     addokbuf("waitForClock 2\n");
-    insertBlocked(&semAdd, currentProcess);
+    insertBlocked(semAdd, currentProcess);
     addokbuf("waitForClock 3\n");
     softBlockCount++;
     addokbuf("waitForClock 4\n");
