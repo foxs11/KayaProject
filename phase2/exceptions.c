@@ -248,13 +248,18 @@ void passeren(){
   if (*mutex < 0){
     addokbuf("p3\n");
     cpu_t currTime = 0;
+    addokbuf("p4\n");
     STCK(currTime);
+    addokbuf("p5\n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
+    addokbuf("p6\n");
     insertBlocked(&mutex, currentProcess);
+    addokbuf("p7\n");
     currentProcess = NULL;
+    addokbuf("p8\n");
     scheduler();
   }
-  addokbuf("p4s\n");
+  addokbuf("p9s\n");
   LDST(oldSys);
 }
 
