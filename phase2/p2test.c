@@ -236,11 +236,8 @@ void test() {
 	SYSCALL(CREATETHREAD, (int)&p2state,0 , 0);				/* start p2     */
 
 	print("p2 was started\n");
-	testDebug1(0, 0);
 	SYSCALL(VERHOGEN, (int)&startp2, 0, 0);					/* V(startp2)   */
-	testDebug2(0, 0);
 	SYSCALL(PASSERN, (int)&endp2, 0, 0);						/* P(endp2)     */
-	testDebug3(0, 0);
 	/* make sure we really blocked */
 	if (p1p2synch == 0)
 		print("error: p1/p2 synchronization bad\n");
@@ -288,6 +285,7 @@ void test() {
 
 /* p2 -- semaphore and cputime-SYS test process */
 void p2() {
+	testDebug1(0, 0);
 	int		i;				/* just to waste time  */
 	cpu_t	now1,now2;		/* times of day        */
 	cpu_t	cpu_t1,cpu_t2;	/* cpu time used       */
