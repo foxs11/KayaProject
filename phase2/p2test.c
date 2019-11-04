@@ -377,7 +377,6 @@ void p3() {
 	/* loop until we are delayed at least half of clock V interval */
 	while (time2-time1 < (CLOCKINTERVAL >> 1) )  {
 		STCK(time1);			/* time of day     */
-		waitClockDeBug(0, 0);
 		SYSCALL(WAITCLOCK, 0, 0, 0);
 		STCK(time2);			/* new time of day */
 	}
@@ -389,7 +388,6 @@ void p3() {
 	cpu_t1 = SYSCALL(GETCPUTIME, 0, 0, 0);
 
 	for (i=0; i<CLOCKLOOP; i++)
-		waitClockDeBug(0, 0);
 		SYSCALL(WAITCLOCK, 0, 0, 0);
 	
 	cpu_t2 = SYSCALL(GETCPUTIME, 0, 0, 0);
@@ -561,7 +559,6 @@ void p5b() {
 	time2 = 0;
 	while (time2 - time1 < (CLOCKINTERVAL >> 1))  {
 		STCK(time1);
-		waitClockDeBug(0, 0);
 		SYSCALL(WAITCLOCK, 0, 0, 0);
 		STCK(time2);
 	}

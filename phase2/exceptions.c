@@ -280,26 +280,24 @@ waitForClock(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * semAdd = &(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]);
   (*semAdd)--;
-  if(currentProcess != NULL){
-    if ((*semAdd) < 0){
-      if(currentProcess == NULL){
-        addokbuf("current process is null\n");
-      }
-      addokbuf("waitForClock 2\n");
-      insertBlocked(semAdd, currentProcess);
-      addokbuf("waitForClock 3\n");
-      softBlockCount++;
-      addokbuf("waitForClock 4\n");
-      cpu_t currTime = 0;
-      addokbuf("waitForClock 5\n");
-      STCK(currTime);
-      addokbuf("waitForClock 6\n");
-      currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-      addokbuf("waitForClock 7\n");
-      currentProcess = NULL;
-      addokbuf("waitForClock 8\n");
-      scheduler();
+  if ((*semAdd) < 0){
+    if(currentProcess == NULL){
+      addokbuf("current process is null\n");
     }
+    addokbuf("waitForClock 2\n");
+    insertBlocked(semAdd, currentProcess);
+    addokbuf("waitForClock 3\n");
+    softBlockCount++;
+    addokbuf("waitForClock 4\n");
+    cpu_t currTime = 0;
+    addokbuf("waitForClock 5\n");
+    STCK(currTime);
+    addokbuf("waitForClock 6\n");
+    currentProcess->p_time = currentProcess->p_time + (currTime - (time));
+    addokbuf("waitForClock 7\n");
+    currentProcess = NULL;
+    addokbuf("waitForClock 8\n");
+    scheduler();
   }
   addokbuf("waitForClock 9\n");
   LDST(oldSys);
