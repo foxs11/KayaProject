@@ -106,7 +106,9 @@ void createProcess(){
     return;
   }
   else { /* pcb allocated */
+    aDebug(newProcState->s_status, 0, 0);
     stateCopyPCB(p, newProcState);
+    aDebug(p->p_s.s_status, 0, 0);
     processCount++;
     insertChild(currentProcess, p);
     insertProcQ(&readyQue, p);
