@@ -285,16 +285,20 @@ waitForClock(){
   if (semAdd < 0){
     addokbuf("waitForClock 2\n");
     insertBlocked(&semAdd, currentProcess);
+    addokbuf("waitForClock 3\n");
     softBlockCount++;
-
+    addokbuf("waitForClock 4\n");
     cpu_t currTime = 0;
+    addokbuf("waitForClock 5\n");
     STCK(currTime);
+    addokbuf("waitForClock 6\n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-
+    addokbuf("waitForClock 7\n");
     currentProcess = NULL;
+    addokbuf("waitForClock 8\n");
     scheduler();
   }
-  addokbuf("waitForClock 3\n");
+  addokbuf("waitForClock 9\n");
   LDST(oldSys);
 }
 
