@@ -111,6 +111,19 @@ memaddr *p5MemLocation = 0;		/* To cause a p5 trap */
 void	p2(),p3(),p4(),p5(),p5a(),p5b(),p6(),p7(),p7a(),p5prog(),p5mm();
 void	p5sys(),p8root(),child1(),child2(),p8leaf();
 
+void testDebug1(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+void testDebug2(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+void testDebug3(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
@@ -223,11 +236,11 @@ void test() {
 	SYSCALL(CREATETHREAD, (int)&p2state,0 , 0);				/* start p2     */
 
 	print("p2 was started\n");
-
+	testDebug1(0, 0);
 	SYSCALL(VERHOGEN, (int)&startp2, 0, 0);					/* V(startp2)   */
-
+	testDebug2(0, 0);
 	SYSCALL(PASSERN, (int)&endp2, 0, 0);					/* P(endp2)     */
-
+	testDebug3(0, 0);
 	/* make sure we really blocked */
 	if (p1p2synch == 0)
 		print("error: p1/p2 synchronization bad\n");
