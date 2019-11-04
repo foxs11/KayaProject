@@ -262,6 +262,9 @@ void passeren(){
     addokbuf("p10");
     currentProcess = NULL;
     addokbuf("p11");
+    addokbuf("p11");
+    addokbuf("p11");
+    addokbuf("p11");
     scheduler();
   }
   addokbuf("p12");
