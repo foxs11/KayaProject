@@ -257,6 +257,7 @@ void passeren(){
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
     insertBlocked(&mutex, currentProcess);
+    softBlockCount++;
     currentProcess = NULL;
     scheduler();
   }

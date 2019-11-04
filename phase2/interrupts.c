@@ -162,9 +162,6 @@ void interruptHandler(){
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
   		p = removeBlocked(semAdd);
-			if(lineNumber ==7){
-				p->p_s.s_v0 = status;
-			}
   		p->p_s.s_v0 = status;
   		insertProcQ(&readyQue, p);
   		softBlockCount--;
