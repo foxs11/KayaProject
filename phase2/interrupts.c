@@ -47,19 +47,24 @@ int getDeviceNumber(int lineNumber){
   		intDevBitMap_PTR bitMap = (intDevBitMap_PTR) LINE3INTBITMAP;
       unsigned int lineNumberBitMap;
       switch (lineNumber){
-        case 3: 
+        case 3:
+					addokbuf("line3 interupt\n");
           lineNumberBitMap = bitMap->i_lineThree;
           break;
         case 4: 
+					addokbuf("line4 interupt\n");
           lineNumberBitMap = bitMap->i_lineFour;
           break;
         case 5: 
+					addokbuf("line5 interupt\n");
           lineNumberBitMap = bitMap->i_lineFive;
           break;
         case 6: 
+					addokbuf("line6 interupt\n");
           lineNumberBitMap = bitMap->i_lineSix;
           break;
         case 7: 
+					addokbuf("line7 interupt\n");
           lineNumberBitMap = bitMap->i_lineSeven;
           break;
 
