@@ -45,35 +45,27 @@ void syscallDispatch(int syscallNum, int kernelMode){
     if(kernelMode == TRUE) {
       switch(syscallNum){
         case 1:
-          addokbuf("pre-createProcess\n");
           createProcess(); /* done */
           break;
         case 2:
-          addokbuf("pre-terminateProcess\n");
           terminateProcess(); /* done */
           break;
         case 3:
-          addokbuf("pre-verhogen\n");
           verhogen(); /* done */
           break;
         case 4:
-          addokbuf("pre-passeren\n");
           passeren(); /* done */
           break;
         case 5:
-          addokbuf("pre-specifyExceptionStateVector\n");
           specifyExceptionStateVector(); /* done */
           break;
         case 6:
-          addokbuf("pre-getCPUTime\n");
           getCPUTime(); /* done */
           break;
         case 7:
-          addokbuf("pre-waitForClock\n");
           waitForClock();
           break;
         case 8:
-          addokbuf("pre-waitForIODevice\n");
           waitForIODevice(); /* done */
           break;
       }
@@ -246,16 +238,11 @@ void verhogen(){
 }
 
 void passeren(){
-  addokbuf("passeren1.0\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  addokbuf("passeren1.1\n");
   aDebug(oldSys->s_pc, 0, 0);
   int * mutex = oldSys->s_a1;
-  addokbuf("passeren1.2\n");
   (*mutex)--;
-  addokbuf("passeren1.3\n");
   if (*mutex < 0){
-    addokbuf("passeren2\n");
     cpu_t currTime = 0;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
@@ -264,7 +251,6 @@ void passeren(){
     currentProcess = NULL;
     scheduler();
   }
-  addokbuf("passeren3\n");
   LDST(oldSys);
 }
 
