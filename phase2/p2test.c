@@ -139,6 +139,10 @@ void testDebug7(unsigned int a, unsigned int b){
 	int i;
   i = 42;
 }
+void testPanic(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
@@ -151,6 +155,7 @@ void print(char *msg) {
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
 		if ((status & TERMSTATMASK) != RECVD)
+			testPanic(0, 0);
 			PANIC();
 		s++;	
 	}
