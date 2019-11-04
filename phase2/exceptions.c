@@ -99,7 +99,6 @@ void syscallDispatch(int syscallNum, int kernelMode){
 void createProcess(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   state_PTR newProcState = syscallOld->s_a1;
-  aDebug(newProcState->s_status, 0, 0);
   pcb_PTR p = allocPcb();
   if (p==NULL) {
     addokbuf("p is null");
@@ -107,6 +106,7 @@ void createProcess(){
     return;
   }
   else { /* pcb allocated */
+    aDebug(newProcState->s_status, 0, 0);
     stateCopy(&p->p_s, newProcState);
     aDebug(p->p_s.s_status, 0, 0);
     processCount++;
