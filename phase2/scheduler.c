@@ -16,11 +16,11 @@ void bDebug(unsigned int a, unsigned int b) {
 
 void scheduler(){
   unsigned int cp0status;
-  addokbuf("scheduler 1\n")
+  addokbuf("scheduler 1\n");
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
     if(processCount == 0){
-      addokbuf("scheduler 2\n")
+      addokbuf("scheduler 2\n");
       HALT();
     }
     else{
@@ -29,19 +29,19 @@ void scheduler(){
         PANIC();
       }
       else{
-        addokbuf("scheduler 3\n")
+        addokbuf("scheduler 3\n");
         cp0status = SCHEDULERINTSUNMASKED;
-        addokbuf("scheduler 4\n")
+        addokbuf("scheduler 4\n");
         waitFlag = 1;
-        addokbuf("scheduler 5\n")
+        addokbuf("scheduler 5\n");
         setSTATUS(cp0status); /* has a return value...?  */
-        addokbuf("scheduler 6\n")
+        addokbuf("scheduler 6\n");
         WAIT();
       }
     }
   }
   else{
-    addokbuf("scheduler 7\n")
+    addokbuf("scheduler 7\n");
     waitFlag = 0;
     currentProcess = process;
     setTIMER(5000);
