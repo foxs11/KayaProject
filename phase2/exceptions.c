@@ -109,7 +109,7 @@ void createProcess(){
     processCount++;
     insertChild(currentProcess, p);
     insertProcQ(&readyQue, p);
-    syscallOld->s_v0 = 1;
+    syscallOld->s_v0 = 0;
     LDST(syscallOld);
   }
 }
