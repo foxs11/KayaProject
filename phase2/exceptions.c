@@ -99,13 +99,16 @@ void syscallDispatch(int syscallNum, int kernelMode){
 void createProcess(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   state_PTR newProcState = syscallOld->s_a1;
+  aDebug(*newProcState, 0, 0);
   pcb_PTR p = allocPcb();
   if (p==NULL) {
+    addokbuf("p is null");
     syscallOld->s_v0 = -1;
     return;
   }
   else { /* pcb allocated */
     stateCopy(&p->p_s, newProcState);
+    aDebug(p->p_s, 0, 0)
     processCount++;
     insertChild(currentProcess, p);
     insertProcQ(&readyQue, p);
@@ -295,7 +298,6 @@ void waitForIODevice(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   stateCopy(oldSys, &(currentProcess->p_s));
   unsigned int pc = oldSys->s_pc;
-  aDebug(pc, 0, 0);
   int lineNumber = oldSys->s_a1;
   int deviceNumber = oldSys->s_a2;
   int termRead = oldSys->s_a3;
