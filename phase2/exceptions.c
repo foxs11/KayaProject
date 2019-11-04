@@ -107,9 +107,7 @@ void createProcess(){
     return;
   }
   else { /* pcb allocated */
-    aDebug(newProcState->s_status, 0, 0);
     stateCopyPCB(p, newProcState);
-    aDebug(p->p_s.s_status, 0, 0);
     processCount++;
     insertChild(currentProcess, p);
     insertProcQ(&readyQue, p);
@@ -283,6 +281,9 @@ waitForClock(){
   int * semAdd = &(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]);
   (*semAdd)--;
   if ((*semAdd) < 0){
+    if(currentProcess == NULL){
+      addokbuf("current process is null\n")
+    }
     addokbuf("waitForClock 2\n");
     insertBlocked(semAdd, currentProcess);
     addokbuf("waitForClock 3\n");

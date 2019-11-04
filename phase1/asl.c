@@ -31,29 +31,20 @@ static semd_PTR semdFree_h; /* pointer to the head of the semd free list */
 *  above. If a new semaphore descriptor needs to be allocated and the
 *  semdFree list is empty, return TRUE. In all other cases return FALSE.*/
 int insertBlocked (int *semAdd, pcb_PTR p){
-  addokbuf("insertBlock 1\n");
   semd_PTR parent = searchSemd(semAdd);
-  addokbuf("insertBlock 2\n");
   if (parent->s_next->s_semAdd == semAdd){ /* is there a semd with semAdd on the ASL? */
-    addokbuf("insertBlock 3\n");
     insertProcQ(&(parent->s_next->s_procQ), p); /* yes */
     p->p_semAdd = semAdd;
     return FALSE;
   }
   else{ /* semd not found and needs to be allocated */
-    addokbuf("insertBlock 4\n");
     semd_PTR newSemd = allocateSemd(semAdd);
     if (newSemd == NULL) {
-      addokbuf("insertBlock 5\n");
       return TRUE; /* no more free semd's and insert is blocked */
     }
-    addokbuf("insertBlock 6\n");
     newSemd->s_next = parent->s_next; /* there are available semds */
-    addokbuf("insertBlock 7\n");
     parent->s_next = newSemd;
-    addokbuf("insertBlock 8\n");
     insertProcQ(&(newSemd->s_procQ), p);
-    addokbuf("insertBlock 9\n");
     p->p_semAdd = semAdd;
     return FALSE;
   }
