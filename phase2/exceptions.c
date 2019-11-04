@@ -282,7 +282,7 @@ waitForClock(){
   (*semAdd)--;
   if ((*semAdd) < 0){
     if(currentProcess == NULL){
-      addokbuf("current process is null\n")
+      addokbuf("current process is null\n");
     }
     addokbuf("waitForClock 2\n");
     insertBlocked(semAdd, currentProcess);
