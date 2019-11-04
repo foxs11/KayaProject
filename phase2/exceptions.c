@@ -252,10 +252,10 @@ void passeren(){
   int * mutex = oldSys->s_a1;
   (*mutex)--;
   if (*mutex < 0){
-    insertBlocked(&mutex, currentProcess);
     cpu_t currTime = 0;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
+    insertBlocked(&mutex, currentProcess);
     currentProcess = NULL;
     scheduler();
   }
