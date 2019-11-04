@@ -28,7 +28,7 @@ void tlbMgmtHandler(){
 void sysCallHandler(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   syscallOld->s_pc = syscallOld->s_pc + 4;
-  stateCopy(syscallOld, &(currentProcess->p_s));
+  
   int syscallNum = syscallOld->s_a0;
   int kernelMode;
   int kernelStatus = syscallOld->s_status & KERNELOFF;
@@ -293,6 +293,7 @@ waitForClock(){
 
 void waitForIODevice(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
+  stateCopy(oldSys, &(currentProcess->p_s));
   unsigned int pc = oldSys->s_pc;
   aDebug(pc, 0, 0);
   int lineNumber = oldSys->s_a1;
