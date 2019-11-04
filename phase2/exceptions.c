@@ -103,7 +103,9 @@ void createProcess(){
     stateCopyPCB(p, newProcState);
     processCount++;
     insertChild(currentProcess, p);
+    aDebug(11, 4, 2);
     insertProcQ(&readyQue, p);
+    aDebug(2, 5, 0);
     syscallOld->s_v0 = 0;
     LDST(syscallOld);
   }
