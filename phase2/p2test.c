@@ -252,16 +252,18 @@ void test() {
 
 	print("p2 was started\n");
 
+	testDebug1(0, 0);
 	SYSCALL(VERHOGEN, (int)&startp2, 0, 0);					/* V(startp2)   */
-
+	testDebug2(0, 0);
 	SYSCALL(PASSERN, (int)&endp2, 0, 0);					/* P(endp2)     */
-
+	testDebug3(0, 0);
 	/* make sure we really blocked */
 	if (p1p2synch == 0)
+		testDebug4(0, 0);
 		print("error: p1/p2 synchronization bad\n");
-
+	testDebug5(0, 0);
 	SYSCALL(CREATETHREAD, (int)&p3state, 0, 0);				/* start p3     */
-
+	testDebug6(0, 0);
 	print("p3 is started\n");
 
 	SYSCALL(PASSERN, (int)&endp3, 0, 0);					/* P(endp3)     */
