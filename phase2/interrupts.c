@@ -127,7 +127,7 @@ int getDevRegIndex(int lineNumber, int deviceNumber) {
 }
 
 void interruptHandler(){
-	addokbuf("in interruptHandler");
+	addokbuf("in interruptHandler\n");
 	unsigned int status = 0;
 	int termOffset = 0;
   cpu_t currTime = 0;
