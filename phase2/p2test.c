@@ -155,7 +155,6 @@ void print(char *msg) {
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
 		if ((status & TERMSTATMASK) != RECVD)
-			/* testPanic(0, 0); */
 			PANIC();
 		s++;	
 	}

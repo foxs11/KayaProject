@@ -23,7 +23,7 @@ void scheduler(){
     }
     else{
       if(softBlockCount == 0){
-        addokbuf("scheduler panic");
+        addokbuf("scheduler panic \n");
         PANIC();
       }
       else{
