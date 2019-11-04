@@ -241,12 +241,12 @@ void verhogen(){
 
 void passeren(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  addokbuf("p1");
+  addokbuf("p1\n");
   int * mutex = oldSys->s_a1;
-  addokbuf("p2");
+  addokbuf("p2\n");
   (*mutex)--;
   if (*mutex < 0){
-    addokbuf("p3");
+    addokbuf("p3\n");
     cpu_t currTime = 0;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
@@ -254,7 +254,7 @@ void passeren(){
     currentProcess = NULL;
     scheduler();
   }
-  addokbuf("p4");
+  addokbuf("p4s\n");
   LDST(oldSys);
 }
 
