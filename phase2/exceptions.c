@@ -241,6 +241,7 @@ void verhogen(){
   (*mutex)++;
   if (*mutex <= 0){
     pcb_PTR temp = removeBlocked(&mutex);
+    softBlockCount--;
     if(temp != NULL){
     }
     insertProcQ(&readyQue, temp);
@@ -277,10 +278,12 @@ getCPUTime(){
 }
 
 waitForClock(){
+  addokbuf("waitForClock 1\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int semAdd = devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE];
   semAdd--;
   if (semAdd < 0){
+    addokbuf("waitForClock 2\n");
     insertBlocked(&semAdd, currentProcess);
     softBlockCount++;
 
@@ -291,6 +294,7 @@ waitForClock(){
     currentProcess = NULL;
     scheduler();
   }
+  addokbuf("waitForClock 3\n");
   LDST(oldSys);
 }
 
