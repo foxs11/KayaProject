@@ -179,6 +179,7 @@ void interruptHandler(){
       scheduler();
     }
     else { /* line number 2 */
+			addokbuf("line2 interupt");
       LDIT(100000);
       if (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
 				if (devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE] <= 0){
