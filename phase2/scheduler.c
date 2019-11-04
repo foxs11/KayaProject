@@ -41,7 +41,7 @@ void scheduler(){
     }
   }
   else{
-    bDebug(1, 2, 3);
+    bDebug(1, 2);
     addokbuf("scheduler 7\n");
     waitFlag = 0;
     currentProcess = process;
