@@ -249,7 +249,7 @@ void passeren(){
   addokbuf("passeren1.0\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   addokbuf("passeren1.1\n");
-  aDebug(oldSys->s_pc);
+  aDebug(oldSys->s_pc, 0, 0);
   int * mutex = oldSys->s_a1;
   addokbuf("passeren1.2\n");
   (*mutex)--;
