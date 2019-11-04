@@ -285,19 +285,13 @@ void test() {
 
 /* p2 -- semaphore and cputime-SYS test process */
 void p2() {
-	testDebug1(0, 0);
 	int		i;				/* just to waste time  */
-	testDebug1(0, 0);
 	cpu_t	now1,now2;		/* times of day        */
-	testDebug1(0, 0);
 	cpu_t	cpu_t1,cpu_t2;	/* cpu time used       */
-	testDebug1(0, 0);
 
 	SYSCALL(PASSERN, (int)&startp2, 0, 0);				/* P(startp2)   */
-	testDebug1(0, 0);
 
 	print("p2 starts\n");
-	testDebug1(0, 0);
 
 	/* initialize all semaphores in the s[] array */
 	for (i=0; i<= MAXSEM; i++)

@@ -232,7 +232,6 @@ void verhogen(){
   (*mutex)++;
   if (*mutex <= 0){
     pcb_PTR temp = removeBlocked(&mutex);
-    softBlockCount--;
     if(temp != NULL){
     }
     insertProcQ(&readyQue, temp);
@@ -249,7 +248,6 @@ void passeren(){
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
     insertBlocked(&mutex, currentProcess);
-    softBlockCount++;
     currentProcess = NULL;
     scheduler();
   }
