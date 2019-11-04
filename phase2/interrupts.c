@@ -16,27 +16,35 @@ int getLineNumber(unsigned int cause){
 	int lineNumber = NULL;
 
 	if (CHECK_BIT(cause, 8)) {
+		addokbuf("line0 interupt");
   	lineNumber = 0;
   }
   else if (CHECK_BIT(cause, 9)) {
+		addokbuf("line1 interupt");
   	lineNumber = 1;
   }
   else if (CHECK_BIT(cause, 10)) {
+		addokbuf("line2 interupt");
   	lineNumber = 2;
   }
   else if (CHECK_BIT(cause, 11)) {
+		addokbuf("line3 interupt");
   	lineNumber = 3;
   }
   else if (CHECK_BIT(cause, 12)) {
+		addokbuf("line4 interupt");
   	lineNumber = 4;
   }
   else if (CHECK_BIT(cause, 13)) {
+		addokbuf("line5 interupt");
   	lineNumber = 5;
   }
   else if (CHECK_BIT(cause, 14)) {
+		addokbuf("line6 interupt");
   	lineNumber = 6;
   }
   else if (CHECK_BIT(cause, 15)) {
+		addokbuf("line7 interupt");
   	lineNumber = 7;
   }
 	return lineNumber;
