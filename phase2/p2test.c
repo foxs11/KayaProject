@@ -123,6 +123,10 @@ void testDebug3(unsigned int a, unsigned int b){
 	int i;
 	i = 42;
 }
+void testDebug4(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
 
 
 /* a procedure to print on terminal 0 */
@@ -241,6 +245,7 @@ void test() {
 	SYSCALL(PASSERN, (int)&endp2, 0, 0);						/* P(endp2)     */
 	/* make sure we really blocked */
 	if (p1p2synch == 0)
+		testDebug4(10, 11);
 		print("error: p1/p2 synchronization bad\n");
 
 	SYSCALL(CREATETHREAD, (int)&p3state, 0, 0);				/* start p3     */
