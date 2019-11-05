@@ -156,6 +156,7 @@ void interruptHandler(){
 
     if (lineNumber == 7){
 			status = ackTerminal(&devRegIndex);
+			intDebug(10, 11);
       if ((status & 0x0F) == READY) { /* recv */
         termOffset = 8; 
       }
