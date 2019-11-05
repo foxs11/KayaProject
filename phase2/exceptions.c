@@ -45,9 +45,11 @@ void syscallDispatch(int syscallNum, int kernelMode){
     if(kernelMode == TRUE) {
       switch(syscallNum){
         case 1:
+          addokbuf("pre-createProcess\n");
           createProcess(); /* done */
           break;
         case 2:
+          addokbuf("pre-terminateProcess\n");
           terminateProcess(); /* done */
           break;
         case 3:
@@ -59,9 +61,11 @@ void syscallDispatch(int syscallNum, int kernelMode){
           passeren(); /* done */
           break;
         case 5:
+          addokbuf("pre-specifyExceptionStateVector\n");
           specifyExceptionStateVector(); /* done */
           break;
         case 6:
+          addokbuf("pre-getCPUTime\n");
           getCPUTime(); /* done */
           break;
         case 7:
@@ -69,6 +73,7 @@ void syscallDispatch(int syscallNum, int kernelMode){
           waitForClock();
           break;
         case 8:
+          addokbuf("pre-waitForIODevice\n");
           waitForIODevice(); /* done */
           break;
       }
@@ -243,25 +248,16 @@ void verhogen(){
 
 void passeren(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  addokbuf("p1\n");
   int * mutex = oldSys->s_a1;
-  addokbuf("p2\n");
   (*mutex)--;
   if (*mutex < 0){
-    addokbuf("p3\n");
     cpu_t currTime = 0;
-    addokbuf("p4\n");
     STCK(currTime);
-    addokbuf("p5\n");
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-    addokbuf("p6\n");
     insertBlocked(&mutex, currentProcess);
-    addokbuf("p7\n");
     currentProcess = NULL;
-    addokbuf("p8\n");
     scheduler();
   }
-  addokbuf("p9s\n");
   LDST(oldSys);
 }
 
