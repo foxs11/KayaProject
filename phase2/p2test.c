@@ -127,6 +127,10 @@ void testDebug4(unsigned int a, unsigned int b){
 	int i;
 	i = 42;
 }
+void testWaitD(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
 
 
 /* a procedure to print on terminal 0 */
@@ -359,6 +363,7 @@ void p3() {
 	/* loop until we are delayed at least half of clock V interval */
 	while (time2-time1 < (CLOCKINTERVAL >> 1) )  {
 		STCK(time1);			/* time of day     */
+		testWaitD(0, 1);
 		SYSCALL(WAITCLOCK, 0, 0, 0);
 		STCK(time2);			/* new time of day */
 	}
@@ -370,6 +375,7 @@ void p3() {
 	cpu_t1 = SYSCALL(GETCPUTIME, 0, 0, 0);
 
 	for (i=0; i<CLOCKLOOP; i++)
+		testWaitD(2, 3);
 		SYSCALL(WAITCLOCK, 0, 0, 0);
 	cpu_t2 = SYSCALL(GETCPUTIME, 0, 0, 0);
 
@@ -540,6 +546,7 @@ void p5b() {
 	time2 = 0;
 	while (time2 - time1 < (CLOCKINTERVAL >> 1))  {
 		STCK(time1);
+		testWaitD(4, 5);
 		SYSCALL(WAITCLOCK, 0, 0, 0);
 		STCK(time2);
 	}
