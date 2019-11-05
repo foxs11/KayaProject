@@ -10,7 +10,7 @@
 void aDebug(unsigned int a, unsigned int b, unsigned int c) {
   int i = 0;
 }
-void bDebug(unsigned int a, unsigned int b) {
+void qDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
 
@@ -117,7 +117,7 @@ void terminateProcess(){
 void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
   aDebug(currentProcess->p_child, 115, 2);
   while (emptyChild(processToKill) == FALSE) {
-    bDebug(120, 0);
+    qDebug(120, 0);
     pcb_PTR nextProcessToKill=removeChild(processToKill);
     terminateRecursively(nextProcessToKill);
   }
