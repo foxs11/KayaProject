@@ -286,9 +286,9 @@ getCPUTime(){
 waitForClock(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * semAdd = &(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]);
-  stateCopy(oldSys, &(currentProcess->p_s));
   (*semAdd)--;
   if ((*semAdd) < 0){
+    stateCopy(oldSys, &(currentProcess->p_s));
     insertBlocked(semAdd, currentProcess);
     softBlockCount++;
     cpu_t currTime = 0;
@@ -297,7 +297,6 @@ waitForClock(){
     currentProcess = NULL;
     scheduler();
   }
-  LDIT(100000);
   LDST(oldSys);
 }
 
