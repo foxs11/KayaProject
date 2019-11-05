@@ -165,7 +165,7 @@ void interruptHandler(){
       }
     }
 		else{
-			status = deviceRegs->devreg[(*devSemNum)].d_status;
+			status = device->d_status;
   		device->d_command = ACK;
   	}
 
@@ -173,6 +173,7 @@ void interruptHandler(){
 		(*semAdd)++;
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
+      /* yellow book pg 26 second half of paragraph before nuts and bolts */
   		p = removeBlocked(semAdd);
   		p->p_s.s_v0 = status;
   		insertProcQ(&readyQue, p);
