@@ -262,14 +262,17 @@ void passeren(){
 }
 
 getCPUTime(){
+  addokbuf("e61\n");
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
-  
+  addokbuf("e62\n");
   cpu_t currTime = 0;
+  addokbuf("e63\n");
   STCK(currTime);
+  addokbuf("e64\n");
   currentProcess->p_time = currentProcess->p_time + (currTime - (time));
-
+  addokbuf("e65\n");
   oldSys->s_v0 = currentProcess->p_time;
-
+  addokbuf("e66\n");
   LDST(oldSys);
 }
 
