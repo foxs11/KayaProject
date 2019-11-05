@@ -183,6 +183,8 @@ void interruptHandler(){
   }
   else { /* line number not between 3 and 7 */
   	if (lineNumber == 1) {
+			insertProcQ(&readyQue, currentProcess);
+			currentProcess = NULL;
       scheduler();
     }
     else { /* line number 2 */
