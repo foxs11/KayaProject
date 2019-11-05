@@ -155,6 +155,7 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
+			intDebug(8, 9);
 			status = ackTerminal(&devRegIndex);
 			intDebug(10, 11);
       if ((status & 0x0F) == READY) { /* recv */
