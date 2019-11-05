@@ -117,23 +117,26 @@ void terminateProcess(){
 void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
   aDebug(currentProcess->p_child, 115, 2);
   while (emptyChild(processToKill) == FALSE) {
-    qDebug(120, 0);
     pcb_PTR nextProcessToKill=removeChild(processToKill);
     terminateRecursively(nextProcessToKill);
   }
   if (processToKill->p_semAdd != NULL) { /* on ASL */
+    qDebug(124, 0);
     if (processToKill->p_semAdd == (&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]))) {
       (*(processToKill->p_semAdd))++;
     }
+    qDebug(128, 0);
     freePcb(outBlocked(processToKill));
     processCount--;
     softBlockCount--;
   }
   else if (processToKill == currentProcess) { /* current proc */
+    qDebug(134, 0);
     freePcb(outChild(processToKill));
     processCount--;
   }
   else { /* pcb is on readyQue */
+    qDebug(139, 0);
     freePcb(outProcQ(&readyQue, processToKill));
     processCount--;
   }
