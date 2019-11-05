@@ -254,6 +254,7 @@ void passeren(){
     cpu_t currTime = 0;
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
+    stateCopy(oldSys, &(currentProcess->p_s));
     insertBlocked(&mutex, currentProcess);
     currentProcess = NULL;
     scheduler();
