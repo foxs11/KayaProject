@@ -148,6 +148,7 @@ void print(char *msg) {
 			PANIC();
 		s++;	
 	}
+	testDebug1(1, 0);
 	SYSCALL(VERHOGEN, (int)&term_mut, 0, 0);				/* V(term_mut) */
 }
 
@@ -160,7 +161,6 @@ void test() {
 	SYSCALL(VERHOGEN, (int)&testsem, 0, 0);					/* V(testsem)   */
 
 	print("p1 v(testsem)\n");
-	testDebug2(5, 6);
 	/* set up states of the other processes */
 
 	/* set up p2's state */
@@ -243,6 +243,7 @@ void test() {
 	/* create process p2 */
 	SYSCALL(CREATETHREAD, (int)&p2state,0 , 0);				/* start p2     */
 
+	testDebug2(9, 10);
 	print("p2 was started\n");
 	SYSCALL(VERHOGEN, (int)&startp2, 0, 0);					/* V(startp2)   */
 	testDebug2(3, 4);
