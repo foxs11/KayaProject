@@ -113,7 +113,7 @@ void terminateProcess(){
 
 void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
   aDebug(currentProcess->p_child, 115, 2);
-  while (!emptyChild(processToKill)) {
+  while (emptyChild(processToKill) == FALSE) {
     pcb_PTR nextProcessToKill=removeChild(processToKill);
     terminateRecursively(nextProcessToKill);
   }
