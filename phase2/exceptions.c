@@ -239,6 +239,7 @@ void verhogen(){
   if (*mutex <= 0){
     pcb_PTR temp = removeBlocked(&mutex);
     if(temp != NULL){
+      temp->p_semAdd = NULL;
       insertProcQ(&readyQue, temp);
     }
   }
