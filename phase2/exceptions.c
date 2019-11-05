@@ -10,6 +10,9 @@
 void aDebug(unsigned int a, unsigned int b, unsigned int c) {
   int i = 0;
 }
+void bDebug(unsigned int a, unsigned int b) {
+  int i = 0;
+}
 
 void pgmTrapHandler(){
   state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
@@ -114,6 +117,7 @@ void terminateProcess(){
 void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
   aDebug(currentProcess->p_child, 115, 2);
   while (emptyChild(processToKill) == FALSE) {
+    bDebug(120, 0);
     pcb_PTR nextProcessToKill=removeChild(processToKill);
     terminateRecursively(nextProcessToKill);
   }
