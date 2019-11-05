@@ -103,8 +103,8 @@ int getDeviceNumber(int lineNumber){
 }
 
 unsigned int ackTerminal(int *devSemNum){
-	volatile devregarea_t *deviceRegs;
 	unsigned int intStatus;
+	volatile devregarea_t *deviceRegs;
 
 	deviceRegs = (devregarea_t *) RAMBASEADDR;
 
@@ -115,6 +115,7 @@ unsigned int ackTerminal(int *devSemNum){
 	}
 
 	else {
+		intStatus = deviceRegs->devreg[(*devSemNum)].t_recv_status;
 		deviceRegs->devreg[(*devSemNum)].t_recv_command = ACK;
 
 		*devSemNum = *devSemNum + DEVPERINT;
