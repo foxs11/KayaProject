@@ -240,8 +240,8 @@ void verhogen(){
   if (*mutex <= 0){
     pcb_PTR temp = removeBlocked(&mutex);
     if(temp != NULL){
+      insertProcQ(&readyQue, temp);
     }
-    insertProcQ(&readyQue, temp);
   }
   LDST(oldSys);
 }
