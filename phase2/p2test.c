@@ -294,7 +294,9 @@ void p2() {
 	int		i;				/* just to waste time  */
 	cpu_t	now1,now2;		/* times of day        */
 	cpu_t	cpu_t1,cpu_t2;	/* cpu time used       */
-	SYSCALL(PASSERN, (int)&startp2, 0, 0);				/* P(startp2)   */
+	SYSCALL(PASSERN, (int)&startp2, 0, 0);
+	testDebug3(298, 0);
+					/* P(startp2)   */
 	print("p2 starts\n");
 
 	/* initialize all semaphores in the s[] array */
