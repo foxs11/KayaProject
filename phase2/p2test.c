@@ -135,7 +135,7 @@ void testWaitD(unsigned int a, unsigned int b){
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
-
+	
 	char * s = msg;
 	devregtr * base = (devregtr *) (TERM0ADDR);
 	devregtr status;

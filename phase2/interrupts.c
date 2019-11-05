@@ -165,6 +165,7 @@ void interruptHandler(){
       }
     }
 		else{
+			status = deviceRegs->devreg[(*devSemNum)].d_status;
   		device->d_command = ACK;
   	}
 
