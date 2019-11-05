@@ -127,6 +127,10 @@ void testDebug4(unsigned int a, unsigned int b){
 	int i;
 	i = 42;
 }
+void testDebugCPU(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
 
 
 /* a procedure to print on terminal 0 */
@@ -316,12 +320,13 @@ void p2() {
 	/* test of SYS6 */
 
 	STCK(now1);				/* time of day   */
+	testDebugCPU(0, 1);
 	cpu_t1 = SYSCALL(GETCPUTIME, 0, 0, 0);			/* CPU time used */
 
 	/* delay for several milliseconds */
 	for (i=1; i < LOOPNUM; i++)
 		;
-
+	testDebugCPU(2, 3);
 	cpu_t2 = SYSCALL(GETCPUTIME, 0, 0, 0);			/* CPU time used */
 	STCK(now2);				/* time of day  */
 
@@ -368,11 +373,12 @@ void p3() {
 
 	/* now let's check to see if we're really charge for CPU
 	   time correctly */
+	testDebugCPU(4, 5);
 	cpu_t1 = SYSCALL(GETCPUTIME, 0, 0, 0);
 
 	for (i=0; i<CLOCKLOOP; i++)
 		SYSCALL(WAITCLOCK, 0, 0, 0);
-	
+	testDebugCPU(6, 7);
 	cpu_t2 = SYSCALL(GETCPUTIME, 0, 0, 0);
 
 	if (cpu_t2 - cpu_t1 < (MINCLOCKLOOP / (* ((cpu_t *) TIMESCALEADDR))))
