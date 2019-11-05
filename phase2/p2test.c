@@ -237,6 +237,7 @@ void test() {
 
 	print("p2 was started\n");
 	SYSCALL(VERHOGEN, (int)&startp2, 0, 0);					/* V(startp2)   */
+	testDebug2(3, 4);
 	SYSCALL(PASSERN, (int)&endp2, 0, 0);						/* P(endp2)     */
 	/* make sure we really blocked */
 	if (p1p2synch == 0)
