@@ -161,7 +161,7 @@ void interruptHandler(){
       }
     }
 		else{
-  		device->d_command = 1;
+  		device->d_command = ACK;
   	}
 
     int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
