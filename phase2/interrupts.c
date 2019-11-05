@@ -168,6 +168,7 @@ void interruptHandler(){
   	if ((*semAdd) <= 0) {
       /* yellow book pg 26 second half of paragraph before nuts and bolts */
   		p = removeBlocked(semAdd);
+			p->p_semAdd = NULL;
   		p->p_s.s_v0 = status;
   		insertProcQ(&readyQue, p);
   		softBlockCount--;
@@ -195,6 +196,7 @@ void interruptHandler(){
 				if (devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE] <= 0){
 					while (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) {
 						pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
+						temp->p_semAdd = NULL;
 						devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]++;
             insertProcQ(&readyQue, temp);
             softBlockCount--;
