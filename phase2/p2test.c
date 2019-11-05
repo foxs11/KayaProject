@@ -236,7 +236,6 @@ void test() {
 	SYSCALL(CREATETHREAD, (int)&p2state,0 , 0);				/* start p2     */
 
 	print("p2 was started\n");
-	testDebug1(0, 0);
 	SYSCALL(VERHOGEN, (int)&startp2, 0, 0);					/* V(startp2)   */
 	SYSCALL(PASSERN, (int)&endp2, 0, 0);						/* P(endp2)     */
 	/* make sure we really blocked */
@@ -291,7 +290,7 @@ void p2() {
 	cpu_t	cpu_t1,cpu_t2;	/* cpu time used       */
 
 	SYSCALL(PASSERN, (int)&startp2, 0, 0);				/* P(startp2)   */
-
+	testDebug1(1, 2);
 	print("p2 starts\n");
 
 	/* initialize all semaphores in the s[] array */
