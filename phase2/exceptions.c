@@ -286,6 +286,7 @@ getCPUTime(){
 waitForClock(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * semAdd = &(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]);
+  stateCopy(oldSys, &(currentProcess->p_s));
   (*semAdd)--;
   if ((*semAdd) < 0){
     insertBlocked(semAdd, currentProcess);
