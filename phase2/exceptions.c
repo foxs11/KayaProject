@@ -115,7 +115,8 @@ void terminateProcess(){
 
 void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
   while (!emptyChild(processToKill)) {
-    terminateRecursively(removeChild(processToKill));
+    pcb_PTR nextProcessToKill=removeChild(processToKill);
+    terminateRecursively(nextProcessToKill);
   }
   if (processToKill->p_semAdd != NULL) { /* on ASL */
     if (processToKill->p_semAdd == (&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]))) {
