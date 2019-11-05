@@ -109,7 +109,8 @@ unsigned int ackTerminal(int *devSemNum){
 	deviceRegs = (devregarea_t *) RAMBASEADDR;
 
 	intStatus = deviceRegs->devreg[(*devSemNum)].t_transm_status;
-	intDebug(intStatus, 0);
+	unsigned int command = deviceRegs->devreg[(*devSemNum)].t_transm_command;
+	intDebug(command, 0);
 	if ((intStatus & 0x0F) != READY) {
 		deviceRegs->devreg[(*devSemNum)].t_transm_command = ACK;
 	}
@@ -156,9 +157,7 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
-			intDebug(8, 9);
 			status = ackTerminal(&devRegIndex);
-			intDebug(10, 11);
       if ((status & 0x0F) == READY) { /* recv */
         termOffset = 8; 
       }
