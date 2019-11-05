@@ -294,6 +294,7 @@ void p2() {
 	for (i=0; i<= MAXSEM; i++)  {
 		SYSCALL(VERHOGEN, (int)&s[i], 0, 0);			/* V(S[I]) */
 		SYSCALL(PASSERN, (int)&s[i], 0, 0);			/* P(S[I]) */
+		testDebug1(297, 0);
 		if (s[i] != 0)
 			print("error: p2 bad v/p pairs\n");
 	}
