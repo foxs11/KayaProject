@@ -7,9 +7,12 @@
 #include "../h/types.h"
 #include "../h/const.h"
 #include "/usr/local/include/umps2/umps/libumps.e"
-#include "../phase1/p1test.c"
 
 void bDebug(unsigned int a, unsigned int b) {
+  int i;
+  i = 42;
+}
+void schedulerPanic(unsigned int a, unsigned int b) {
   int i;
   i = 42;
 }
@@ -23,6 +26,7 @@ void scheduler(){
     }
     else{
       if(softBlockCount == 0){
+        schedulerPanic(29, 0);
         PANIC();
       }
       else{
