@@ -121,7 +121,10 @@ void testDebug2(unsigned int a, unsigned int b){
 	i = 42;
 }
 
-
+p4Debug(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
 
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
@@ -395,20 +398,20 @@ void p4() {
 	}
 
 	SYSCALL(VERHOGEN, (int)&synp4, 0, 0);				/* V(synp4)     */
-
+	p4Debug(401, 0);
 	SYSCALL(PASSERN, (int)&blkp4, 0, 0);				/* P(blkp4)     */
-
+	p4Debug(403, 0);
 	SYSCALL(PASSERN, (int)&synp4, 0, 0);				/* P(synp4)     */
-
+	p4Debug(405, 0);
 	/* start another incarnation of p4 running, and wait for  */
 	/* a V(synp4). the new process will block at the P(blkp4),*/
 	/* and eventually, the parent p4 will terminate, killing  */
 	/* off both p4's.                                         */
 
 	p4state.s_sp -= QPAGE;		/* give another page  */
-
+	p4Debug(412, 0);
 	SYSCALL(CREATETHREAD, (int)&p4state, 0, 0);			/* start a new p4    */
-
+	p4Debug(414, 0);
 	SYSCALL(PASSERN, (int)&synp4, 0, 0);				/* wait for it       */
 
 	print("p4 is OK\n");
