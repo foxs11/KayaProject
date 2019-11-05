@@ -6,6 +6,7 @@
 #include "../h/types.h"
 #include "../h/const.h"
 #include "../e/initial.e"
+#include "../e/exceptions.e"
 
 void intDebug(unsigned int a, unsigned int b){
   int i;
@@ -183,6 +184,7 @@ void interruptHandler(){
   }
   else { /* line number not between 3 and 7 */
   	if (lineNumber == 1) {
+			stateCopy(interruptOld, &(currentProcess->p_s));
 			insertProcQ(&readyQue, currentProcess);
 			currentProcess = NULL;
       scheduler();

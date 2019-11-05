@@ -10,5 +10,6 @@
 extern void pgmTrapHandler();
 extern void tlbMgmtHandler();
 extern void sysCallHandler();
+extern void stateCopy(state_PTR old, state_PTR new);
 
 #endif

@@ -147,7 +147,7 @@ void stateCopyPCB(pcb_PTR p, state_PTR s){
   }
 }
 
-void stateCopy(state_PTR old, state_PTR new){
+extern void stateCopy(state_PTR old, state_PTR new){
   new->s_asid = old->s_asid;
   new->s_cause = old->s_cause;
   new->s_status = old->s_status;
