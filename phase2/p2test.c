@@ -111,26 +111,12 @@ memaddr *p5MemLocation = 0;		/* To cause a p5 trap */
 void	p2(),p3(),p4(),p5(),p5a(),p5b(),p6(),p7(),p7a(),p5prog(),p5mm();
 void	p5sys(),p8root(),child1(),child2(),p8leaf();
 
+
 void testDebug1(unsigned int a, unsigned int b){
 	int i;
 	i = 42;
 }
-void testDebug2(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-void testDebug3(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-void testDebug4(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-void testWaitD(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
+
 
 
 /* a procedure to print on terminal 0 */
@@ -148,7 +134,6 @@ void print(char *msg) {
 			PANIC();
 		s++;	
 	}
-	testDebug1(1, 0);
 	SYSCALL(VERHOGEN, (int)&term_mut, 0, 0);				/* V(term_mut) */
 }
 
@@ -243,14 +228,12 @@ void test() {
 	/* create process p2 */
 	SYSCALL(CREATETHREAD, (int)&p2state,0 , 0);				/* start p2     */
 
-	testDebug2(9, 10);
 	print("p2 was started\n");
-	SYSCALL(VERHOGEN, (int)&startp2, 0, 0);					/* V(startp2)   */
-	testDebug2(3, 4);
+	SYSCALL(VERHOGEN, (int)&startp2, 0, 0);
+						/* V(startp2)   */
 	SYSCALL(PASSERN, (int)&endp2, 0, 0);						/* P(endp2)     */
 	/* make sure we really blocked */
 	if (p1p2synch == 0)
-		testDebug4(10, 11);
 		print("error: p1/p2 synchronization bad\n");
 
 	SYSCALL(CREATETHREAD, (int)&p3state, 0, 0);				/* start p3     */
@@ -300,10 +283,9 @@ void p2() {
 	cpu_t	now1,now2;		/* times of day        */
 	cpu_t	cpu_t1,cpu_t2;	/* cpu time used       */
 	SYSCALL(PASSERN, (int)&startp2, 0, 0);
-	testDebug3(298, 0);
 					/* P(startp2)   */
 	print("p2 starts\n");
-
+	testDebug1(288, 0);
 	/* initialize all semaphores in the s[] array */
 	for (i=0; i<= MAXSEM; i++)
 		s[i] = 0;
@@ -364,7 +346,6 @@ void p3() {
 	/* loop until we are delayed at least half of clock V interval */
 	while (time2-time1 < (CLOCKINTERVAL >> 1) )  {
 		STCK(time1);			/* time of day     */
-		testWaitD(0, 1);
 		SYSCALL(WAITCLOCK, 0, 0, 0);
 		STCK(time2);			/* new time of day */
 	}
@@ -376,7 +357,6 @@ void p3() {
 	cpu_t1 = SYSCALL(GETCPUTIME, 0, 0, 0);
 
 	for (i=0; i<CLOCKLOOP; i++)
-		testWaitD(2, 3);
 		SYSCALL(WAITCLOCK, 0, 0, 0);
 	cpu_t2 = SYSCALL(GETCPUTIME, 0, 0, 0);
 
@@ -547,7 +527,6 @@ void p5b() {
 	time2 = 0;
 	while (time2 - time1 < (CLOCKINTERVAL >> 1))  {
 		STCK(time1);
-		testWaitD(4, 5);
 		SYSCALL(WAITCLOCK, 0, 0, 0);
 		STCK(time2);
 	}
