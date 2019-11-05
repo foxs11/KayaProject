@@ -53,7 +53,6 @@ void syscallDispatch(int * syscallNum, int kernelMode){
           terminateProcess(); /* done */
           break;
         case 3:
-          addokbuf("e3\n");
           verhogen(); /* done */
           break;
         case 4:
