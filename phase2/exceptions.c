@@ -123,7 +123,7 @@ void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device
   }
   if (processToKill->p_semAdd != NULL) { /* on ASL */
     if (processToKill->p_semAdd == (&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]))) {
-      (*processToKill->p_semAdd)++;
+      (*(processToKill->p_semAdd))++;
     }
     freePcb(outBlocked(processToKill));
     processCount--;
