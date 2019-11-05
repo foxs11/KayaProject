@@ -116,6 +116,10 @@ void testDebug1(unsigned int a, unsigned int b){
 	int i;
 	i = 42;
 }
+void testDebug2(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
 
 
 
@@ -241,17 +245,17 @@ void test() {
 	print("p3 is started\n");
 
 	SYSCALL(PASSERN, (int)&endp3, 0, 0);					/* P(endp3)     */
-
+	testDebug2(248, 0);
 	SYSCALL(CREATETHREAD, (int)&p4state, 0, 0);				/* start p4     */
-
+	testDebug2(250, 0);
 	SYSCALL(CREATETHREAD, (int)&p5state, 0, 0); 			/* start p5     */
-
+	testDebug2(252, 0);
 	SYSCALL(CREATETHREAD, (int)&p6state, 0, 0);				/* start p6		*/
-
+	testDebug2(254, 0);
 	SYSCALL(CREATETHREAD, (int)&p7state, 0, 0);				/* start p7		*/
-
+	testDebug2(256, 0);
 	SYSCALL(PASSERN, (int)&endp5, 0, 0);					/* P(endp5)		*/ 
-
+	testDebug2(258, 0);
 	print("p1 knows p5 ended\n");
 
 	SYSCALL(PASSERN, (int)&blkp4, 0, 0);					/* P(blkp4)		*/
