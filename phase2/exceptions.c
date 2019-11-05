@@ -100,9 +100,7 @@ void createProcess(){
     stateCopyPCB(p, newProcState);
     processCount++;
     insertChild(currentProcess, p);
-    aDebug(11, 4, 2);
     insertProcQ(&readyQue, p);
-    aDebug(2, 5, 0);
     syscallOld->s_v0 = 0;
     LDST(syscallOld);
   }
@@ -114,6 +112,7 @@ void terminateProcess(){
 }
 
 void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
+  aDebug(currentProcess->p_child, 115, 2);
   while (!emptyChild(processToKill)) {
     pcb_PTR nextProcessToKill=removeChild(processToKill);
     terminateRecursively(nextProcessToKill);
