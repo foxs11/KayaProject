@@ -193,7 +193,7 @@ void interruptHandler(){
 						pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
 						/* devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]++; */
 						int * semAdd2 = &(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]);  /*change for terminal math */
-						(*semAdd2)--;
+						(*semAdd2)++;
             insertProcQ(&readyQue, temp);
             softBlockCount--;
           }
