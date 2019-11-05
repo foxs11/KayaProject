@@ -204,7 +204,12 @@ void interruptHandler(){
           }
         }
       }
-      LDST(interruptOld);
+      if (currentProcess != NULL){
+        LDST(interruptOld);
+      }
+      else{
+        scheduler();
+      }
     }
   }
 }
