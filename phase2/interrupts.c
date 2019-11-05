@@ -115,7 +115,7 @@ unsigned int ackTerminal(int *devSemNum){
 	}
 
 	else {
-		intStatus = deviceRegs->devreg[(*devSemNum)].t_recv_command = ACK;
+		deviceRegs->devreg[(*devSemNum)].t_recv_command = ACK;
 
 		*devSemNum = *devSemNum + DEVPERINT;
 	}
