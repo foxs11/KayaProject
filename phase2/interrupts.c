@@ -109,12 +109,8 @@ unsigned int ackTerminal(int *devSemNum){
 	deviceRegs = (devregarea_t *) RAMBASEADDR;
 
 	intStatus = deviceRegs->devreg[(*devSemNum)].t_transm_status;
-	unsigned int command = deviceRegs->devreg[(*devSemNum)].t_transm_command;
-	intDebug(command, 0);
 	if ((intStatus & 0x0F) != READY) {
 		deviceRegs->devreg[(*devSemNum)].t_transm_command = ACK;
-		command = deviceRegs->devreg[(*devSemNum)].t_transm_command;
-		intDebug(command, 0);
 	}
 
 	else {
