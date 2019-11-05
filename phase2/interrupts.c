@@ -16,35 +16,27 @@ int getLineNumber(unsigned int cause){
 	int lineNumber = NULL;
 
 	if (CHECK_BIT(cause, 8)) {
-		addokbuf("line0 interupt");
   	lineNumber = 0;
   }
   else if (CHECK_BIT(cause, 9)) {
-		addokbuf("line1 interupt\n");
   	lineNumber = 1;
   }
   else if (CHECK_BIT(cause, 10)) {
-		addokbuf("line2 interupt\n");
   	lineNumber = 2;
   }
   else if (CHECK_BIT(cause, 11)) {
-		addokbuf("line3 interupt\n");
   	lineNumber = 3;
   }
   else if (CHECK_BIT(cause, 12)) {
-		addokbuf("line4 interupt\n");
   	lineNumber = 4;
   }
   else if (CHECK_BIT(cause, 13)) {
-		addokbuf("line5 interupt\n");
   	lineNumber = 5;
   }
   else if (CHECK_BIT(cause, 14)) {
-		addokbuf("line6 interupt\n");
   	lineNumber = 6;
   }
   else if (CHECK_BIT(cause, 15)) {
-		addokbuf("line7 interupt\n");
   	lineNumber = 7;
   }
 	return lineNumber;
@@ -135,13 +127,11 @@ int getDevRegIndex(int lineNumber, int deviceNumber) {
 }
 
 void interruptHandler(){
-	addokbuf("interuptHandler1\n");
 	unsigned int status = 0;
 	int termOffset = 0;
   cpu_t currTime = 0;
   STCK(currTime);
 	if(currentProcess != NULL){
-		addokbuf("interuptHandler2\n");
   	currentProcess->p_time = currentProcess->p_time + (currTime - (time));
 	}
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
@@ -149,7 +139,6 @@ void interruptHandler(){
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
   if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
-		addokbuf("interuptHandler3\n");
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -158,15 +147,12 @@ void interruptHandler(){
     device_t * device = &(foo->devreg[devRegIndex]);
 
     if (lineNumber == 7){
-			addokbuf("interuptHandler4\n");
 			status = ackTerminal(&devRegIndex);
       if ((status & 0x0F) == READY) { /* recv */
-				addokbuf("interuptHandler5\n");
         termOffset = 8; 
       }
     }
 		else{
-			addokbuf("interuptHandler6\n");
   		device->d_command = 1;
   	}
 
@@ -174,17 +160,14 @@ void interruptHandler(){
 		(*semAdd)++;
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
-			addokbuf("interuptHandler7\n");
   		p = removeBlocked(semAdd);
   		p->p_s.s_v0 = status;
   		insertProcQ(&readyQue, p);
   		softBlockCount--;
   		if (waitFlag == 1) {
-				addokbuf("interuptHandler8\n");
   			scheduler();
   		}
   		else{
-				addokbuf("interuptHandler9\n");
         STCK(time);
   			LDST(interruptOld);
 			}
@@ -192,16 +175,12 @@ void interruptHandler(){
   }
   else { /* line number not between 3 and 7 */
   	if (lineNumber == 1) {
-			addokbuf("interuptHandler10\n");
       scheduler();
     }
     else { /* line number 2 */
-			addokbuf("interuptHandler11\n");
       LDIT(100000);
       if (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
-				addokbuf("interuptHandler12\n");
 				if (devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE] <= 0){
-					addokbuf("interuptHandler13\n");
 					while (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) {
 						devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE]++;
 						pcb_PTR temp = removeBlocked(&(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]));
@@ -210,7 +189,6 @@ void interruptHandler(){
           }
         }
       }
-			addokbuf("interuptHandler14\n");
       LDST(interruptOld);
     }
   }
