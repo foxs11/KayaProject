@@ -117,7 +117,7 @@ void terminateProcess(){
 void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
   aDebug(currentProcess->p_child, 115, 2);
   int i;
-  bool devSem;
+  int devSem;
   devSem = FALSE;
   i = 0;
 
