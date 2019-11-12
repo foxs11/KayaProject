@@ -126,6 +126,21 @@ p4Debug(unsigned int a, unsigned int b){
 	i = 42;
 }
 
+p2Ended(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
+p3Ended(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
+p4Ended(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
 	
@@ -334,7 +349,7 @@ void p2() {
 	p1p2synch = 1;				/* p1 will check this */
 
 	SYSCALL(VERHOGEN, (int)&endp2, 0, 0);				/* V(endp2)     */
-
+	p2Ended(342, 0);
 	SYSCALL(TERMINATETHREAD, 0, 0, 0);			/* terminate p2 */
 
 	/* just did a SYS2, so should not get to this point */
@@ -376,7 +391,7 @@ void p3() {
 
 
 	SYSCALL(VERHOGEN, (int)&endp3, 0, 0);				/* V(endp3)        */
-
+	p3Ended(384, 0);
 	SYSCALL(TERMINATETHREAD, 0, 0, 0);			/* terminate p3    */
 
 	/* just did a SYS2, so should not get to this point */
@@ -417,7 +432,7 @@ void p4() {
 	print("p4 is OK\n");
 
 	SYSCALL(VERHOGEN, (int)&endp4, 0, 0);				/* V(endp4)          */
-
+	p4Ended(430, 0);
 	SYSCALL(TERMINATETHREAD, 0, 0, 0);			/* terminate p4      */
 
 	/* just did a SYS2, so should not get to this point */
