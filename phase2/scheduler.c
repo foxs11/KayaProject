@@ -18,6 +18,7 @@ void schedulerPanic(unsigned int a, unsigned int b) {
 }
 
 void scheduler(){
+  schedulerPanic(21, 0);
   unsigned int cp0status;
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
@@ -26,7 +27,7 @@ void scheduler(){
     }
     else{
       if(softBlockCount == 0){
-        schedulerPanic(29, 0);
+        schedulerPanic(30, 0);
         PANIC();
       }
       else{
