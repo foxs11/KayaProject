@@ -141,13 +141,18 @@ p4Ended(unsigned int a, unsigned int b){
 	i = 42;
 }
 
+printDebug(unsigned int a){
+	int i;
+	i = 42;
+}
+
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
 	
 	char * s = msg;
 	devregtr * base = (devregtr *) (TERM0ADDR);
 	devregtr status;
-	
+	printDebug(0);
 	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
 	while (*s != EOS) {
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
