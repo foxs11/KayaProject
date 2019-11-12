@@ -126,6 +126,21 @@ p4Debug(unsigned int a, unsigned int b){
 	i = 42;
 }
 
+p5Debug(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
+p6Debug(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
+p7Debug(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
 p2Ended(unsigned int a, unsigned int b){
 	int i;
 	i = 42;
@@ -506,6 +521,7 @@ void p5sys(unsigned int cause) {
 
 /* p5 -- SYS5 test process */
 void p5() {
+	p5Debug(10, 11);
 	print("p5 starts\n");
 
 	/* set up higher level TRAP handlers (new areas) */
@@ -579,6 +595,7 @@ void p5b() {
 
 /*p6 -- high level syscall without initializing trap vector*/
 void p6() {
+	p6Debug(14, 15);
 	print("p6 starts\n");
 
 	SYSCALL(9, 0, 0, 0);		/* should cause termination because p6 has no 
@@ -590,6 +607,7 @@ void p6() {
 
 /*p7 -- program trap without initializing passup vector*/
 void p7() {
+	p7Debug(18, 19);
 	print("p7 starts\n");
 
 	* ((memaddr *) BADADDR) = 0;
