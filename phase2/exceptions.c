@@ -14,6 +14,10 @@ void qDebug(unsigned int a, unsigned int b) {
   int i = 0;
 }
 
+void vDebug(unsigned int a){
+  int i = 0;
+}
+
 void pgmTrapHandler(){
   state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
   unsigned int cause = pgmOld->s_cause;
@@ -251,10 +255,12 @@ void verhogen(){
   if (*mutex <= 0){
     pcb_PTR temp = removeBlocked(&mutex);
     if(temp != NULL){
+      vDebug(1);
       temp->p_semAdd = NULL;
       insertProcQ(&readyQue, temp);
     }
     else{
+      vDebug(2);
       (*mutex)--;
     }
   }
