@@ -126,6 +126,11 @@ p4Debug(unsigned int a, unsigned int b){
 	i = 42;
 }
 
+panicDebug(unsigned int a){
+	int i;
+	i = 42;
+}
+
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
 	
@@ -138,6 +143,7 @@ void print(char *msg) {
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
 		if ((status & TERMSTATMASK) != RECVD)
+			panicDebug(1);
 			PANIC();
 		s++;	
 	}
@@ -269,6 +275,7 @@ void test() {
 
 		if (creation == CREATENOGOOD) {
 			print("error in process termination\n");
+			panicDebug(2);
 			PANIC();
 		}
 
@@ -280,6 +287,7 @@ void test() {
 
 	/* should not reach this point, since p1 just got a program trap */
 	print("error: p1 still alive after progtrap & no trap vector\n");
+	panicDebug(3);
 	PANIC();					/* PANIC !!!     */
 }
 
@@ -339,6 +347,7 @@ void p2() {
 
 	/* just did a SYS2, so should not get to this point */
 	print("error: p2 didn't terminate\n");
+	panicDebug(4);
 	PANIC();					/* PANIC!           */
 }
 
@@ -381,6 +390,7 @@ void p3() {
 
 	/* just did a SYS2, so should not get to this point */
 	print("error: p3 didn't terminate\n");
+	panicDebug(5);
 	PANIC();					/* PANIC            */
 }
 
@@ -422,6 +432,7 @@ void p4() {
 
 	/* just did a SYS2, so should not get to this point */
 	print("error: p4 didn't terminate\n");
+	panicDebug(6);
 	PANIC();					/* PANIC            */
 }
 
@@ -553,6 +564,7 @@ void p5b() {
 
 	/* should have terminated, so should not get to this point */
 	print("error: p5 didn't terminate\n");
+	panicDebug(7);
 	PANIC();				/* PANIC            */
 }
 
@@ -565,7 +577,7 @@ void p6() {
 			  trap vector */
 
 	print("error: p6 alive after SYS9() with no trap vector\n");
-
+	panicDebug(8);
 	PANIC();
 }
 
@@ -576,6 +588,7 @@ void p7() {
 	* ((memaddr *) BADADDR) = 0;
 		
 	print("error: p7 alive after program trap with no trap vector\n");
+	panicDebug(9);
 	PANIC();
 }
 
