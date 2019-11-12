@@ -254,6 +254,9 @@ void verhogen(){
       temp->p_semAdd = NULL;
       insertProcQ(&readyQue, temp);
     }
+    else{
+      (*mutex)--;
+    }
   }
   LDST(oldSys);
 }
