@@ -18,7 +18,6 @@ void schedulerPanic(unsigned int a, unsigned int b) {
 }
 
 void scheduler(){
-  schedulerPanic(21, 0);
   unsigned int cp0status;
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
