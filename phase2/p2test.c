@@ -126,6 +126,21 @@ p4Debug(unsigned int a, unsigned int b){
 	i = 42;
 }
 
+p2Ended(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
+p3Ended(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
+p4Ended(unsigned int a, unsigned int b){
+	int i;
+	i = 42;
+}
+
 panicDebug(unsigned int a){
 	int i;
 	i = 42;
@@ -342,7 +357,7 @@ void p2() {
 	p1p2synch = 1;				/* p1 will check this */
 
 	SYSCALL(VERHOGEN, (int)&endp2, 0, 0);				/* V(endp2)     */
-
+	p2Ended(342, 0);
 	SYSCALL(TERMINATETHREAD, 0, 0, 0);			/* terminate p2 */
 
 	/* just did a SYS2, so should not get to this point */
@@ -385,7 +400,7 @@ void p3() {
 
 
 	SYSCALL(VERHOGEN, (int)&endp3, 0, 0);				/* V(endp3)        */
-
+	p3Ended(384, 0);
 	SYSCALL(TERMINATETHREAD, 0, 0, 0);			/* terminate p3    */
 
 	/* just did a SYS2, so should not get to this point */
@@ -423,11 +438,11 @@ void p4() {
 	SYSCALL(CREATETHREAD, (int)&p4state, 0, 0);			/* start a new p4    */
 	p4Debug(414, 0);
 	SYSCALL(PASSERN, (int)&synp4, 0, 0);				/* wait for it       */
-
+	p4Debug(416, 0);
 	print("p4 is OK\n");
 
 	SYSCALL(VERHOGEN, (int)&endp4, 0, 0);				/* V(endp4)          */
-
+	p4Ended(430, 0);
 	SYSCALL(TERMINATETHREAD, 0, 0, 0);			/* terminate p4      */
 
 	/* just did a SYS2, so should not get to this point */
