@@ -281,15 +281,14 @@ void test() {
 	SYSCALL(CREATETHREAD, (int)&p3state, 0, 0);				/* start p3     */
 
 	print("p3 is started\n");
-	testDebug2(248, 0);
+
 	SYSCALL(PASSERN, (int)&endp3, 0, 0);					/* P(endp3)     */
-	testDebug2(248, 0);
+
 	SYSCALL(CREATETHREAD, (int)&p4state, 0, 0);				/* start p4     */
-	testDebug2(250, 0);
+
 	SYSCALL(CREATETHREAD, (int)&p5state, 0, 0); 			/* start p5     */
-	testDebug2(252, 0);
+
 	SYSCALL(CREATETHREAD, (int)&p6state, 0, 0);				/* start p6		*/
-	testDebug2(254, 0);
 	SYSCALL(CREATETHREAD, (int)&p7state, 0, 0);				/* start p7		*/
 	testDebug2(256, 0);
 	SYSCALL(PASSERN, (int)&endp5, 0, 0);					/* P(endp5)		*/ 
