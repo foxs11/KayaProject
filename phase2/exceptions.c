@@ -33,8 +33,6 @@ void tlbMgmtHandler(){
 }
 
 void sysCallHandler(){
-  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  syscallOld->s_pc = syscallOld->s_pc + 4;
   int * syscallNum = &(syscallOld->s_a0);
   int kernelMode;
   int kernelStatus = syscallOld->s_status & KERNELOFF;
@@ -50,6 +48,8 @@ void sysCallHandler(){
 void syscallDispatch(int * syscallNum, int kernelMode){
   if(*(syscallNum) > 0 && *(syscallNum) < 9){
     if(kernelMode == TRUE) {
+      state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+      syscallOld->s_pc = syscallOld->s_pc + 4;
       switch(*syscallNum){
         case 1:
           createProcess(); /* done */
