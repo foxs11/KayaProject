@@ -17,6 +17,7 @@ void intDebug2(unsigned int a, unsigned int b){
   i = 42;
 }
 
+/* Given a cause register, the function returns the lowest line number with a pending device interrupt */
 int getLineNumber(unsigned int cause){
 	int lineNumber = NULL;
 
@@ -47,6 +48,7 @@ int getLineNumber(unsigned int cause){
 	return lineNumber;
 }
 
+/* Given a line number, the function returns the lowest device number with a pending device interrupt */
 int getDeviceNumber(int lineNumber){
 	if (2 < lineNumber && lineNumber < 8){
   		intDevBitMap_PTR bitMap = (intDevBitMap_PTR) LINE3INTBITMAP;
@@ -99,6 +101,7 @@ int getDeviceNumber(int lineNumber){
 	}
 }
 
+/* Given a the index of a terminal device semaphore that has an interrupt pending, the function ACKs the appropriate command word in the terminal's device register area and returns the status field of the terminal "personality" that was ACKED. If both a receive and a transmit have pending interrupts, transmit takes priority */ 
 unsigned int ackTerminal(int *devSemNum){
 	unsigned int intStatus;
 	volatile devregarea_t *deviceRegs;
@@ -120,16 +123,19 @@ unsigned int ackTerminal(int *devSemNum){
 	return intStatus;
 }
 
+/* Given a line number, device number, and an offset, calculates the index of the appropriate semaphore for the given device. Offset will be 0 the device in question is not a terminal or if it is a transmit, and 8 if a receive. */ 
 int getSemArrayNum(int lineNumber, int deviceNumber, int termOffset){
 	int arrayNum = ((lineNumber-3)*8);
 	arrayNum = arrayNum + deviceNumber + termOffset;
 	return arrayNum;
 }
 
+/* Given a line number and device number, calculates and returns the index of the appropriate device register area. This index is later used to access the device register as a struct */
 int getDevRegIndex(int lineNumber, int deviceNumber) {
   int devIndex = ((lineNumber - 3) * 8) + deviceNumber;
   return devIndex;
 }
+
 
 void interruptHandler(){
 	unsigned int status = 0;
