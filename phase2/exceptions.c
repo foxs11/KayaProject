@@ -33,6 +33,7 @@ void tlbMgmtHandler(){
 }
 
 void sysCallHandler(){
+  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   int * syscallNum = &(syscallOld->s_a0);
   int kernelMode;
   int kernelStatus = syscallOld->s_status & KERNELOFF;
