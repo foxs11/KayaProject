@@ -253,7 +253,7 @@ void verhogen(){
   int *mutex = oldSys->s_a1;
   (*mutex)++;
   if (*mutex <= 0){
-    pcb_PTR temp = removeBlocked(&mutex);
+    pcb_PTR temp = removeBlocked(mutex);
     if(temp != NULL){
       vDebug(1);
       temp->p_semAdd = NULL;
@@ -276,7 +276,7 @@ void passeren(){
     STCK(currTime);
     currentProcess->p_time = currentProcess->p_time + (currTime - (time));
     stateCopy(oldSys, &(currentProcess->p_s));
-    insertBlocked(&mutex, currentProcess);
+    insertBlocked(mutex, currentProcess);
     currentProcess = NULL;
     scheduler();
   }
