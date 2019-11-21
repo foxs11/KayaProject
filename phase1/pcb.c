@@ -15,10 +15,6 @@
 #include "../h/types.h"
 #include "../h/const.h"
 
-void stupidDebug (unsigned int a){
-  int a = 0;
-}
-
 static pcb_PTR pcbFree_h; /* the tail pointer into the pcb free list */
 
 /* GLOBAL FUNCTIONS */
@@ -98,7 +94,6 @@ pcb_PTR outProcQ (pcb_PTR *tp, pcb_PTR p){
 *  Update the process queue’s tail pointer if necessary. */
 pcb_PTR removeProcQ (pcb_PTR *tp){
   if(emptyProcQ(*tp)){ /* is the queue empty? */
-    stupidDebug(0);
     return NULL;
   }
   else{ /* queue is not empty, remove the head via outProcQ */
