@@ -18,6 +18,7 @@ void vDebug(unsigned int a){
   int i = 0;
 }
 
+/* Program Trap Handler */
 void pgmTrapHandler(){
   state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
   unsigned int cause = pgmOld->s_cause;
@@ -32,6 +33,10 @@ void tlbMgmtHandler(){
   passUpOrDie(0);
 }
 
+/* sysCall Handler
+*  gets state from SYSCALLOLDAREA, gets the sysCall number,
+*  calculates if it is in kernal mode or not
+*  passes on to sysCallDispatch to handle the sysCall */
 void sysCallHandler(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   int * syscallNum = &(syscallOld->s_a0);
@@ -46,39 +51,46 @@ void sysCallHandler(){
   syscallDispatch(syscallNum, kernelMode);
 }
 
+/* takes a sysCallNum and if kernel mode as parameters
+*  if sysCallNum within between 0-9 and in kernel mode,
+*  updates the does pc + 4 on the process then calls the 
+*  correct function based on the sysCallNum.
+*  If in user mode, causeses a privilaged instruction error
+*  and passes to program trap handler.
+*  If not between 0-9, call passUpOrDie */
 void syscallDispatch(int * syscallNum, int kernelMode){
   if(*(syscallNum) > 0 && *(syscallNum) < 9){
     if(kernelMode == TRUE) {
       state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-      syscallOld->s_pc = syscallOld->s_pc + 4;
+      syscallOld->s_pc = syscallOld->s_pc + 4; /* update processes pc */
       switch(*syscallNum){
         case 1:
-          createProcess(); /* done */
+          createProcess();
           break;
         case 2:
-          terminateProcess(); /* done */
+          terminateProcess();
           break;
         case 3:
-          verhogen(); /* done */
+          verhogen();
           break;
         case 4:
-          passeren(); /* done */
+          passeren();
           break;
         case 5:
-          specifyExceptionStateVector(); /* done */
+          specifyExceptionStateVector();
           break;
         case 6:
-          getCPUTime(); /* done */
+          getCPUTime();
           break;
         case 7:
           waitForClock();
           break;
         case 8:
-          waitForIODevice(); /* done */
+          waitForIODevice();
           break;
       }
     }
-    else { /* syscall 1-8 user mode, make it look like a priveleged instruction error */
+    else { /* syscall 1-8 user mode, make it look like a privileged instruction error */
       state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
       state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
       stateCopy(syscallOld, pgmOld);
@@ -92,10 +104,16 @@ void syscallDispatch(int * syscallNum, int kernelMode){
     }
   }
   else{
-    passUpOrDie(2); /* no parameter???? */
+    passUpOrDie(2);
   }
 }
 
+/* SYS 1
+*  Gets process state from SYSCALLOLDAREA. Call allocPcb(),
+*  if there are no more pcbs available, store off -1 in v0 and return
+*  if successful allocation, copy state into new PCB,
+*  update process count, insert process as a child onto currentProcess,
+*  insert new process on readyQue, load state of old state */
 void createProcess(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   state_PTR newProcState = syscallOld->s_a1;
@@ -114,11 +132,23 @@ void createProcess(){
   }
 }
 
+/* SYS 2
+*  call termination function then call scheduler */
 void terminateProcess(){
   terminateRecursively(currentProcess);
   scheduler();
 }
 
+/* Takes a pointer to the process the needs to be terminated
+*  First, it goes and finds the lowest child of the procosses on the process tree.
+*  Then, checks to see if process is being blocked by a device semaphore,
+*  If yes, updates semaphore then removes process from it.
+*  If not on a device semaphore, checks if it is current process,
+*  if yes, calls freePCB on current process. If not current process,
+*  its on the readyQue so then removes from readyQue and freesPCB. 
+*  Does all of this for every child of the current process and all of the 
+*  childerns childrens until at the bottom of the tree starting at the bottom
+*  child */
 void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
   aDebug(currentProcess->p_child, 115, 2);
   int i;
@@ -126,6 +156,8 @@ void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device
   devSem = FALSE;
   i = 0;
 
+  /* This is where it gets the bottom of the children on the tree
+  *  and recursively kills all the rest on the way up */
   while (emptyChild(processToKill) == FALSE) {
     pcb_PTR nextProcessToKill=removeChild(processToKill);
     terminateRecursively(nextProcessToKill);
@@ -159,6 +191,8 @@ void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device
   }
 }
 
+/* State copy function that takes a pointer to a PCB and a
+*  pointer to a state as parameters */
 void stateCopyPCB(pcb_PTR p, state_PTR s){
   p->p_s.s_asid = s->s_asid;
   p->p_s.s_cause = s->s_cause;
@@ -171,6 +205,8 @@ void stateCopyPCB(pcb_PTR p, state_PTR s){
   }
 }
 
+/* State copy function that takes a pointer to a state and another
+*  pointer to a state as perameters. */
 extern void stateCopy(state_PTR old, state_PTR new){
   new->s_asid = old->s_asid;
   new->s_cause = old->s_cause;
@@ -183,6 +219,17 @@ extern void stateCopy(state_PTR old, state_PTR new){
   } 
 }
 
+/* SYS 5
+*  Gets the state from SYSCALLOLDAREA and gets the exception type,
+*  the address where the old process state should be stored in case of
+*  an exception, and the process state that should be loaded into the 
+*  process if and exception occurs. If exception type is 0 and hasn't been
+*  called on this processes yet, update new and old TLB with new and old state,
+*  else, terminate process. If exception type 1 and hasn't been called on this 
+*  process yet, update new and old PGM withe new and old state, else,
+*  terminate process. If exception type 2 and hasn't been called on this process
+*  yet, update new and old sys with new and old state, else, terminate process.
+*  Finally, load state with the state from SYSCALLOLDAREA */
 void specifyExceptionStateVector(){
   state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
   int exceptionType = syscallOld->s_a1;
@@ -190,7 +237,8 @@ void specifyExceptionStateVector(){
   state_PTR newState = syscallOld->s_a3;
 
   if (exceptionType == 0){
-    if (currentProcess->p_oldTLB != NULL){
+    /* SYS 5 has been called for exception type 0 */
+    if (currentProcess->p_oldTLB != NULL){ 
       terminateProcess();
     }
     else {
@@ -199,6 +247,7 @@ void specifyExceptionStateVector(){
     }
   }
   else if (exceptionType == 1){
+    /* SYS 5 has been called for exception type 1 */
     if (currentProcess->p_oldPgm != NULL){
       terminateProcess();
     }
@@ -208,6 +257,7 @@ void specifyExceptionStateVector(){
     }
   }
   else if (exceptionType == 2){
+    /* SYS 5 has been called for exception type 2 */
     if (currentProcess->p_oldSys != NULL){
       terminateProcess();
     }
@@ -221,8 +271,6 @@ void specifyExceptionStateVector(){
 }
 
 void passUpOrDie(int exceptionType){
-  if(currentProcess == NULL){
-  }
   state_PTR oldState = NULL;
   if (exceptionType == 0) {
     if (currentProcess->p_oldTLB != NULL) {
