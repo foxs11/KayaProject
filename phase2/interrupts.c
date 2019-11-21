@@ -8,15 +8,6 @@
 #include "../e/initial.e"
 #include "../e/exceptions.e"
 
-void intDebug(unsigned int a, unsigned int b){
-  int i;
-  i = 42;
-}
-void intDebug2(unsigned int a, unsigned int b){
-  int i;
-  i = 42;
-}
-
 /* Given a cause register, the function returns the lowest line number with a pending device interrupt */
 int getLineNumber(unsigned int cause){
 	int lineNumber = NULL;
@@ -179,12 +170,10 @@ void interruptHandler(){
   		insertProcQ(&readyQue, p);
   		softBlockCount--;
   		if (waitFlag == 1) {
-				intDebug2(0, 1);
   			scheduler();
   		}
   		else{
         STCK(time);
-				intDebug2(2, 3);
   			LDST(interruptOld);
 			}
   	}
@@ -197,7 +186,6 @@ void interruptHandler(){
       scheduler();
     }
     else { /* line number 2 */
-      intDebug(195, 0);
       LDIT(100000);
       if (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
 				if (devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE] <= 0){

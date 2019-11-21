@@ -8,21 +8,7 @@
 #include "../h/const.h"
 #include "/usr/local/include/umps2/umps/libumps.e"
 
-void bDebug(unsigned int a, unsigned int b) {
-  int i;
-  i = 42;
-}
-void schedulerPanic(unsigned int a, unsigned int b) {
-  int i;
-  i = 42;
-}
-void schedulerDebug(unsigned int a){
-  int i;
-  i = 42;
-}
-
 void scheduler(){
-  schedulerDebug(1);
   unsigned int cp0status;
   pcb_PTR process = removeProcQ(&readyQue);
   if(process == NULL){
@@ -31,7 +17,6 @@ void scheduler(){
     }
     else{
       if(softBlockCount == 0){
-        schedulerPanic(30, 0);
         PANIC();
       }
       else{
@@ -43,12 +28,10 @@ void scheduler(){
     }
   }
   else{
-    bDebug(1, 2);
     waitFlag = 0;
     currentProcess = process;
     setTIMER(5000);
     STCK(time);
-    bDebug(process->p_s.s_status, 0);
     LDST(&(process->p_s));
   }
 }

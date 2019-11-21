@@ -7,17 +7,6 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
-void aDebug(unsigned int a, unsigned int b, unsigned int c) {
-  int i = 0;
-}
-void qDebug(unsigned int a, unsigned int b) {
-  int i = 0;
-}
-
-void vDebug(unsigned int a){
-  int i = 0;
-}
-
 /* Program Trap Handler */
 void pgmTrapHandler(){
   state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
@@ -150,7 +139,6 @@ void terminateProcess(){
 *  childerns childrens until at the bottom of the tree starting at the bottom
 *  child */
 void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device asl cases from video */
-  aDebug(currentProcess->p_child, 115, 2);
   int i;
   int devSem;
   devSem = FALSE;
@@ -163,7 +151,6 @@ void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device
     terminateRecursively(nextProcessToKill);
   }
   if (processToKill->p_semAdd != NULL) { /* on ASL */
-    qDebug(128, 0);
     while (i < 49){
       if (&(devSemTable[i]) == processToKill->p_semAdd){
         devSem = TRUE; /* process is blocked on a device semaphore */
@@ -180,12 +167,10 @@ void terminateRecursively(pcb_PTR processToKill) { /* handle 2 device/not device
     processCount--;
   }
   else if (processToKill == currentProcess) { /* current proc */
-    qDebug(134, 0);
     freePcb(outChild(processToKill));
     processCount--;
   }
   else { /* pcb is on readyQue */
-    qDebug(139, 0);
     freePcb(outProcQ(&readyQue, processToKill));
     processCount--;
   }
@@ -237,7 +222,7 @@ void specifyExceptionStateVector(){
   state_PTR newState = syscallOld->s_a3;
 
   if (exceptionType == 0){
-    /* SYS 5 has been called for exception type 0 */
+    /* SYS 5 has already been called for exception type 0 */
     if (currentProcess->p_oldTLB != NULL){ 
       terminateProcess();
     }
@@ -247,7 +232,7 @@ void specifyExceptionStateVector(){
     }
   }
   else if (exceptionType == 1){
-    /* SYS 5 has been called for exception type 1 */
+    /* SYS 5 has already been called for exception type 1 */
     if (currentProcess->p_oldPgm != NULL){
       terminateProcess();
     }
@@ -257,7 +242,7 @@ void specifyExceptionStateVector(){
     }
   }
   else if (exceptionType == 2){
-    /* SYS 5 has been called for exception type 2 */
+    /* SYS 5 has already been called for exception type 2 */
     if (currentProcess->p_oldSys != NULL){
       terminateProcess();
     }
@@ -304,13 +289,8 @@ void verhogen(){
   if (*mutex <= 0){
     pcb_PTR temp = removeBlocked(mutex);
     if(temp != NULL){
-      vDebug(1);
       temp->p_semAdd = NULL;
       insertProcQ(&readyQue, temp);
-    }
-    else{
-      vDebug(2);
-      (*mutex)--;
     }
   }
   LDST(oldSys);

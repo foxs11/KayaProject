@@ -111,63 +111,12 @@ memaddr *p5MemLocation = 0;		/* To cause a p5 trap */
 void	p2(),p3(),p4(),p5(),p5a(),p5b(),p6(),p7(),p7a(),p5prog(),p5mm();
 void	p5sys(),p8root(),child1(),child2(),p8leaf();
 
-
-void testDebug1(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-void testDebug2(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-
-p4Debug(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-
-p5Debug(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-
-p6Debug(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-
-p7Debug(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-
-p2Ended(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-
-p3Ended(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-
-p4Ended(unsigned int a, unsigned int b){
-	int i;
-	i = 42;
-}
-
-printDebug(unsigned int a){
-	int i;
-	i = 42;
-}
-
 /* a procedure to print on terminal 0 */
 void print(char *msg) {
 	
 	char * s = msg;
 	devregtr * base = (devregtr *) (TERM0ADDR);
 	devregtr status;
-	printDebug(0);
 	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
 	while (*s != EOS) {
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
@@ -176,7 +125,6 @@ void print(char *msg) {
 			PANIC();
 		s++;	
 	}
-	printDebug(1);
 	SYSCALL(VERHOGEN, (int)&term_mut, 0, 0);				/* V(term_mut) */
 }
 
@@ -291,9 +239,7 @@ void test() {
 
 	SYSCALL(CREATETHREAD, (int)&p6state, 0, 0);				/* start p6		*/
 	SYSCALL(CREATETHREAD, (int)&p7state, 0, 0);				/* start p7		*/
-	testDebug2(256, 0);
 	SYSCALL(PASSERN, (int)&endp5, 0, 0);					/* P(endp5)		*/ 
-	testDebug2(258, 0);
 	print("p1 knows p5 ended\n");
 
 	SYSCALL(PASSERN, (int)&blkp4, 0, 0);					/* P(blkp4)		*/
@@ -327,7 +273,6 @@ void p2() {
 	SYSCALL(PASSERN, (int)&startp2, 0, 0);
 					/* P(startp2)   */
 	print("p2 starts\n");
-	testDebug1(288, 0);
 	/* initialize all semaphores in the s[] array */
 	for (i=0; i<= MAXSEM; i++)
 		s[i] = 0;
@@ -336,11 +281,9 @@ void p2() {
 	for (i=0; i<= MAXSEM; i++)  {
 		SYSCALL(VERHOGEN, (int)&s[i], 0, 0);			/* V(S[I]) */
 		SYSCALL(PASSERN, (int)&s[i], 0, 0);			/* P(S[I]) */
-		testDebug1(297, 0);
 		if (s[i] != 0)
 			print("error: p2 bad v/p pairs\n");
 	}
-	testDebug1(301, 0);
 
 	print("p2 v's successfully\n");
 
@@ -369,7 +312,6 @@ void p2() {
 	p1p2synch = 1;				/* p1 will check this */
 
 	SYSCALL(VERHOGEN, (int)&endp2, 0, 0);				/* V(endp2)     */
-	p2Ended(342, 0);
 	SYSCALL(TERMINATETHREAD, 0, 0, 0);			/* terminate p2 */
 
 	/* just did a SYS2, so should not get to this point */
@@ -411,7 +353,6 @@ void p3() {
 
 
 	SYSCALL(VERHOGEN, (int)&endp3, 0, 0);				/* V(endp3)        */
-	p3Ended(384, 0);
 	SYSCALL(TERMINATETHREAD, 0, 0, 0);			/* terminate p3    */
 
 	/* just did a SYS2, so should not get to this point */
@@ -422,7 +363,6 @@ void p3() {
 
 /* p4 -- termination test process */
 void p4() {
-	p4Debug(10, 0);
 	switch (p4inc) {
 		case 1:
 			print("first incarnation of p4 starts\n");
@@ -434,26 +374,19 @@ void p4() {
 	}
 
 	SYSCALL(VERHOGEN, (int)&synp4, 0, 0);				/* V(synp4)     */
-	p4Debug(401, 0);
 	SYSCALL(PASSERN, (int)&blkp4, 0, 0);				/* P(blkp4)     */
-	p4Debug(403, 0);
 	SYSCALL(PASSERN, (int)&synp4, 0, 0);				/* P(synp4)     */
-	p4Debug(405, 0);
 	/* start another incarnation of p4 running, and wait for  */
 	/* a V(synp4). the new process will block at the P(blkp4),*/
 	/* and eventually, the parent p4 will terminate, killing  */
 	/* off both p4's.                                         */
 
 	p4state.s_sp -= QPAGE;		/* give another page  */
-	p4Debug(412, 0);
 	SYSCALL(CREATETHREAD, (int)&p4state, 0, 0);			/* start a new p4    */
-	p4Debug(414, 0);
 	SYSCALL(PASSERN, (int)&synp4, 0, 0);				/* wait for it       */
-	p4Debug(416, 0);
 	print("p4 is OK\n");
 
 	SYSCALL(VERHOGEN, (int)&endp4, 0, 0);				/* V(endp4)          */
-	p4Ended(430, 0);
 	SYSCALL(TERMINATETHREAD, 0, 0, 0);			/* terminate p4      */
 
 	/* just did a SYS2, so should not get to this point */
@@ -522,7 +455,6 @@ void p5sys(unsigned int cause) {
 
 /* p5 -- SYS5 test process */
 void p5() {
-	p5Debug(10, 11);
 	print("p5 starts\n");
 
 	/* set up higher level TRAP handlers (new areas) */
@@ -596,7 +528,6 @@ void p5b() {
 
 /*p6 -- high level syscall without initializing trap vector*/
 void p6() {
-	p6Debug(14, 15);
 	print("p6 starts\n");
 
 	SYSCALL(9, 0, 0, 0);		/* should cause termination because p6 has no 
@@ -608,7 +539,6 @@ void p6() {
 
 /*p7 -- program trap without initializing passup vector*/
 void p7() {
-	p7Debug(18, 19);
 	print("p7 starts\n");
 
 	* ((memaddr *) BADADDR) = 0;
