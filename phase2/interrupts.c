@@ -136,20 +136,20 @@ int getDevRegIndex(int lineNumber, int deviceNumber) {
   return devIndex;
 }
 
-
+/* This is the function that handles interrupts. It identifies the highest priority interrupt, acks it, and returns a status */
 void interruptHandler(){
 	unsigned int status = 0;
 	int termOffset = 0;
   cpu_t currTime = 0;
   STCK(currTime);
-	if(currentProcess != NULL){
+	if(currentProcess != NULL){ /* if in a wait state, do not attribute time */
   	currentProcess->p_time = currentProcess->p_time + (currTime - (time));
 	}
   state_t *interruptOld = (state_t *) INTERRUPTOLDAREA;
   unsigned int cause = interruptOld->s_cause;
   int lineNumber = NULL;
   lineNumber = getLineNumber(cause);
-  if (lineNumber > 2 && lineNumber < 8){ /* maybe remove line 5? */
+  if (lineNumber > 2 && lineNumber < 8){
   	int deviceNumber = getDeviceNumber(lineNumber);
   	/* have line and device, get register area associated */
   	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -159,7 +159,7 @@ void interruptHandler(){
 
     if (lineNumber == 7){
 			status = ackTerminal(&devRegIndex);
-      if ((status & 0x0F) == READY) { /* recv */
+      if ((status & 0x0F) == READY) { /* recv, so offset dev sem index */
         termOffset = 8; 
       }
     }
@@ -167,12 +167,11 @@ void interruptHandler(){
 			status = device->d_status;
   		device->d_command = ACK;
   	}
-
-    int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);  /*change for terminal math */
+    /* perform a v operation on the appropriate dev semaphore */
+    int * semAdd = &(devSemTable[getSemArrayNum(lineNumber, deviceNumber, termOffset)]);
 		(*semAdd)++;
   	pcb_PTR p = NULL;
   	if ((*semAdd) <= 0) {
-      /* yellow book pg 26 second half of paragraph before nuts and bolts */
   		p = removeBlocked(semAdd);
 			p->p_semAdd = NULL;
   		p->p_s.s_v0 = status;
@@ -190,13 +189,13 @@ void interruptHandler(){
   	}
   }
   else { /* line number not between 3 and 7 */
-  	if (lineNumber == 1) {
+  	if (lineNumber == 1) { /* end of a quantum, put current process back on ready q and call scheduler to give another process a turn */ 
 			stateCopy(interruptOld, &(currentProcess->p_s));
 			insertProcQ(&readyQue, currentProcess);
 			currentProcess = NULL;
       scheduler();
     }
-    else { /* line number 2 */
+    else { /* line number 2. reload interval timer and wake up all processes waiting on interval timer */
       intDebug(195, 0);
       LDIT(100000);
       if (headBlocked(&(devSemTable[(EIGHTDEVLINES * DEVSPERLINE) + DEVSPERLINE])) != NULL) { /* are there processes blocked on IT */
@@ -213,7 +212,7 @@ void interruptHandler(){
       if (currentProcess != NULL){
         LDST(interruptOld);
       }
-      else{
+      else{ /* wait state resume */
         scheduler();
       }
     }
