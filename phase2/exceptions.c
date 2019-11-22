@@ -1,6 +1,13 @@
 #ifndef EXCEPTIONS
 #define EXCEPTIONS
 
+/***************** EXCEPTIONS.C *******************
+ * 
+ * provides all methodes and functions for program traps, tlb management, and
+ * sysCalls 1-8. 
+ * 
+*/
+
 #include "../e/pcb.e"
 #include "../e/asl.e"
 #include "../h/types.h"
@@ -18,6 +25,7 @@ void pgmTrapHandler(){
   passUpOrDie(1);
 }
 
+/* tbl management handler */
 void tlbMgmtHandler(){
   passUpOrDie(0);
 }
@@ -255,9 +263,18 @@ void specifyExceptionStateVector(){
   LDST(syscallOld);
 }
 
+/* takes an exception type as parameter
+*  If exceptionType = 0 and current process has a tlb handler,
+*  load state of the tlbHandler
+*  If exceptionType = 1 and current process has a pgm handler,
+*  load state of the pgmHandler
+*  It exceptionTpye = 2 and current process has a sys handler,
+*  load state of the sysHandler
+*  else, terminate process */
 void passUpOrDie(int exceptionType){
   state_PTR oldState = NULL;
   if (exceptionType == 0) {
+    /* currentProcess has its of tlbHandler */
     if (currentProcess->p_oldTLB != NULL) {
       oldState = (state_t *) TLBMANAGEMENTOLDAREA;
       stateCopy(oldState, currentProcess->p_oldTLB);
@@ -265,6 +282,7 @@ void passUpOrDie(int exceptionType){
     }
   }
   else if (exceptionType == 1) {
+    /* currentProcess has its of pgmHandler */
     if (currentProcess->p_oldPgm != NULL) {
       oldState = (state_t *) PROGRAMTRAPOLDAREA;
       stateCopy(oldState, currentProcess->p_oldPgm);
@@ -272,6 +290,7 @@ void passUpOrDie(int exceptionType){
     }
   }
   else if (exceptionType == 2) {
+    /* currentProcess has its of sysHandler */
     if (currentProcess->p_oldSys != NULL) {
       oldState = (state_t *) SYSCALLOLDAREA;
       stateCopy(oldState, currentProcess->p_oldSys);
@@ -282,6 +301,10 @@ void passUpOrDie(int exceptionType){
   terminateProcess();  
 }
 
+/* SYS 3
+*  loads state from SYSCALLOLDAREA and gets the semaphore in a1,
+*  incrament semaphore if semaphore <= 0, remove process from 
+*  semaphore and add to readyQue, load state of oldSys */
 void verhogen(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int *mutex = oldSys->s_a1;
@@ -296,6 +319,12 @@ void verhogen(){
   LDST(oldSys);
 }
 
+/* SYS 4
+*  load state from SYSCALLOLDAREA, get semaphore from a1,
+*  decrament semaphore, if semaphore is less than 0,
+*  store off cpu time in currentProcess, copy state from oldSys into current process,
+*  insert current process onto semaphore queue, set current process to null,
+*  call scheduler. If semaphore greater than 0, load state of oldSys */
 void passeren(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * mutex = oldSys->s_a1;
@@ -312,6 +341,9 @@ void passeren(){
   LDST(oldSys);
 }
 
+/* SYS 6
+*  load state from SYSCALLOLDAREA, store off the current time used by procces,
+*  add current time to v0, load state of oldSys */
 getCPUTime(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   cpu_t currTime = 0;
@@ -321,6 +353,12 @@ getCPUTime(){
   LDST(oldSys);
 }
 
+/* SYS 7
+*  load state from SYSCALLOLDAREA, get clock semaphore from semaphore table,
+*  decrement semaphore, if less than 0, copy state of oldSys into current process,
+*  insert current process onto semaphore queue, incrament soft blocked count,
+*  store of cpu time in current process, call scheduler.
+*  Else, load state of oldSys */
 waitForClock(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   int * semAdd = &(devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE]);
@@ -338,8 +376,13 @@ waitForClock(){
   LDST(oldSys);
 }
 
-
-
+/* SYS 8
+*  load state from SYSCALLOLDAREA, get pc, line number, device number, and if
+*  terminal read from pc, a1, a2, and a3. If line number is 7 and if terminal read,
+*  create offset of 8 to get terminal read semaphores. Calculate what device is being
+*  used and get its semaphore. Decrament the semaphore, store of cpu time into 
+*  current process, incrament softblocked count, insert current process onto
+*  semaphore, call scheduler */
 void waitForIODevice(){
   state_t *oldSys = (state_t *) SYSCALLOLDAREA;
   stateCopy(oldSys, &(currentProcess->p_s));
