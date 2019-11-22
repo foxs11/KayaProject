@@ -14,97 +14,6 @@
 #include "../h/const.h"
 #include "../e/initial.e"
 
-/* Program Trap Handler */
-void pgmTrapHandler(){
-  state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
-  unsigned int cause = pgmOld->s_cause;
-  unsigned int status = pgmOld->s_status;
-  unsigned int sp = pgmOld->s_sp;
-  devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
-  unsigned int ramTop = foo->rambase + foo->ramsize;
-  passUpOrDie(1);
-}
-
-/* tbl management handler */
-void tlbMgmtHandler(){
-  passUpOrDie(0);
-}
-
-/* sysCall Handler
-*  gets state from SYSCALLOLDAREA, gets the sysCall number,
-*  calculates if it is in kernal mode or not
-*  passes on to sysCallDispatch to handle the sysCall */
-void sysCallHandler(){
-  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-  int * syscallNum = &(syscallOld->s_a0);
-  int kernelMode;
-  int kernelStatus = syscallOld->s_status & KERNELOFF;
-  if(kernelStatus == ALLOFF){
-   kernelMode = TRUE;
-  }
-  else{
-    kernelMode = FALSE;
-  }
-  syscallDispatch(syscallNum, kernelMode);
-}
-
-/* takes a sysCallNum and if kernel mode as parameters
-*  if sysCallNum within between 0-9 and in kernel mode,
-*  updates the does pc + 4 on the process then calls the 
-*  correct function based on the sysCallNum.
-*  If in user mode, causeses a privilaged instruction error
-*  and passes to program trap handler.
-*  If not between 0-9, call passUpOrDie */
-void syscallDispatch(int * syscallNum, int kernelMode){
-  if(*(syscallNum) > 0 && *(syscallNum) < 9){
-    if(kernelMode == TRUE) {
-      state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-      syscallOld->s_pc = syscallOld->s_pc + 4; /* update processes pc */
-      switch(*syscallNum){
-        case 1:
-          createProcess();
-          break;
-        case 2:
-          terminateProcess();
-          break;
-        case 3:
-          verhogen();
-          break;
-        case 4:
-          passeren();
-          break;
-        case 5:
-          specifyExceptionStateVector();
-          break;
-        case 6:
-          getCPUTime();
-          break;
-        case 7:
-          waitForClock();
-          break;
-        case 8:
-          waitForIODevice();
-          break;
-      }
-    }
-    else { /* syscall 1-8 user mode, make it look like a privileged instruction error */
-      state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
-      state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
-      stateCopy(syscallOld, pgmOld);
-
-      unsigned int* cause = &(pgmOld->s_cause);  /*fucky bitwise ops that could go wrong */
-      *cause = *cause | RIMASKON;
-      unsigned int finalCause = ~(*cause) | RIMASKTOTURNOFF;
-      *cause = ~finalCause;
-
-      pgmTrapHandler();
-    }
-  }
-  else{
-    passUpOrDie(2);
-  }
-}
-
 /* SYS 1
 *  Gets process state from SYSCALLOLDAREA. Call allocPcb(),
 *  if there are no more pcbs available, store off -1 in v0 and return
@@ -409,6 +318,93 @@ void waitForIODevice(){
     scheduler();
   }
   /* error */
+}
+
+/* Program Trap Handler */
+void pgmTrapHandler(){
+  state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
+  devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
+  passUpOrDie(1);
+}
+
+/* tbl management handler */
+void tlbMgmtHandler(){
+  passUpOrDie(0);
+}
+
+/* sysCall Handler
+*  gets state from SYSCALLOLDAREA, gets the sysCall number,
+*  calculates if it is in kernal mode or not
+*  passes on to sysCallDispatch to handle the sysCall */
+void sysCallHandler(){
+  state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+  int * syscallNum = &(syscallOld->s_a0);
+  int kernelMode;
+  int kernelStatus = syscallOld->s_status & KERNELOFF;
+  if(kernelStatus == ALLOFF){
+   kernelMode = TRUE;
+  }
+  else{
+    kernelMode = FALSE;
+  }
+  syscallDispatch(syscallNum, kernelMode);
+}
+
+/* takes a sysCallNum and if kernel mode as parameters
+*  if sysCallNum within between 0-9 and in kernel mode,
+*  updates the does pc + 4 on the process then calls the 
+*  correct function based on the sysCallNum.
+*  If in user mode, causeses a privilaged instruction error
+*  and passes to program trap handler.
+*  If not between 0-9, call passUpOrDie */
+void syscallDispatch(int * syscallNum, int kernelMode){
+  if(*(syscallNum) > 0 && *(syscallNum) < 9){
+    if(kernelMode == TRUE) {
+      state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+      syscallOld->s_pc = syscallOld->s_pc + 4; /* update processes pc */
+      switch(*syscallNum){
+        case 1:
+          createProcess();
+          break;
+        case 2:
+          terminateProcess();
+          break;
+        case 3:
+          verhogen();
+          break;
+        case 4:
+          passeren();
+          break;
+        case 5:
+          specifyExceptionStateVector();
+          break;
+        case 6:
+          getCPUTime();
+          break;
+        case 7:
+          waitForClock();
+          break;
+        case 8:
+          waitForIODevice();
+          break;
+      }
+    }
+    else { /* syscall 1-8 user mode, make it look like a privileged instruction error */
+      state_t *syscallOld = (state_t *) SYSCALLOLDAREA;
+      state_t *pgmOld = (state_t *) PROGRAMTRAPOLDAREA;
+      stateCopy(syscallOld, pgmOld);
+
+      unsigned int* cause = &(pgmOld->s_cause);  /*fucky bitwise ops that could go wrong */
+      *cause = *cause | RIMASKON;
+      unsigned int finalCause = ~(*cause) | RIMASKTOTURNOFF;
+      *cause = ~finalCause;
+
+      pgmTrapHandler();
+    }
+  }
+  else{
+    passUpOrDie(2);
+  }
 }
 
 #endif
