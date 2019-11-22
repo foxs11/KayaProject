@@ -1,6 +1,20 @@
 #ifndef INTERRUPTS
 #define INTERRUPTS
 
+/* INTERRUPTS.C handles the processing of all interrupts. Interrupts
+are handled in order of priority from lowest line and device number
+to highest. For interrupts that are not associated with the clocks,
+a status is returned in oldInt's v0 indicating the result of the device's
+operation. The device is then ACKed, and a V operation is performed on the
+device's semaphore to return the process that has finished it's wait for IO
+to the ready queue. Then the scheduler is called if there is no current process,
+or control is returned to the current process if it exists.
+For processor local timer interrupts (that signal the end
+of a quantum), the current process is returned to the readyQ and the
+scheduler is called. For pseudo clock ticks, all processes blocked on the 
+psuedo clock are returned to the readyQ via a mass V and the psuedo clock is
+reloaded with the value of a pseudo clock tick. */
+
 #include "../e/pcb.e"
 #include "../e/asl.e"
 #include "../h/types.h"
@@ -39,7 +53,8 @@ int getLineNumber(unsigned int cause){
 	return lineNumber;
 }
 
-/* Given a line number, the function returns the lowest device number with a pending device interrupt */
+/* Given a line number, the function returns the lowest device number with a pending 
+device interrupt by looking at the appropriate interrupting device bitmap */
 int getDeviceNumber(int lineNumber){
 	if (2 < lineNumber && lineNumber < 8){
   		intDevBitMap_PTR bitMap = (intDevBitMap_PTR) LINE3INTBITMAP;
@@ -92,7 +107,10 @@ int getDeviceNumber(int lineNumber){
 	}
 }
 
-/* Given a the index of a terminal device semaphore that has an interrupt pending, the function ACKs the appropriate command word in the terminal's device register area and returns the status field of the terminal "personality" that was ACKED. If both a receive and a transmit have pending interrupts, transmit takes priority */ 
+/* Given a the index of a terminal device semaphore that has an interrupt pending, 
+the function ACKs the appropriate command word in the terminal's device register 
+area and returns the status field of the terminal "personality" that was ACKED.
+If both a receive and a transmit have pending interrupts, transmit takes priority */ 
 unsigned int ackTerminal(int *devSemNum){
 	unsigned int intStatus;
 	volatile devregarea_t *deviceRegs;
@@ -114,20 +132,28 @@ unsigned int ackTerminal(int *devSemNum){
 	return intStatus;
 }
 
-/* Given a line number, device number, and an offset, calculates the index of the appropriate semaphore for the given device. Offset will be 0 the device in question is not a terminal or if it is a transmit, and 8 if a receive. */ 
+/* Given a line number, device number, and an offset, calculates the index
+of the appropriate semaphore for the given device. Offset will be 0 the device
+in question is not a terminal or if it is a transmit, and 8 if a receive. */ 
 int getSemArrayNum(int lineNumber, int deviceNumber, int termOffset){
 	int arrayNum = ((lineNumber-3)*8);
 	arrayNum = arrayNum + deviceNumber + termOffset;
 	return arrayNum;
 }
 
-/* Given a line number and device number, calculates and returns the index of the appropriate device register area. This index is later used to access the device register as a struct */
+/* Given a line number and device number, calculates and returns the index
+of the appropriate device register area. This index is later used to access
+the device register as a struct */
 int getDevRegIndex(int lineNumber, int deviceNumber) {
   int devIndex = ((lineNumber - 3) * 8) + deviceNumber;
   return devIndex;
 }
 
-/* This is the function that handles interrupts. It identifies the highest priority interrupt, acks it, and returns a status */
+/* This is the function that handles interrupts. When an interrupt context switch occurs,
+Execution resumes here. It identifies the highest priority interrupt, acks it, Vs the appropriate sema4
+and returns a status in oldInt's v0 register if the interrupt wasn't for a clock device.
+For pseudo clock tick interrupts, all processes waiting on the pseudo clock are woken up,
+and for the end of a quantum control is returned to the scheduler. */
 void interruptHandler(){
 	unsigned int status = 0;
 	int termOffset = 0;

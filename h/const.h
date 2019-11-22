@@ -62,6 +62,7 @@
 
 /* process queue constants */
 #define MAXPROC 20
+#define PROCNUM 8
 #define MAXINT 0xFFFFFFFF
 
 

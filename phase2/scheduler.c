@@ -1,6 +1,15 @@
 #ifndef SCHEDULER
 #define SCHEDULER
 
+/* SCHEDULER.C is called whenever a quantum ends or the current process 
+   has been terminated. It chooses a new job to run via round robin from the
+   ready queue. If there is no ready job but there is at least one job
+   blocked on a device sema4 (i.e. we know it will become unblocked), a wait
+   state is entered until a job is ready to run. If there are no jobs softblocked
+   and none on the ready queue but there are jobs still alive, we invoke a kernel panic
+   and if there are no jobs in existence the machine halts.
+*/
+
 #include "../e/initial.e"
 #include "../e/pcb.e"
 #include "../e/asl.e"
@@ -22,15 +31,15 @@ void scheduler(){
       else{
         cp0status = SCHEDULERINTSUNMASKED;
         waitFlag = 1;
-        setSTATUS(cp0status); /* has a return value...?  */
-        WAIT();
+        setSTATUS(cp0status);
+        WAIT(); /* wait for softblocked to return to readyQ */
       }
     }
   }
   else{
     waitFlag = 0;
     currentProcess = process;
-    setTIMER(5000);
+    setTIMER(5000); /* start new quantum */
     STCK(time);
     LDST(&(process->p_s));
   }
