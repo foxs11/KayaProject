@@ -24,3 +24,68 @@ int p3
 
 /* kseg0s page tables */
 
+int ksegOSTable[]
+
+void test(){
+
+
+
+	for (int i = 0; i < 8; i++){
+		state_PTR intialState = NULL;
+		/* s_sp same as process's sys stack page */
+		initalState->s_sp = something; /* change */
+		intialState->s_pc = stub;
+
+		/* t9? */
+
+		SYSCALL(1, intialState);
+	}
+}
+
+void stub(){
+	asid = getASID();
+	/* init kuseg2 pg table */
+
+	/* 3 sys 5s*/
+
+	/* read from tape onto backing store */
+
+	/* LDST */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct pte_t {
+	unsigned int HI,
+	unsigned int LO
+} pte_t, pte_PTR *;
