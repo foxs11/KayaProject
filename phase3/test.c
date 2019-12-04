@@ -2,6 +2,12 @@ state_t newSys;
 state_t newTLB;
 state_t newPgm;
 
+pgb_PTR bufferArray[16] = ENDOFOS;
+int diskBufferMutexes[8];
+for (int i = 0; i < 8; i++){
+	diskBufferMutexes[i] = 1;
+}
+
 /*1 ksegOS page table
 8 kuseg2 page table
 1 kuseg3 page table
@@ -30,7 +36,7 @@ void test(){
 
 
 
-	for (int i = 0; i < 8; i++){
+	for (int i = 0; i < 1; i++){
 		state_PTR intialState = NULL;
 		/* s_sp same as process's sys stack page */
 		initalState->s_sp = something; /* change */
@@ -51,6 +57,16 @@ void stub(){
 	/* read from tape onto backing store */
 
 	/* LDST */
+}
+
+void readBlockFromTape(int asid){
+	
+
+}
+
+void readFromTape(){
+	int asid = getASID();
+	int lineNumber = asid - 1;
 }
 
 

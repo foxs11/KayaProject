@@ -15,6 +15,7 @@
 
 
 #define ROMPAGESTART	0x20000000	 /* ROM Reserved Page */
+#define ENDOFOS 0x2001F000
 
 
 /* timer, timescale, TOD-LO and other bus regs */
