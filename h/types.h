@@ -123,5 +123,9 @@ typedef struct semd_t {
 	pcb_t 				*s_procQ;		/* tail pointer to a process queue*/
 } semd_t, *semd_PTR;
 
+typedef struct pgb_t {
+	int p_words[1024];
+} pgb_t, *pgb_t;
+
 
 #endif

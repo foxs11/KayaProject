@@ -64,9 +64,17 @@ void readBlockFromTape(int asid){
 
 }
 
+
+
 void readFromTape(){
 	int asid = getASID();
-	int lineNumber = asid - 1;
+	int deviceNumber = asid - 1;
+
+
+	int devRegIndex = getDevRegIndex(lineNumber, deviceNumber);
+    device_t * device = &(foo->devreg[devRegIndex]);
+
+	SYSCALL(WAITIO, 4, deviceNumber, FALSE);
 }
 
 
