@@ -70,7 +70,7 @@ int getBufferIndex(int isItDisk, int devNum){
 
 void copyBufferToBuffer(fromIndex, toIndex){
 	while (int i = 0; i < 1024; i++){
-		bufferArray[toIndex]->p_words[i] = bufferArray[fromIndex]->p_words[i];
+		bufferArray[toIndex]->p_words[i] = bufferArray[fromIndex]->p_words[i]; /* might need some pointers */
 	}
 }
 
@@ -95,6 +95,10 @@ void readFromTape(){
 		tapeDevReg->d_command = 3;
 
 		SYSCALL(WAITIO, 4, deviceNumber, FALSE); /* block read into tape buffer */
+
+		SYSCALL(PASSERN, &(diskBufferMutexes[0])); /* gain mutual exclusion on disk 0 buffer */
+
+		copyBufferToBuffer(bufferArray[getBufferIndex(0, tapeDeviceNumber)], bufferArray[getBufferIndex(1, 0)]);
 
 		
 	}
