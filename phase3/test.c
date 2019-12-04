@@ -2,7 +2,7 @@ state_t newSys;
 state_t newTLB;
 state_t newPgm;
 
-pgb_PTR bufferArray[16] = ENDOFOS; /* should this be an array of non-pointers? */
+pgb_PTR bufferArray[16] = (pgb_PTR) ENDOFOS; /* should this be an array of non-pointers? */
 int diskBufferMutexes[8];
 for (int i = 0; i < 8; i++){
 	diskBufferMutexes[i] = 1;
@@ -68,6 +68,12 @@ int getBufferIndex(int isItDisk, int devNum){
 	return (8*isItDisk + devNum);
 }
 
+void copyBufferToBuffer(fromIndex, toIndex){
+	while (int i = 0; i < 1024; i++){
+		bufferArray[toIndex]->p_words[i] = bufferArray[fromIndex]->p_words[i];
+	}
+}
+
 
 
 void readFromTape(){
@@ -89,6 +95,8 @@ void readFromTape(){
 		tapeDevReg->d_command = 3;
 
 		SYSCALL(WAITIO, 4, deviceNumber, FALSE); /* block read into tape buffer */
+
+		
 	}
 
 	
