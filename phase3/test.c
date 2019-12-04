@@ -2,7 +2,7 @@ state_t newSys;
 state_t newTLB;
 state_t newPgm;
 
-pgb_PTR bufferArray[16] = ENDOFOS;
+pgb_PTR bufferArray[16] = ENDOFOS; /* should this be an array of non-pointers? */
 int diskBufferMutexes[8];
 for (int i = 0; i < 8; i++){
 	diskBufferMutexes[i] = 1;
@@ -64,17 +64,36 @@ void readBlockFromTape(int asid){
 
 }
 
+int getBufferIndex(int isItDisk, int devNum){
+	return (8*isItDisk + devNum);
+}
+
 
 
 void readFromTape(){
 	int asid = getASID();
-	int deviceNumber = asid - 1;
+	int tapeDeviceNumber = asid - 1;
+
+	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
+
+	int devRegIndex = getDevRegIndex(tapeLineNumber, tapeDeviceNumber);
+    device_t * tapeDevReg = &(foo->devreg[devRegIndex]); /* gain addressability to tape device's device registers */
+
+	if (tapeDevReg->d_status == 1 && tapeDevReg->d_data1 == 0){
+		PANIC(); /* no tape inserted */
+	}
+
+	while(tapeDevReg->d_data1 != 0) { /* if not at end of tape */
+
+		tapeDevReg->d_data0 = &(bufferArray[getBufferIndex(0, tapeDeviceNumber)]);
+		tapeDevReg->d_command = 3;
+
+		SYSCALL(WAITIO, 4, deviceNumber, FALSE); /* block read into tape buffer */
+	}
+
+	
 
 
-	int devRegIndex = getDevRegIndex(lineNumber, deviceNumber);
-    device_t * device = &(foo->devreg[devRegIndex]);
-
-	SYSCALL(WAITIO, 4, deviceNumber, FALSE);
 }
 
 
