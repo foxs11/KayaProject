@@ -5,6 +5,8 @@ state_t newPgm;
 pgb_PTR bufferArray[16] = (pgb_PTR) ENDOFOS; /* should this be an array of non-pointers? */
 int diskBufferMutexes[8];
 
+st_PTR segTables = (st_PTR) SEGTBLS;
+
 
 /*1 ksegOS page table
 8 kuseg2 page table
@@ -28,11 +30,19 @@ int p3
 
 /* kseg0s page tables */
 
-int ksegOSPageTable[];
+pt_t ksegOSPT;
+
+pt_t kuseg3PT;
+
+pt_t kuseg2PTs[UPROCNUM];
 
 void test(){
 	for (int i = 0; i < 8; i++){
 		diskBufferMutexes[i] = 1;
+	}
+
+	for (int i = 0; i < UPROCNUM){
+		
 	}
 
 

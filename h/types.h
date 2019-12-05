@@ -127,6 +127,10 @@ typedef struct pgb_t { /* page type */
 	int p_words[1024];
 } pgb_t, *pgb_t;
 
+typedef struct st_t {
+	struct ste_t[UPROCNUM];
+} st_t, *st_PTR;
+
 typedef struct ste_t { /* seg table entry type */
 	unsigned int * s_ksegOS;
 	unsigned int * s_kuseg2;
@@ -135,7 +139,7 @@ typedef struct ste_t { /* seg table entry type */
 
 typedef struct pt_t { /* page table type */
 	unsigned int p_header;
-	pte_t p_entries[32];
+	struct pte_t p_entries[32];
 }
 
 typedef struct pte_t { /* page table entry type */
@@ -147,9 +151,9 @@ typedef struct uproc_t { /* user process data structure type */
 	unsigned int u_asid;
 	int u_sem; /* initialize to 0 */
 	/* backing store address - not sure what var type to have for that */
-	pt_t u_pt; /* page table for kuseg2 */
-	state_t u_old[3]; /* old states for passupordie */
-	state_t u_new[3]; /* new states for passupordie */
+	struct pt_t u_pt; /* page table for kuseg2 */
+	struct state_t u_old[3]; /* old states for passupordie */
+	struct state_t u_new[3]; /* new states for passupordie */
 }
 
 
