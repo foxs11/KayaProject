@@ -36,7 +36,7 @@ void test(){
 	}
 
 
-	for (int i = 0; i < 1; i++){
+	for (int i = 0; i < UPROCNUM; i++){
 		state_PTR intialState = NULL;
 		/* s_sp same as process's sys stack page */
 		initalState->s_sp = something; /* change */

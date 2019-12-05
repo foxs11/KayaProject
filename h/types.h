@@ -128,20 +128,24 @@ typedef struct pgb_t { /* page type */
 } pgb_t, *pgb_t;
 
 typedef struct ste_t {
-	unsigned int * ksegOS;
-	unsigned int * kuseg2;
-	unsigned int * kuseg3;
+	unsigned int * s_ksegOS;
+	unsigned int * s_kuseg2;
+	unsigned int * s_kuseg3;
 } ste_t, *ste_PTR;
 
 typedef struct pt_t {
-	unsigned int header;
-	pte_t entries[32];
+	unsigned int p_header;
+	pte_t p_entries[32];
 }
 
 typedef struct pte_t {
-	unsigned int HI;
-	unsigned int LO;
+	unsigned int p_HI;
+	unsigned int p_LO;
 } pte_t, *pte_PTR;
+
+typedef struct uproc_t {
+	unsigned int u_asid;
+}
 
 
 #endif
