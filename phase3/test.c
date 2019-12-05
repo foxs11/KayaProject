@@ -44,19 +44,19 @@ void test(){
   	newPgm->s_sp = ramTop;
 
 
-  	newSys->s_pc = (memaddr) sysCallHandler;
+  	newSys->s_pc = (memaddr) sysCallHandler; /*change*/
   	newTLB->s_pc = (memaddr) pgmTrapHandler;
   	newPgm->s_pc = (memaddr) tlbMgmtHandler;
 
 
-  	newSys->s_t9 = (memaddr) sysCallHandler;
+  	newSys->s_t9 = (memaddr) sysCallHandler; /*change*/
   	newTLB->s_t9 = (memaddr) pgmTrapHandler;
   	newPgm->s_t9 = (memaddr) tlbMgmtHandler;
 
 
-  	newSys->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
-  	newTLB->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
-  	newPgm->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
+  	newSys->s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
+  	newTLB->s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
+  	newPgm->s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
 
 
 	for (int i = 0; i < 8; i++){
@@ -82,6 +82,9 @@ void test(){
 		/* s_sp same as process's sys stack page */
 		initalState->s_sp = something; /* change */
 		intialState->s_pc = stub;
+		intialState->s_t9 = stub;
+
+		/* entryHI something? */
 
 		/* t9? */
 
@@ -90,12 +93,16 @@ void test(){
 }
 
 void stub(){
-	asid = getASID();
+	int asid = getASID();
 	/* init kuseg2 pg table */
 
-	/* 3 sys 5s*/
 
-	/* read from tape onto backing store */
+	/* 3 sys 5s*/
+	SYSCALL(5, 0, ,);
+	SYSCALL(5, 1, ,);
+	SYSCALL(5, 2, ,);
+
+	readFromTape();
 
 	/* LDST */
 }
