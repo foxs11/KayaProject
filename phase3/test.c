@@ -5,7 +5,9 @@ state_t newPgm;
 pgb_PTR bufferArray[16] = (pgb_PTR) ENDOFOS; /* should this be an array of non-pointers? */
 int diskBufferMutexes[8];
 
-st_PTR segTables = (st_PTR) SEGTBLS;
+pgb_PTR framePool[UPROCNUM*2] = (pgb_PTR) FRAMEPOOL;
+
+st_PTR segTable = (st_PTR) SEGTBLS;
 
 
 /*1 ksegOS page table
@@ -26,7 +28,7 @@ user process data structure (array of structs)
 */
 int masterSem = 0;
 
-int p3
+
 
 /* kseg0s page tables */
 
@@ -34,20 +36,49 @@ pt_t ksegOSPT;
 
 pt_t kuseg3PT;
 
-pt_t kuseg2PTs[UPROCNUM];
+uproc_t uprocs[UPROCNUM];
 
 void test(){
+	newSys->s_sp = ramTop; /*change */
+  	newTLB->s_sp = ramTop;
+  	newPgm->s_sp = ramTop;
+
+
+  	newSys->s_pc = (memaddr) sysCallHandler;
+  	newTLB->s_pc = (memaddr) pgmTrapHandler;
+  	newPgm->s_pc = (memaddr) tlbMgmtHandler;
+
+
+  	newSys->s_t9 = (memaddr) sysCallHandler;
+  	newTLB->s_t9 = (memaddr) pgmTrapHandler;
+  	newPgm->s_t9 = (memaddr) tlbMgmtHandler;
+
+
+  	newSys->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
+  	newTLB->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
+  	newPgm->s_status = INTSMASKED | VMOFF | PROCLOCALTIMEON | KERNELON;
+
+
 	for (int i = 0; i < 8; i++){
 		diskBufferMutexes[i] = 1;
 	}
 
 	for (int i = 0; i < UPROCNUM){
-		
+		segTable[i].s_ksegOS = &ksegOSPT;
+		segTable[i].s_kuseg3 = &kuseg3PT;
 	}
 
 
 	for (int i = 0; i < UPROCNUM; i++){
 		state_PTR intialState = NULL;
+		initialState->s_asid = i+1;
+
+		uprocs[i].u_pt.p_header = 0;
+		int magicNum = 42;
+		magicNum << 24;
+		uprocs[i].u_pt.p_header += magicNum;
+		uprocs[i].u_sem = 0;
+		segTable[i].s_kuseg2 = &(uprocs[i].u_pt);
 		/* s_sp same as process's sys stack page */
 		initalState->s_sp = something; /* change */
 		intialState->s_pc = stub;

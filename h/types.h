@@ -123,7 +123,7 @@ typedef struct semd_t {
 	pcb_t 				*s_procQ;		/* tail pointer to a process queue*/
 } semd_t, *semd_PTR;
 
-typedef struct pgb_t { /* page type */
+typedef struct pgb_t { /* page buffer type */
 	int p_words[1024];
 } pgb_t, *pgb_t;
 
@@ -148,7 +148,6 @@ typedef struct pte_t { /* page table entry type */
 } pte_t, *pte_PTR;
 
 typedef struct uproc_t { /* user process data structure type */
-	unsigned int u_asid;
 	int u_sem; /* initialize to 0 */
 	/* backing store address - not sure what var type to have for that */
 	struct pt_t u_pt; /* page table for kuseg2 */

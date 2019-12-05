@@ -16,7 +16,8 @@
 
 #define ROMPAGESTART	0x20000000	 /* ROM Reserved Page */
 #define ENDOFOS 0x2001F000
-#define SEGTBLS 0x20000500
+#define FRAMEPOOL 0x2002F000
+#define SEGTBLS 0x20000500 /* is it 5000???? */
 
 
 /* timer, timescale, TOD-LO and other bus regs */
