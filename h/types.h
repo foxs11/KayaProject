@@ -140,7 +140,7 @@ typedef struct ste_t { /* seg table entry type */
 typedef struct pt_t { /* page table type */
 	unsigned int p_header;
 	struct pte_t p_entries[32];
-}
+} pt_t, *pt_PTR;
 
 typedef struct pte_t { /* page table entry type */
 	unsigned int p_HI;
@@ -153,7 +153,7 @@ typedef struct uproc_t { /* user process data structure type */
 	struct pt_t u_pt; /* page table for kuseg2 */
 	struct state_t u_old[3]; /* old states for passupordie */
 	struct state_t u_new[3]; /* new states for passupordie */
-}
+} uproc_t, *uproc_PTR;
 
 
 #endif
