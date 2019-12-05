@@ -4,9 +4,7 @@ state_t newPgm;
 
 pgb_PTR bufferArray[16] = (pgb_PTR) ENDOFOS; /* should this be an array of non-pointers? */
 int diskBufferMutexes[8];
-for (int i = 0; i < 8; i++){
-	diskBufferMutexes[i] = 1;
-}
+
 
 /*1 ksegOS page table
 8 kuseg2 page table
@@ -30,10 +28,12 @@ int p3
 
 /* kseg0s page tables */
 
-int ksegOSTable[]
+int ksegOSPageTable[];
 
 void test(){
-
+	for (int i = 0; i < 8; i++){
+		diskBufferMutexes[i] = 1;
+	}
 
 
 	for (int i = 0; i < 1; i++){
@@ -89,7 +89,7 @@ void readFromTape(){
 		PANIC(); /* no tape inserted */
 	}
 
-	while(tapeDevReg->d_data1 != 0) { /* if not at end of tape */
+	while(tapeDevReg->d_data1 != 0 || tapeDevReg->d_data1 != 1) { /* if not at end of tape/file */
 
 		tapeDevReg->d_data0 = &(bufferArray[getBufferIndex(0, tapeDeviceNumber)]);
 		tapeDevReg->d_command = 3;
@@ -100,47 +100,12 @@ void readFromTape(){
 
 		copyBufferToBuffer(bufferArray[getBufferIndex(0, tapeDeviceNumber)], bufferArray[getBufferIndex(1, 0)]);
 
-		
+
+
+
 	}
 
 	
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-struct pte_t {
-	unsigned int HI,
-	unsigned int LO
-} pte_t, pte_PTR *;

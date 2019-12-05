@@ -123,9 +123,25 @@ typedef struct semd_t {
 	pcb_t 				*s_procQ;		/* tail pointer to a process queue*/
 } semd_t, *semd_PTR;
 
-typedef struct pgb_t {
+typedef struct pgb_t { /* page type */
 	int p_words[1024];
 } pgb_t, *pgb_t;
+
+typedef struct ste_t {
+	unsigned int * ksegOS;
+	unsigned int * kuseg2;
+	unsigned int * kuseg3;
+} ste_t, *ste_PTR;
+
+typedef struct pt_t {
+	unsigned int header;
+	pte_t entries[32];
+}
+
+typedef struct pte_t {
+	unsigned int HI;
+	unsigned int LO;
+} pte_t, *pte_PTR;
 
 
 #endif
