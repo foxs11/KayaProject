@@ -79,16 +79,25 @@ void test(){
 		uprocs[i].u_pt.p_header += magicNum;
 		uprocs[i].u_sem = 0;
 		segTable[i].s_kuseg2 = &(uprocs[i].u_pt);
+
+		for (j = 0; j < 32; j++) {
+			unsigned int segNo = 2 << 30;
+			unsigned int vpn = 0x8000 << 12;
+			unsigned int shiftedASID = (i + 1) << 6;
+
+			uprocs[i].u_pt.p_entries[j].p_HI = segNo + vpn + shiftedASID;
+
+			uprocs[i].u_pt.p_entries[j].p_LO = 1 << 10;
+		}
+
 		/* s_sp same as process's sys stack page */
-		initalState->s_sp = something; /* change */
-		intialState->s_pc = stub;
-		intialState->s_t9 = stub;
+		initialState->s_sp = something; /* change */
+		initialState->s_pc = stub;
+		initialState->s_t9 = stub;
 
-		/* entryHI something? */
+		initialState->s_status = INTSUNMASKED | PROCLOCALTIMEON | VMOFF | KERNELON;
 
-		/* t9? */
-
-		SYSCALL(1, intialState);
+		SYSCALL(1, initialState);
 	}
 }
 
@@ -127,15 +136,23 @@ void copyBufferToBuffer(fromIndex, toIndex){
 void readFromTape(){
 	int asid = getASID();
 	int tapeDeviceNumber = asid - 1;
+	int diskDeviceNumber = 0;
 
 	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
 
 	int devRegIndex = getDevRegIndex(tapeLineNumber, tapeDeviceNumber);
     device_t * tapeDevReg = &(foo->devreg[devRegIndex]); /* gain addressability to tape device's device registers */
 
+    devRegIndex = getDevRegIndex(3, diskDeviceNumber);
+    device_t * diskDevReg = &(foo->devreg[devRegIndex]);
+
 	if (tapeDevReg->d_status == 1 && tapeDevReg->d_data1 == 0){
 		PANIC(); /* no tape inserted */
 	}
+
+	int track = ((asid - 1)*32)/256;
+
+	int sector = (asid*32) % 256;
 
 	while(tapeDevReg->d_data1 != 0 || tapeDevReg->d_data1 != 1) { /* if not at end of tape/file */
 
@@ -148,12 +165,47 @@ void readFromTape(){
 
 		copyBufferToBuffer(bufferArray[getBufferIndex(0, tapeDeviceNumber)], bufferArray[getBufferIndex(1, 0)]);
 
+		/* check for device ready? */
 
+		/* assume mutex on disk device registers */
 
+		diskDevReg->d_data0 = 0;
+		diskDevReg->d_command = 2;
 
+		SYSCALL(WAITIO, 3, 0, FALSE);
+
+		diskDevReg->d_data0 = &(bufferArray[getBufferIndex(1, 0)]);
+		diskDevReg->d_command = 4;
+
+		SYSCALL(WAITIO, 3, 0, FALSE);
+
+		sector++;
 	}
 
 	
 
 
+}
+
+void upperSyscallHandler(){
+	int sysNum = currentProcess->p_oldSys->s_a0;
+	
+
+
+}
+
+void writeToTerminal(char *msg) {
+	
+	char * s = msg;
+	devregtr * base = (devregtr *) (TERM0ADDR);
+	devregtr status;
+	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
+	while (*s != EOS) {
+		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
+		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
+		if ((status & TERMSTATMASK) != RECVD)
+			PANIC();
+		s++;	
+	}
+	SYSCALL(VERHOGEN, (int)&term_mut, 0, 0);				/* V(term_mut) */
 }
