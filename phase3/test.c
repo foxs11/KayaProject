@@ -1,4 +1,6 @@
-
+#include "../h/types.h"
+#include "../h/const.h"
+#include "../e/initial.e"
 
 pgb_PTR bufferArray[16] = (pgb_PTR) ENDOFOS; /* should this be an array of non-pointers? */
 int diskBufferMutexes[8];
@@ -73,15 +75,15 @@ void test(){
 	}
 
 	for (int i = 0; i < UPROCNUM; i++){
-		segTable[i].s_ksegOS = &ksegOSPT;
-		segTable[i].s_kuseg3 = &kuseg3PT;
+		segTable->entries[i].s_ksegOS = &ksegOSPT;
+		segTable->entries[i].s_kuseg3 = &kuseg3PT;
 	}
 
 	
 
 
 	for (int i = 0; i < UPROCNUM; i++){
-		state_PTR intialState = NULL;
+		state_PTR initialState = NULL;
 		initialState->s_asid = i+1;
 
 		uprocs[i].u_pt.p_header = 0;
@@ -89,9 +91,9 @@ void test(){
 		magicNum << 24;
 		uprocs[i].u_pt.p_header += magicNum;
 		uprocs[i].u_sem = 0;
-		segTable[i].s_kuseg2 = &(uprocs[i].u_pt);
+		segTable->entries[i].s_kuseg2 = &(uprocs[i].u_pt);
 
-		for (j = 0; j < 32; j++) {
+		for (int j = 0; j < 32; j++) {
 			unsigned int segNo = 2 << 30;
 			unsigned int vpn = 0x8000 << 12;
 			unsigned int shiftedASID = (i + 1) << 6;
@@ -135,7 +137,7 @@ int getBufferIndex(int isItDisk, int devNum){
 }
 
 void copyBufferToBuffer(fromIndex, toIndex){
-	while (int i = 0; i < 1024; i++){
+	for (int i = 0; i < 1024; i++){
 		bufferArray[toIndex]->p_words[i] = bufferArray[fromIndex]->p_words[i]; /* might need some pointers */
 	}
 }
@@ -149,7 +151,7 @@ void readFromTape(){
 
 	devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
 
-	int devRegIndex = getDevRegIndex(tapeLineNumber, tapeDeviceNumber);
+	int devRegIndex = getDevRegIndex(4, tapeDeviceNumber);
     device_t * tapeDevReg = &(foo->devreg[devRegIndex]); /* gain addressability to tape device's device registers */
 
     devRegIndex = getDevRegIndex(3, diskDeviceNumber);
@@ -165,9 +167,9 @@ void readFromTape(){
 
 	while(tapeDevReg->d_data1 != 0 || tapeDevReg->d_data1 != 1) { /* if not at end of tape/file */
 
-		unsinged int origStatus = getSTATUS();
+		unsigned int origStatus = getSTATUS();
 
-		newStatus = ~origStatus;
+		unsigned int newStatus = ~origStatus;
 		newStatus = newStatus | IECON;
 		newStatus = ~newStatus;
 
@@ -178,7 +180,7 @@ void readFromTape(){
 
 		setSTATUS(origStatus);
 
-		SYSCALL(WAITIO, 4, deviceNumber, FALSE); /* block read into tape buffer */
+		SYSCALL(WAITIO, 4, asid-1, FALSE); /* block read into tape buffer */
 
 		SYSCALL(PASSERN, &(diskBufferMutexes[0])); /* gain mutual exclusion on disk 0 buffer */
 
@@ -188,7 +190,7 @@ void readFromTape(){
 
 		/* assume mutex on disk device registers */
 
-		unsinged int origStatus = getSTATUS();
+		unsigned int origStatus = getSTATUS();
 
 		newStatus = ~origStatus;
 		newStatus = newStatus | IECON;
@@ -203,7 +205,7 @@ void readFromTape(){
 
 		SYSCALL(WAITIO, 3, 0, FALSE);
 
-		unsinged int origStatus = getSTATUS();
+		unsigned int origStatus = getSTATUS();
 
 		newStatus = ~origStatus;
 		newStatus = newStatus | IECON;
@@ -220,17 +222,53 @@ void readFromTape(){
 
 		sector++;
 	}
-
-	
-
-
 }
 
 void upperSyscallHandler(){
 	int sysNum = currentProcess->p_oldSys->s_a0;
-	
-
-
+	int kernelMode;
+  int kernelStatus = currentProcess->p_oldSys->s_status & KERNELOFF;
+  if(kernelStatus == ALLOFF){
+   kernelMode = TRUE;
+  }
+  else{
+    kernelMode = FALSE;
+  }
+	if(kernelMode == TRUE) {
+		switch(sysNum){
+			case 9:
+				readFromTerminal();
+				break;
+			case 10:
+				writeToTerminal(currentProcess->p_oldSys->s_a1);
+				break;
+			case 11:
+				vVirtualSemaphore();
+				break;
+			case 12:
+				pVirtualSemaphore();
+				break;
+			case 13:
+				delay();
+				break;
+			case 14:
+				diskPut();
+				break;
+			case 15:
+				diskGet();
+				break;
+			case 16:
+				writeToPrinter();
+				break;
+			case 17:
+				getTOD();
+				break;
+			case 18:
+				terminate();
+				break;
+		}
+	}
+	else {}
 }
 
 void writeToTerminal(char *msg) {

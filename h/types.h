@@ -125,10 +125,10 @@ typedef struct semd_t {
 
 typedef struct pgb_t { /* page buffer type */
 	int p_words[1024];
-} pgb_t, *pgb_t;
+} pgb_t, *pgb_PTR;
 
 typedef struct st_t {
-	struct ste_t[UPROCNUM];
+	struct ste_t entries[UPROCNUM];
 } st_t, *st_PTR;
 
 typedef struct ste_t { /* seg table entry type */
