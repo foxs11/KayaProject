@@ -7,6 +7,8 @@ int diskBufferMutexes[8];
 
 pgb_PTR framePool[UPROCNUM*2] = (pgb_PTR) FRAMEPOOL;
 
+static int currentFrame = 0;
+
 st_PTR segTable = (st_PTR) SEGTBLS;
 
 devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
@@ -221,6 +223,39 @@ void readFromTape(){
 		SYSCALL(VERHOGEN, &(diskBufferMutexes[0]));
 
 		sector++;
+	}
+}
+
+void tlbHandler(){
+	int segno = 
+	int vpn = 
+	SYSCALL(PASSERN, whateverpageitis) /*fix*/
+	for(int i = 0; i < uprocs[currentProcess->asid]-1].u_pt.p_header - 42; i++)
+		unsigned int entryHigh = uprocs[currentProcess->asid]-1].u_pt.p_entries[i].p_HI;
+		entryHigh = entryHigh << 2;
+		entryHigh = entryHigh >> 13;
+		unsigned int entryLow = uprocs[currentProcess->asid]-1].u_pt.p_entries[i].p_LO;
+		entryLow = entryLow << 22;
+		entryLow = entryLow >> 31;
+		if(entryHigh == vpn) {
+			if(entryLow = 1){
+				SYSCALL(VERHOGEN, whateverpageitis) /*fix*/
+				return
+			}
+		}
+		int frameToUse = currentFrame % 16;
+		if(frameisoccupied){
+			//mark PTE entry as invalid
+			//write the frame to backingstore
+			//read in missing page
+			//update swap pool
+			//update PTE
+			//clear tlb
+			//shave PTE into tlb
+			//v whateverpageitis
+			//LDST(ugiafdghakjlhjgkldsjhklasdjhklagsdjkn)
+		}
+		
 	}
 }
 
