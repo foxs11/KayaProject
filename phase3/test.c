@@ -240,7 +240,7 @@ void upperSyscallHandler(){
 				readFromTerminal();
 				break;
 			case 10:
-				writeToTerminal(currentProcess->p_oldSys->s_a1);
+				writeToTerminal(currentProcess->p_oldSys->s_a1, currentProcess->p_oldSys->s_a2);
 				break;
 			case 11:
 				vVirtualSemaphore();
@@ -271,13 +271,13 @@ void upperSyscallHandler(){
 	else {}
 }
 
-void writeToTerminal(char *msg) {
+void writeToTerminal(char *msg, int length) {
 	
 	char * s = msg;
 	devregtr * base = (devregtr *) (TERM0ADDR);
 	devregtr status;
 	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
-	while (*s != EOS) {
+	for (int i = 0; i < length; i++) {
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
 		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
 		if ((status & TERMSTATMASK) != RECVD)
