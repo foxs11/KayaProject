@@ -1,6 +1,4 @@
-state_t newSys;
-state_t newTLB;
-state_t newPgm;
+
 
 pgb_PTR bufferArray[16] = (pgb_PTR) ENDOFOS; /* should this be an array of non-pointers? */
 int diskBufferMutexes[8];
@@ -8,6 +6,13 @@ int diskBufferMutexes[8];
 pgb_PTR framePool[UPROCNUM*2] = (pgb_PTR) FRAMEPOOL;
 
 st_PTR segTable = (st_PTR) SEGTBLS;
+
+devregarea_t *foo = (devregarea_t *) RAMBASEADDR;
+int ramTop = foo->rambase + foo->ramsize;
+
+pgb_PTR stacks[UPROCNUM*3] = (pgb_PTR) ramTop - (1024 * UPROCNUM * 3);
+
+state_t states[UPROCNUM*3]; 
 
 
 /*1 ksegOS page table
@@ -39,34 +44,40 @@ pt_t kuseg3PT;
 uproc_t uprocs[UPROCNUM];
 
 void test(){
-	newSys->s_sp = ramTop; /*change */
-  	newTLB->s_sp = ramTop;
-  	newPgm->s_sp = ramTop;
+	for (int i = 0; i < UPROCNUM; i++){
+
+	
+		states[i*3].s_sp = &(stacks[i*3+1]); 
+  		states[i*3 + 1].s_sp = &(stacks[i*3+2]);
+  		states[i*3 + 2].s_sp = &(stacks[i*3+3]);
 
 
-  	newSys->s_pc = (memaddr) sysCallHandler; /*change*/
-  	newTLB->s_pc = (memaddr) pgmTrapHandler;
-  	newPgm->s_pc = (memaddr) tlbMgmtHandler;
+  		states[i*3].s_pc = (memaddr) sysCallUpper; 
+  		states[i*3 + 1].s_pc = (memaddr) pgmTrapHandler; /*change*/
+  		states[i*3 + 2].s_pc = (memaddr) tlbMgmtHandler;
 
 
-  	newSys->s_t9 = (memaddr) sysCallHandler; /*change*/
-  	newTLB->s_t9 = (memaddr) pgmTrapHandler;
-  	newPgm->s_t9 = (memaddr) tlbMgmtHandler;
+  		states[i*3].s_t9 = (memaddr) sysCallUpper; 
+  		states[i*3 + 1].s_t9 = (memaddr) pgmTrapHandler; /*change*/
+  		states[i*3 + 2].s_t9 = (memaddr) tlbMgmtHandler;
 
 
-  	newSys->s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
-  	newTLB->s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
-  	newPgm->s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
+  		states[i*3].s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
+  		states[i*3 + 1].s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
+  		states[i*3 + 2].s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
+  	}
 
 
 	for (int i = 0; i < 8; i++){
 		diskBufferMutexes[i] = 1;
 	}
 
-	for (int i = 0; i < UPROCNUM){
+	for (int i = 0; i < UPROCNUM; i++){
 		segTable[i].s_ksegOS = &ksegOSPT;
 		segTable[i].s_kuseg3 = &kuseg3PT;
 	}
+
+	
 
 
 	for (int i = 0; i < UPROCNUM; i++){
@@ -103,13 +114,11 @@ void test(){
 
 void stub(){
 	int asid = getASID();
-	/* init kuseg2 pg table */
-
 
 	/* 3 sys 5s*/
-	SYSCALL(5, 0, ,);
-	SYSCALL(5, 1, ,);
-	SYSCALL(5, 2, ,);
+	SYSCALL(5, 0, &(states[(asid - 1)*3]), &(states[(asid - 1)*3]));
+	SYSCALL(5, 1, &(states[(asid - 1)*3 +1]), &(states[(asid - 1)*3 +1]));
+	SYSCALL(5, 2, &(states[(asid - 1)*3 +2]), &(states[(asid - 1)*3 +2]));
 
 	readFromTape();
 
@@ -156,8 +165,18 @@ void readFromTape(){
 
 	while(tapeDevReg->d_data1 != 0 || tapeDevReg->d_data1 != 1) { /* if not at end of tape/file */
 
+		unsinged int origStatus = getSTATUS();
+
+		newStatus = ~origStatus;
+		newStatus = newStatus | IECON;
+		newStatus = ~newStatus;
+
+		setSTATUS(newStatus);
+
 		tapeDevReg->d_data0 = &(bufferArray[getBufferIndex(0, tapeDeviceNumber)]);
 		tapeDevReg->d_command = 3;
+
+		setSTATUS(origStatus);
 
 		SYSCALL(WAITIO, 4, deviceNumber, FALSE); /* block read into tape buffer */
 
@@ -169,15 +188,35 @@ void readFromTape(){
 
 		/* assume mutex on disk device registers */
 
+		unsinged int origStatus = getSTATUS();
+
+		newStatus = ~origStatus;
+		newStatus = newStatus | IECON;
+		newStatus = ~newStatus;
+
+		setSTATUS(newStatus);
+
 		diskDevReg->d_data0 = 0;
 		diskDevReg->d_command = 2;
 
+		setSTATUS(origStatus);
+
 		SYSCALL(WAITIO, 3, 0, FALSE);
+
+		unsinged int origStatus = getSTATUS();
+
+		newStatus = ~origStatus;
+		newStatus = newStatus | IECON;
+		newStatus = ~newStatus;
 
 		diskDevReg->d_data0 = &(bufferArray[getBufferIndex(1, 0)]);
 		diskDevReg->d_command = 4;
 
+		setSTATUS(origStatus);
+
 		SYSCALL(WAITIO, 3, 0, FALSE);
+
+		SYSCALL(VERHOGEN, &(diskBufferMutexes[0]));
 
 		sector++;
 	}
