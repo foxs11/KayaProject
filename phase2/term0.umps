@@ -1,41 +1,49 @@
-pre-verhogen
-pre-passeren
-ppre-waitForIODevice
-1pre-waitForIODevice
- pre-waitForIODevice
-vpre-waitForIODevice
-(pre-waitForIODevice
-tpre-waitForIODevice
-epre-waitForIODevice
-spre-waitForIODevice
-tpre-waitForIODevice
-spre-waitForIODevice
-epre-waitForIODevice
-mpre-waitForIODevice
-)pre-waitForIODevice
-
-pre-waitForIODevice
-pre-verhogen
-pre-createProcess
-pre-passeren
-ppre-waitForIODevice
-pre-passeren
-2pre-waitForIODevice
- pre-waitForIODevice
-wpre-waitForIODevice
-apre-waitForIODevice
-spre-waitForIODevice
- pre-waitForIODevice
-spre-waitForIODevice
-tpre-waitForIODevice
-apre-waitForIODevice
-rpre-waitForIODevice
-tpre-waitForIODevice
-epre-waitForIODevice
-dpre-waitForIODevice
-
-pre-waitForIODevice
-pre-verhogen
-pre-verhogen
-pre-passeren
-pre-passeren
+p1 v(testsem)
+p2 was started
+p2 starts
+p2 v's successfully
+p2 is OK
+p3 is started
+p3 - WAITCLOCK OK
+p3 - CPU time correctly maintained
+first incarnation of p4 starts
+p5 starts
+p6 starts
+p7 starts
+second incarnation of p4 starts
+Access non-existent memory
+p4 is OK
+memory management trap
+High level SYS call from user mode process
+privileged instruction
+High level SYS call from kernel mode process
+p1 knows p5 ended
+p8root starts
+child1 starts
+child2 starts
+leaf process starts
+leaf process starts
+leaf process starts
+leaf process starts
+p8root starts
+child1 starts
+child2 starts
+leaf process starts
+leaf process starts
+leaf process starts
+leaf process starts
+p8root starts
+child1 starts
+child2 starts
+leaf process starts
+leaf process starts
+leaf process starts
+leaf process starts
+p8root starts
+child1 starts
+child2 starts
+leaf process starts
+leaf process starts
+leaf process starts
+leaf process starts
+p1 finishes OK -- TTFN
