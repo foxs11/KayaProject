@@ -15,6 +15,9 @@
 
 
 #define ROMPAGESTART	0x20000000	 /* ROM Reserved Page */
+#define ENDOFOS 0x2001F000
+#define FRAMEPOOL 0x2002F000
+#define SEGTBLS 0x20000500 /* is it 5000???? */
 
 
 /* timer, timescale, TOD-LO and other bus regs */
@@ -35,7 +38,7 @@
 #define INTERRUPTOLDAREA 0x20000000
 
 #define ALLOFF 0x00000000
-#define VMON 0x02000000
+#define VMON 0x01000000
 #define VMOFF 0x00000000
 #define KERNELON 0x00000000
 #define KERNELOFF 0x00000008
@@ -46,8 +49,9 @@
 #define SCHEDULERINTSUNMASKED 0x0000FF01 /* use this for waitState loop */
 #define RIMASKON 0x00000028
 #define RIMASKTOTURNOFF 0x00000014
-#define NEWAREASTATUSMASK 0x08000000;
-#define FIRSTPROCESSSTATUSMASK 0x0800FF01;
+#define NEWAREASTATUSMASK 0x08000000
+#define FIRSTPROCESSSTATUSMASK 0x0800FF01
+#define IECON 0x00000001
 
 
 /* utility constants */
@@ -62,6 +66,7 @@
 
 /* process queue constants */
 #define MAXPROC 20
+#define UPROCNUM 8
 #define MAXINT 0xFFFFFFFF
 
 

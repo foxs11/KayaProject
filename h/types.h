@@ -123,5 +123,37 @@ typedef struct semd_t {
 	pcb_t 				*s_procQ;		/* tail pointer to a process queue*/
 } semd_t, *semd_PTR;
 
+typedef struct pgb_t { /* page buffer type */
+	int p_words[1024];
+} pgb_t, *pgb_PTR;
+
+typedef struct st_t {
+	struct ste_t entries[UPROCNUM];
+} st_t, *st_PTR;
+
+typedef struct ste_t { /* seg table entry type */
+	unsigned int * s_ksegOS;
+	unsigned int * s_kuseg2;
+	unsigned int * s_kuseg3;
+} ste_t, *ste_PTR;
+
+typedef struct pt_t { /* page table type */
+	unsigned int p_header;
+	struct pte_t p_entries[32];
+} pt_t, *pt_PTR;
+
+typedef struct pte_t { /* page table entry type */
+	unsigned int p_HI;
+	unsigned int p_LO;
+} pte_t, *pte_PTR;
+
+typedef struct uproc_t { /* user process data structure type */
+	int u_sem; /* initialize to 0 */
+	/* backing store address - not sure what var type to have for that */
+	struct pt_t u_pt; /* page table for kuseg2 */
+	struct state_t u_old[3]; /* old states for passupordie */
+	struct state_t u_new[3]; /* new states for passupordie */
+} uproc_t, *uproc_PTR;
+
 
 #endif

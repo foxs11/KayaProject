@@ -1,6 +1,10 @@
 #ifndef INITIAL
 #define INITIAL
 
+/* INITIAL.C contains the startup code that initializes the four new exception states,
+*  the device semaphores, important globals, the pcb pool and ASL, and the first process.
+*/
+
 #include "../e/pcb.e"
 #include "../e/asl.e"
 #include "../h/types.h"
@@ -10,13 +14,13 @@
 #include "../e/interrupts.e"
 
 /* global variables */
-int processCount;
-int softBlockCount;
+int processCount; /* number of processes */
+int softBlockCount; /* number of processes blocked on device semaphors */
 pcb_PTR currentProcess;
 pcb_PTR readyQue;
 cpu_t time;
-int waitFlag;
-int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /*compute number differently */
+int waitFlag; /* true if in a wait state */
+int devSemTable[EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1]; /* device semaphore array */
 
 extern void test();
 
@@ -58,8 +62,8 @@ void main(){
   initASL();
 
   int i;
-  for(i=0; i< (EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1); i++){
-    devSemTable[i] = 0;
+  for(i=0; i< (EIGHTDEVLINES * DEVSPERLINE + DEVSPERLINE + 1); i++){ 
+    devSemTable[i] = 0; /* device sema4s are synchronization sema4s */
   }
   pcb_PTR p = allocPcb();
   p->p_s.s_sp = ramTop - PAGESIZE;
@@ -70,7 +74,7 @@ void main(){
   processCount++;
   insertProcQ(&readyQue, p);
 
-  LDIT(100000);
+  LDIT(100000); /* start pseudo clock */
 
   time = 0;
 
