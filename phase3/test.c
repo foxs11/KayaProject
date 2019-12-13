@@ -320,4 +320,12 @@ void writeToTerminal(char *msg, int length) {
 		s++;	
 	}
 	SYSCALL(VERHOGEN, (int)&term_mut, 0, 0);				/* V(term_mut) */
+	LDST(currentProcess->oldSys);
+}
+
+void writeToPrinter(char){}
+
+void getTOD(){
+	currentProcess->p_oldSys->s_v0 = getTIMER();
+	LDST(currentProcess->oldSys);
 }
