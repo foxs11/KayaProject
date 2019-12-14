@@ -52,24 +52,24 @@ void test(){
 
 	
 		states[i*3].s_sp = &(stacks[i*3+1]); 
-  		states[i*3 + 1].s_sp = &(stacks[i*3+2]);
-  		states[i*3 + 2].s_sp = &(stacks[i*3+3]);
+  	states[i*3 + 1].s_sp = &(stacks[i*3+2]);
+  	states[i*3 + 2].s_sp = &(stacks[i*3+3]);
 
 
-  		states[i*3].s_pc = (memaddr) sysCallUpper; 
-  		states[i*3 + 1].s_pc = (memaddr) pgmTrapHandler; /*change*/
-  		states[i*3 + 2].s_pc = (memaddr) tlbMgmtHandler;
+  	states[i*3].s_pc = (memaddr) sysCallUpper; 
+  	states[i*3 + 1].s_pc = (memaddr) pgmTrapHandler; /*change*/
+  	states[i*3 + 2].s_pc = (memaddr) tlbMgmtHandler;
 
 
-  		states[i*3].s_t9 = (memaddr) sysCallUpper; 
-  		states[i*3 + 1].s_t9 = (memaddr) pgmTrapHandler; /*change*/
-  		states[i*3 + 2].s_t9 = (memaddr) tlbMgmtHandler;
+  	states[i*3].s_t9 = (memaddr) sysCallUpper; 
+  	states[i*3 + 1].s_t9 = (memaddr) pgmTrapHandler; /*change*/
+  	states[i*3 + 2].s_t9 = (memaddr) tlbMgmtHandler;
 
 
-  		states[i*3].s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
-  		states[i*3 + 1].s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
-  		states[i*3 + 2].s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
-  	}
+  	states[i*3].s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
+  	states[i*3 + 1].s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
+  	states[i*3 + 2].s_status = INTSUNMASKED | VMON | PROCLOCALTIMEON | KERNELON;
+  }
 
 
 	for (int i = 0; i < 8; i++){
@@ -328,7 +328,7 @@ void writeToTerminal(char *msg, int length) {
 	SYSCALL(PASSERN, (int)&term_mut, 0, 0);				/* P(term_mut) */
 	for (int i = 0; i < length; i++) {
 		*(base + 3) = PRINTCHR | (((devregtr) *s) << BYTELEN);
-		status = SYSCALL(WAITIO, TERMINT, 0, 0);	
+		status = SYSCALL(WAITIO, TERM,INT, 0, 0);	
 		if ((status & TERMSTATMASK) != RECVD)
 			PANIC();
 		s++;	
