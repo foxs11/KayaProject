@@ -244,20 +244,24 @@ void tlbHandler(){
 			if(entryHigh == vpn) {
 				if(entryLow = 1){
 					SYSCALL(VERHOGEN, framePool[processId - 1]);
-					LDST(TLBMANAGEMENTOLDAREA);
+					LDST(TLBMANAGEMENTOLDAREA); 
 				}
 			}
 			int frameToUse = currentFrame % 16;
-			if(frameisoccupied){
-				//mark PTE entry as invalid
+			if(framePool[currentFrame]->occupied == TRUE){ /* frame is occupied */
+				pteToChange = uprocs[processId-1].u_pt.p_entries->p_LO; //mark PTE entry as invalid
+				pteToChange = ~pteToChange;
+				pteToChange = pteToChange | 0x00000200;
+				pteToChange = ~pteToChange;
+				uprocs[processId-1].u_pt.p_entries->p_LO = pteToChange;
+				TLBCLR() //clear tlb
 				//write the frame to backingstore
 				//read in missing page
 				//update swap pool
 				//update PTE
-				TLBCLR() //clear tlb
-				//shave PTE into tlb
-				//v whateverpageitis
-				//LDST(ugiafdghakjlhjgkldsjhklasdjhklagsdjkn)
+				//save PTE into tlb
+				SYSCALL(VERHOGEN, framePool[processId - 1]);
+				LDST(TLBMANAGEMENTOLDAREA)
 			}
 			
 		}
