@@ -1,4 +1,4 @@
-#include "../h/types.h"
+ww#include "../h/types.h"
 #include "../h/const.h"
 #include "../e/initial.e"
 
@@ -16,7 +16,9 @@ int ramTop = foo->rambase + foo->ramsize;
 
 pgb_PTR stacks[UPROCNUM*3] = (pgb_PTR) ramTop - (1024 * UPROCNUM * 3);
 
-state_t states[UPROCNUM*3]; 
+state_t states[UPROCNUM*3];
+
+pgbH_t framePoolStats[UPROCNUM*2]; 
 
 
 /*1 ksegOS page table
@@ -248,7 +250,7 @@ void tlbHandler(){
 				}
 			}
 			int frameToUse = currentFrame % 16;
-			if(framePool[currentFrame]->occupied == TRUE){ /* frame is occupied */
+			if(framePoolStats[currentFrame].occupied == TRUE){ /* frame is occupied */
 				pteToChange = uprocs[processId-1].u_pt.p_entries->p_LO; //mark PTE entry as invalid
 				pteToChange = ~pteToChange;
 				pteToChange = pteToChange | 0x00000200;
