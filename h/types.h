@@ -124,6 +124,10 @@ typedef struct semd_t {
 } semd_t, *semd_PTR;
 
 typedef struct pgb_t { /* page buffer type */
+	int occupied;
+	unsigned int asid;
+	unsigned int segno;
+	unsigned int vpn
 	int p_words[1024];
 } pgb_t, *pgb_PTR;
 

@@ -227,37 +227,47 @@ void readFromTape(){
 }
 
 void tlbHandler(){
-	int segno = 
-	int vpn = 
-	SYSCALL(PASSERN, whateverpageitis) /*fix*/
-	for(int i = 0; i < uprocs[currentProcess->asid]-1].u_pt.p_header - 42; i++)
-		unsigned int entryHigh = uprocs[currentProcess->asid]-1].u_pt.p_entries[i].p_HI;
-		entryHigh = entryHigh << 2;
-		entryHigh = entryHigh >> 13;
-		unsigned int entryLow = uprocs[currentProcess->asid]-1].u_pt.p_entries[i].p_LO;
-		entryLow = entryLow << 22;
-		entryLow = entryLow >> 31;
-		if(entryHigh == vpn) {
-			if(entryLow = 1){
-				SYSCALL(VERHOGEN, whateverpageitis) /*fix*/
-				return
+	int processId = currentProcess->p_s.s_asid;
+	unsigned int cause = TLBMANAGEMENTOLDAREA->s_cause;
+	if(cause == 2 || cause == 3){
+		unsigned int segno = TLBMANAGEMENTOLDAREA->s_asid >> 30;
+		unsigned int vpn = TLBMANAGEMENTOLDAREA->s_asid << 2;
+		vpn = vpn >> 14;
+		SYSCALL(PASSERN, framePool[processId - 1]);
+		for(int i = 0; i < uprocs[processId]-1].u_pt.p_header - 42; i++)
+			unsigned int entryHigh = uprocs[processId]-1].u_pt.p_entries[i].p_HI;
+			entryHigh = entryHigh << 2;
+			entryHigh = entryHigh >> 13;
+			unsigned int entryLow = uprocs[processId]-1].u_pt.p_entries[i].p_LO;
+			entryLow = entryLow << 22;
+			entryLow = entryLow >> 31;
+			if(entryHigh == vpn) {
+				if(entryLow = 1){
+					SYSCALL(VERHOGEN, framePool[processId - 1]);
+					LDST(TLBMANAGEMENTOLDAREA);
+				}
 			}
+			int frameToUse = currentFrame % 16;
+			if(frameisoccupied){
+				//mark PTE entry as invalid
+				//write the frame to backingstore
+				//read in missing page
+				//update swap pool
+				//update PTE
+				TLBCLR() //clear tlb
+				//shave PTE into tlb
+				//v whateverpageitis
+				//LDST(ugiafdghakjlhjgkldsjhklasdjhklagsdjkn)
+			}
+			
 		}
-		int frameToUse = currentFrame % 16;
-		if(frameisoccupied){
-			//mark PTE entry as invalid
-			//write the frame to backingstore
-			//read in missing page
-			//update swap pool
-			//update PTE
-			//clear tlb
-			//shave PTE into tlb
-			//v whateverpageitis
-			//LDST(ugiafdghakjlhjgkldsjhklasdjhklagsdjkn)
-		}
-		
+	}
+	else {
+		death /* fix */
 	}
 }
+
+void programTrapHandler(){}
 
 void upperSyscallHandler(){
 	int sysNum = currentProcess->p_oldSys->s_a0;
@@ -329,3 +339,5 @@ void getTOD(){
 	currentProcess->p_oldSys->s_v0 = getTIMER();
 	LDST(currentProcess->oldSys);
 }
+
+void terminate(){}
