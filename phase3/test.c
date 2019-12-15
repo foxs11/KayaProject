@@ -116,6 +116,10 @@ void test(){
 
 		SYSCALL(1, initialState);
 	}
+	for (i = 0; i < UPROCNUM; i ++){
+		SYSCALL(PASSERN, &masterSem);
+	}
+	SYSCALL(2);
 }
 
 void stub(){
