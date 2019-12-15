@@ -258,6 +258,35 @@ void tlbHandler(){
 				uprocs[processId-1].u_pt.p_entries->p_LO = pteToChange;
 				TLBCLR() //clear tlb
 				//write the frame to backingstore
+				devRegIndex = getDevRegIndex(3, 0);
+    			device_t * diskDevReg = &(foo->devreg[devRegIndex]);
+
+				unsigned int origStatus = getSTATUS();
+				unsigned int newStatus = ~origStatus; /* disk seek */
+				newStatus = newStatus | IECON;
+				newStatus = ~newStatus;
+
+				setSTATUS(newStatus);
+
+				diskDevReg->d_data0 = 0;
+				diskDevReg->d_command = 2;
+
+				setSTATUS(origStatus); 
+
+				SYSCALL(WAITIO, 3, 0, FALSE);
+				/* disk seek done */
+
+				newStatus = ~origStatus;
+				newStatus = newStatus | IECON;
+				newStatus = ~newStatus;
+
+				diskDevReg->d_data0 = &(framePool[frameToUse]);
+				diskDevReg->d_command = 4;
+
+				setSTATUS(origStatus);
+
+				SYSCALL(WAITIO, 3, 0, FALSE); /* frame written to backing store */
+
 				//read in missing page
 				//update swap pool
 				//update PTE
