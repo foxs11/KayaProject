@@ -251,6 +251,7 @@ void tlbHandler(){
 			}
 			int frameToUse = currentFrame % 16;
 			if(framePoolStats[currentFrame].occupied == TRUE){ /* frame is occupied */
+
 				pteToChange = uprocs[processId-1].u_pt.p_entries->p_LO; //mark PTE entry as invalid
 				pteToChange = ~pteToChange;
 				pteToChange = pteToChange | 0x00000200;
@@ -285,7 +286,7 @@ void tlbHandler(){
 
 				setSTATUS(origStatus);
 
-				SYSCALL(WAITIO, 3, 0, FALSE); /* frame written to backing store */
+				SYSCALL(WAITIO, 3, 0, FALSE); /* frame written to backing store? */
 
 				//read in missing page
 				//update swap pool
@@ -375,4 +376,8 @@ void getTOD(){
 	LDST(currentProcess->oldSys);
 }
 
-void terminate(){}
+void terminate(){
+	/* p the master sem and then sys2 */
+	SYSCALL(VERHOGEN, &(masterSem));
+	SYSCALL(2);
+}
